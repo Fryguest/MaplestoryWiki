@@ -1,0 +1,5 @@
+﻿{
+    "name": "枫之谷Wiki",
+    "ver": "v0.1",
+    "imports": ["assets/css/wiki.css"]
+}
