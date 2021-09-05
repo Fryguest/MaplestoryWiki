@@ -1,10 +1,10 @@
 
 #### [首页](?file=首页)
 
-##### 新人入门
+<!-- ##### 新人入门
 - <a href="?file=TODO">游戏下载，安装与更新</a>
 - <a href="?file=TODO">游戏启动</a>
-- <a href="?file=TODO">职业推荐</a>
+- <a href="?file=TODO">职业推荐</a> -->
 
 ##### 系统介绍
 - <a href="?file=系统介绍/角色转职">角色转职</a>
