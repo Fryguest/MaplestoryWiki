@@ -17,3 +17,7 @@
 - <a href="?file=TODO">神秘力量</a>
 - <a href="?file=TODO">真实之力</a>
 - <a href="?file=TODO">V矩阵</a>
+
+
+##### 实用手册
+- <a href="?file=实用手册/萌兽终伤收益">萌兽终伤收益</a>
