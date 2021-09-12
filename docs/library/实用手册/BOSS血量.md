@@ -1,6 +1,6 @@
 # BOSS血量表
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="4">残暴炎魔</td>
     </tr>
@@ -30,7 +30,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td width="100%" colspan="4">暗黑龙王</td>
     </tr>
@@ -52,7 +52,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">皮卡啾</td>
     </tr>
@@ -85,7 +85,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">凡雷恩</td>
     </tr>
@@ -108,7 +108,7 @@
 </table>
 
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">阿卡伊侬</td>
     </tr>
@@ -126,7 +126,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">希拉</td>
     </tr>
@@ -144,7 +144,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">梅格耐斯</td>
     </tr>
@@ -166,7 +166,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">西格诺斯</td>
     </tr>
@@ -184,7 +184,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">森兰丸</td>
     </tr>
@@ -202,7 +202,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">卡翁</td>
     </tr>
@@ -216,7 +216,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">培罗德</td>
     </tr>
@@ -252,7 +252,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">浓姬</td>
     </tr>
@@ -274,7 +274,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">比艾乐</td>
     </tr>
@@ -292,7 +292,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">斑斑</td>
     </tr>
@@ -310,7 +310,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">血腥皇后</td>
     </tr>
@@ -328,7 +328,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">贝伦</td>
     </tr>
@@ -346,7 +346,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">桃乐丝</td>
     </tr>
@@ -360,7 +360,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">拉图斯（闹钟）</td>
     </tr>
@@ -386,7 +386,7 @@
     </tr>
 </table>
 
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">史乌</td>
     </tr>
@@ -409,7 +409,7 @@
       <td>23兆3700亿</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">戴米安</td>
     </tr>
@@ -429,7 +429,7 @@
       <td>10兆8000亿</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">露希妲</td>
     </tr>
@@ -470,7 +470,7 @@
       <td>P3会有一次回血，实际血量13.2兆</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">威尔</td>
     </tr>
@@ -493,7 +493,7 @@
       <td>52兆5000亿</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">戴斯克</td>
     </tr>
@@ -510,7 +510,7 @@
       <td>130兆</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">真·希拉</td>
     </tr>
@@ -523,7 +523,7 @@
       <td>176兆</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">顿凯尔</td>
     </tr>
@@ -540,7 +540,7 @@
       <td>160兆</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">黑魔法师</td>
     </tr>
@@ -559,7 +559,7 @@
       <td>135兆</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">赛莲</td>
     </tr>
@@ -574,7 +574,7 @@
       <td>未知</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">烈焰战狼</td>
     </tr>
@@ -587,7 +587,7 @@
       <td>6000亿</td>
     </tr>
 </table>
-<table>
+<table width="95%">
     <tr>
       <td colspan="76">乌勒斯</td>
     </tr>
