@@ -32,11 +32,11 @@
 
 <table>
     <tr>
-      <td colspan="4">暗黑龙王</td>
+      <td width="100%" colspan="4">暗黑龙王</td>
     </tr>
     <tr>
-       <td>模式</td>
-       <td>本体</td>
+       <td width="50%">模式</td>
+       <td width="50%">本体</td>
     </tr>
     <tr>
       <td>容易</td>
