@@ -13,30 +13,30 @@
     <tr>
       <td>容易</td>
       <td>220万</td>
-      <td>20.4万*8</td>
+      <td>20.4万 * 8</td>
       <td></td>
     </tr>
     <tr>
       <td>一般</td>
       <td>700万</td>
-      <td>70万*8</td>
+      <td>70万 * 8</td>
       <td></td>
     </tr>
     <tr>
       <td>混沌</td>
       <td>840亿</td>
-      <td>105亿*8</td>
+      <td>105亿 * 8</td>
       <td>一定时间后手会重生</td>
     </tr>
 </table>
 
 <table width="95%">
     <tr>
-      <td width="100%" colspan="4">暗黑龙王</td>
+      <td colspan="4">暗黑龙王</td>
     </tr>
     <tr>
-       <td width="50%">模式</td>
-       <td width="50%">本体</td>
+       <td>模式</td>
+       <td>本体</td>
     </tr>
     <tr>
       <td>容易</td>
