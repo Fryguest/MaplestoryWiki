@@ -436,25 +436,33 @@
     <tr>
        <td>模式</td>
        <td>P1</td>
+       <td>P1石头人</td>
        <td>P2</td>
+       <td>P2石头人</td>
        <td>P3</td>
     </tr>
     <tr>
       <td>简单</td>
       <td>6兆</td>
+      <td>1亿(限伤50万)</td>
       <td>6兆</td>
+      <td>3.5亿(限伤50万)</td>
       <td>/</td>
     </tr>
     <tr>
       <td>普通</td>
       <td>12兆</td>
+      <td>1.5亿(限伤50万)</td>
       <td>12兆</td>
+      <td>5亿(限伤50万)</td>
       <td>/</td>
     </tr>
     <tr>
       <td>困难</td>
       <td>41兆400亿</td>
+      <td>4000亿</td>
       <td>41兆400亿</td>
+      <td>6000亿</td>
       <td>11兆9700亿</td>
     </tr>
 </table>
