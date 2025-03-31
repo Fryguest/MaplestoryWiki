@@ -1,43 +1,89 @@
-/* style.css */
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f7fa;
-}
+/* 样式部分：定义目录栏和内容区 */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7fa;
+    }
 
-.container {
-  display: flex;
-  min-height: 100vh;
-}
+    /* 侧边栏样式 */
+    .sidebar {
+      width: 220px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(180deg, #3b8d99, #2c3e50);
+      padding-top: 30px;
+      box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+      color: #fff;
+      font-size: 16px;
+    }
+    
+    .sidebar h3 {
+      text-align: center;
+      color: #fff;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
 
-.sidebar {
-  width: 200px;
-  background-color: #e4ecf2;
-  padding: 20px;
-  box-sizing: border-box;
-  border-right: 1px solid #ccc;
-}
+    .sidebar ul li {
+      padding: 12px 20px;
+      border-bottom: 1px solid #3a5763;
+      transition: background-color 0.3s ease;
+    }
+    
+    .sidebar ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+      display: block;
+    }
 
-.sidebar ul {
-  list-style: none;
-  padding-left: 0;
-}
+    .sidebar ul li a:hover {
+      color: #1abc9c;
+    }
 
-.sidebar a {
-  text-decoration: none;
-  color: #333;
-  display: block;
-  padding: 6px 0;
-}
+    .sidebar ul li:hover {
+      background-color: #34495e;
+    }
 
-.sub-menu {
-  display: none;
-  padding-left: 15px;
-}
+    /* 子菜单样式 */
+    .sub-menu {
+      display: none;
+      list-style-type: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
 
-.content {
-  flex: 1;
-  padding: 20px;
-  box-sizing: border-box;
-}
+    .sub-menu li {
+      padding: 8px 20px;
+      border-bottom: 1px solid #3a5763;
+    }
+
+    .sub-menu li a {
+      color: #bdc3c7;
+    }
+
+    .sub-menu li a:hover {
+      color: #1abc9c;
+    }
+
+    /* 增加父菜单项和子菜单项之间的间距 */
+    .sidebar ul li a {
+      padding-bottom: 15px; /* 增加父菜单项和子菜单项的间距 */
+    }
+
+    /* 内容区样式 */
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      background-color: #fff;
+      min-height: 100vh;
+    }

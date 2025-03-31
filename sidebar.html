@@ -1,15 +1,25 @@
 <!-- sidebar.html -->
 <div class="sidebar">
-  <h3>目录</h3>
-  <ul>
-    <li><a href="cards.html">角色卡资料</a></li>
-    <li>
-      <a href="javascript:void(0)" onclick="toggleSubMenu('submenu1')">Link 技能</a>
-      <ul id="submenu1" class="sub-menu">
-        <li><a href="link1.html">Link 1</a></li>
-        <li><a href="link2.html">Link 2</a></li>
-      </ul>
-    </li>
-    <li><a href="calculator.html">属性计算器</a></li>
-  </ul>
+    <h3><a href="index.html" style="text-decoration: none; color: white;">主页</a></h3>
+    <ul>
+        <li>
+            <a href="javascript:void(0)" onclick="toggleSubMenu('submenu0')">游戏系统</a>
+            <ul id="submenu0" class="sub-menu">
+                <li><a href="link1.html">基础属性公式</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript:void(0)" onclick="toggleSubMenu('submenu1')">资料库</a>
+            <ul id="submenu1" class="sub-menu">
+                <li><a href="link.html">角色卡和link</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript:void(0)" onclick="toggleSubMenu('submenu2')">计算器</a>
+            <ul id="submenu2" class="sub-menu">
+                <li><a href="link1.html">属性计算器</a></li>
+                <li><a href="link2.html">六转进度计算器</a></li>
+            </ul>
+        </li>
+    </ul>
 </div>
