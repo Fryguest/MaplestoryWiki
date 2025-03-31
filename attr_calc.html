@@ -37,6 +37,20 @@
             <label>副属性百分比加成 (%)：<input type="number" id="subAttrPct" /></label><br>
             <label>不套用百分比副属性：<input type="number" id="extraSubAttr" /></label><br>
         </div>
+        <br>
+
+        <!-- 切换按钮 -->
+        <button onclick="toggleExtraSub()">我是暗影侠盗/影武者</button>
+        <!-- 副属性 2：默认隐藏 -->
+        <div id="extra-sub-block"
+            style="display: none; margin-top: 10px; padding-left: 1em; border-left: 2px solid #ccc;">
+            <p style="margin: 0;">副属性 2：</p>
+            <label>基础副属性：<input type="number" id="subAttr2" /></label><br>
+            <label>副属性百分比加成 (%)：<input type="number" id="subAttrPct2" /></label><br>
+            <label>附加副属性：<input type="number" id="extraSubAttr2" /></label><br>
+        </div>
+
+        <br>
 
         <br>
         <button onclick="calculateEquivalence()">计算等效属性</button>
@@ -63,6 +77,15 @@
                 submenu.style.display = "block";
             }
         }
+
+        let extraSubEnabled = false;
+
+        function toggleExtraSub() {
+            extraSubEnabled = !extraSubEnabled;
+            const block = document.getElementById("extra-sub-block");
+            block.style.display = extraSubEnabled ? "block" : "none";
+        }
+
         function calculateEquivalence() {
             // 获取用户输入
             const attack = Number(document.getElementById("attack").value);
@@ -76,37 +99,73 @@
             const subAttrPct = Number(document.getElementById("subAttrPct").value) / 100;
             const extraSubAttr = Number(document.getElementById("extraSubAttr").value);
 
-            // 有效主属性、副属性
-            const effectiveMainAttr = mainAttr * (1 + mainAttrPct) + extraMainAttr;
-            const effectiveSubAttr = subAttr * (1 + subAttrPct) + extraSubAttr;
 
-            // 有效属性
-            const totalAttr = effectiveMainAttr * 4 + effectiveSubAttr;
+            effSub = subAttr * (1 + subAttrPct) + extraSubAttr;
+            let subAttr2 = 0
+            let subAttrPct2 = 0
+            let extraSubAttr2 = 0
+            // 双副属性
+            if (extraSubEnabled) {
+                subAttr2 = Number(document.getElementById("subAttr2").value);
+                subAttrPct2 = Number(document.getElementById("subAttrPct2").value) / 100;
+                extraSubAttr2 = Number(document.getElementById("extraSubAttr2").value);
+            }
+            effSub += subAttr2 * (1 + subAttrPct2) + extraSubAttr2;
+            
+            // 当前状态
+            const effMain = mainAttr * (1 + mainAttrPct) + extraMainAttr;
+            const totalAttr = effMain * 4 + effSub;
+            const effAtk = attack * (1 + attackPct);
+            const baseOutput = effAtk * totalAttr;
 
-            // 有效攻击力
-            const effectiveAtk = attack * (1 + attackPct);
-
-            // 当前输出
-            const baseOutput = effectiveAtk * totalAttr;
-
-            // 输出增加：攻击力 +1
+            // +1攻击力
             const atkUp = (attack + 1) * (1 + attackPct) * totalAttr;
             const atkGain = atkUp - baseOutput;
 
-            // 输出增加：主属性 +1（副属性保持不变）
+            // +1%攻击力
+            const atkPctUp = attack * (1 + attackPct + 0.01) * totalAttr;
+            const atkPctGain = atkPctUp - baseOutput;
+
+            // +1主属性
             const mainUp = (mainAttr + 1) * (1 + mainAttrPct) + extraMainAttr;
-            const newTotalAttr = mainUp * 4 + effectiveSubAttr;
-            const attrUp = effectiveAtk * newTotalAttr;
+            const newTotalAttrMain = mainUp * 4 + effSub;
+            const attrUp = effAtk * newTotalAttrMain;
             const attrGain = attrUp - baseOutput;
 
-            // 计算等效
-            const ratio = atkGain > 0 ? (1 / attrGain * atkGain) : 0;
+            // +1%主属性
+            const mainPctUp = mainAttr * (1 + mainAttrPct + 0.01) + extraMainAttr;
+            const newTotalAttrMainPct = mainPctUp * 4 + effSub;
+            const mainPctOutput = effAtk * newTotalAttrMainPct;
+            const mainPctGain = mainPctOutput - baseOutput;
+
+            // +1%副属性
+            // const subPctUp = subAttr * (1 + subAttrPct + 0.01) + extraSubAttr;
+            // const newTotalAttrSubPct = effMain * 4 + subPctUp;
+            // const subPctOutput = effAtk * newTotalAttrSubPct;
+            // const subPctGain = subPctOutput - baseOutput;
+
+            // +1%全属性
+            const mainAllPct = mainAttr * (1 + mainAttrPct + 0.01) + extraMainAttr;
+            const subAllPct = subAttr * (1 + subAttrPct + 0.01) + extraSubAttr;
+            const subAllPct2 = subAttr2 * (1 + subAttrPct2 + 0.01) + extraSubAttr2;
+            const totalAttrAllPct = mainAllPct * 4 + subAllPct + subAllPct2;
+            const allPctOutput = effAtk * totalAttrAllPct;
+            const allPctGain = allPctOutput - baseOutput;
 
             document.getElementById("result").innerText =
-                `当前输出为：${baseOutput.toFixed(2)}\n` +
-                `提升 +1 攻击力，输出变为：${atkUp.toFixed(2)}，提升 ${atkGain.toFixed(2)}\n` +
-                `提升 +1 主属性，输出变为：${attrUp.toFixed(2)}，提升 ${attrGain.toFixed(2)}\n` +
-                `\n结论：1 点攻击力 ≈ ${(attrGain > 0 ? (1 / attrGain * atkGain).toFixed(2) : '无法计算')} 点主属性`;
+                `🧮 当前输出：${baseOutput.toFixed(2)}\n\n` +
+                `📌 +1 攻击力：输出 ${atkUp.toFixed(2)}，提升 ${atkGain.toFixed(2)}\n` +
+                `📌 +1% 攻击力：输出 ${atkPctUp.toFixed(2)}，提升 ${atkPctGain.toFixed(2)}\n` +
+                `📌 +1 主属性：输出 ${attrUp.toFixed(2)}，提升 ${attrGain.toFixed(2)}\n` +
+                `📌 +1% 主属性：输出 ${mainPctOutput.toFixed(2)}，提升 ${mainPctGain.toFixed(2)}\n` +
+                `📌 +1% 全属性：输出 ${allPctOutput.toFixed(2)}，提升 ${allPctGain.toFixed(2)}\n\n` +
+                `✅ 常见等效换算：\n` +
+                `1 攻击力 ≈ ${attrGain > 0 ? (atkGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` +
+                `1 %攻击力 ≈ ${atkGain > 0 ? (atkPctGain / atkGain).toFixed(2) : 'N/A'} 攻击力\n` +
+                `1 %主属性 ≈ ${attrGain > 0 ? (mainPctGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` + 
+                `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性` 
+
+
         }
     </script>
 </body>
