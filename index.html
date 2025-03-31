@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MapleStory Wiki</title>
+  <style>
+    /* 侧边栏样式 */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7fa;
+    }
+    /* 其他样式同上 */
+  </style>
+</head>
+<body>
+  <!-- JavaScript 动态加载左侧目录 -->
+  <div id="sidebar-container"></div>
+
+  <!-- 页面内容区 -->
+  <div class="content">
+    <h1>欢迎来到 MapleStory Wiki</h1>
+    <p>在这里你可以找到游戏的相关资料和计算器。</p>
+  </div>
+
+  <script>
+    // 加载侧边栏
+    fetch('sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      })
+      .catch(error => {
+        console.error('加载侧边栏失败:', error);
+      });
+
+    // JavaScript 控制子菜单的展开和收起
+    function toggleSubMenu(id) {
+      const submenu = document.getElementById(id);
+      if (submenu.style.display === "block") {
+        submenu.style.display = "none";
+      } else {
+        submenu.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
