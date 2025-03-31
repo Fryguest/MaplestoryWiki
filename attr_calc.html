@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>属性计算器</title>
+</head>
+
+<body>
+    <!-- JavaScript 动态加载左侧目录 -->
+    <div id="sidebar-container"></div>
+
+    <!-- 页面内容区 -->
+    <div class="content">
+        <h1>属性计算器</h1>
+        <hr>
+        <p>这里是属性计算器,用于计算两种属性的等比换算,暂时只支持攻击力/属性</p>
+
+        <div class="input-group">
+            <h3>攻击力</h3>
+            <label>基础攻击力：<input type="number" id="attack" /></label><br>
+            <label>攻击力百分比加成 (%)：<input type="number" id="attackPct" /></label><br>
+        </div>
+
+        <div class="input-group">
+            <h3>主属性</h3>
+            <label>基础主属性：<input type="number" id="mainAttr" /></label><br>
+            <label>主属性百分比加成 (%)：<input type="number" id="mainAttrPct" /></label><br>
+            <label>不套用百分比主属性：<input type="number" id="extraMainAttr" /></label><br>
+        </div>
+
+        <div class="input-group">
+            <h3>副属性</h3>
+            <label>基础副属性：<input type="number" id="subAttr" /></label><br>
+            <label>副属性百分比加成 (%)：<input type="number" id="subAttrPct" /></label><br>
+            <label>不套用百分比副属性：<input type="number" id="extraSubAttr" /></label><br>
+        </div>
+
+        <br>
+        <button onclick="calculateEquivalence()">计算等效属性</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        // 加载侧边栏
+        fetch('sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-container').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('加载侧边栏失败:', error);
+            });
+
+        // JavaScript 控制子菜单的展开和收起
+        function toggleSubMenu(id) {
+            const submenu = document.getElementById(id);
+            if (submenu.style.display === "block") {
+                submenu.style.display = "none";
+            } else {
+                submenu.style.display = "block";
+            }
+        }
+        function calculateEquivalence() {
+            // 获取用户输入
+            const attack = Number(document.getElementById("attack").value);
+            const attackPct = Number(document.getElementById("attackPct").value) / 100;
+
+            const mainAttr = Number(document.getElementById("mainAttr").value);
+            const mainAttrPct = Number(document.getElementById("mainAttrPct").value) / 100;
+            const extraMainAttr = Number(document.getElementById("extraMainAttr").value);
+
+            const subAttr = Number(document.getElementById("subAttr").value);
+            const subAttrPct = Number(document.getElementById("subAttrPct").value) / 100;
+            const extraSubAttr = Number(document.getElementById("extraSubAttr").value);
+
+            // 有效主属性、副属性
+            const effectiveMainAttr = mainAttr * (1 + mainAttrPct) + extraMainAttr;
+            const effectiveSubAttr = subAttr * (1 + subAttrPct) + extraSubAttr;
+
+            // 有效属性
+            const totalAttr = effectiveMainAttr * 4 + effectiveSubAttr;
+
+            // 有效攻击力
+            const effectiveAtk = attack * (1 + attackPct);
+
+            // 当前输出
+            const baseOutput = effectiveAtk * totalAttr;
+
+            // 输出增加：攻击力 +1
+            const atkUp = (attack + 1) * (1 + attackPct) * totalAttr;
+            const atkGain = atkUp - baseOutput;
+
+            // 输出增加：主属性 +1（副属性保持不变）
+            const mainUp = (mainAttr + 1) * (1 + mainAttrPct) + extraMainAttr;
+            const newTotalAttr = mainUp * 4 + effectiveSubAttr;
+            const attrUp = effectiveAtk * newTotalAttr;
+            const attrGain = attrUp - baseOutput;
+
+            // 计算等效
+            const ratio = atkGain > 0 ? (1 / attrGain * atkGain) : 0;
+
+            document.getElementById("result").innerText =
+                `当前输出为：${baseOutput.toFixed(2)}\n` +
+                `提升 +1 攻击力，输出变为：${atkUp.toFixed(2)}，提升 ${atkGain.toFixed(2)}\n` +
+                `提升 +1 主属性，输出变为：${attrUp.toFixed(2)}，提升 ${attrGain.toFixed(2)}\n` +
+                `\n结论：1 点攻击力 ≈ ${(attrGain > 0 ? (1 / attrGain * atkGain).toFixed(2) : '无法计算')} 点主属性`;
+        }
+    </script>
+</body>
+
+</html>
