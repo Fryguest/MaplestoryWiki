@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MapleStory Wiki</title>
+    </head>
+    <body>
+        <!-- JavaScript 动态加载左侧目录 -->
+        <div id="sidebar-container"></div>
+
+        <!-- 页面内容区 -->
+        <div class="content">
+            <h1>星期天枫之谷</h1>
+            <p>这里记录了从V269开始的星期天枫之谷</p>
+
+            <h3>V269 楓之谷X鬼滅之刃</h3>
+            <ul>
+                <li><strong>2025/05/11</strong>：燃燒地圖最多15階段／恢復速度提升／維持時間增加；怪物公園成長的星期天箱子配發量2倍</li>
+                <li><strong>2025/05/04</strong>：咒文的痕跡Fever time（增加成功機率）；咒文的痕跡強化費用50%優惠；烈焰戰狼完成經驗值3倍</li>
+                <li><strong>2025/04/27</strong>：裝備潛在能力鑑定費用優惠50%；每99 Combo追加生成Combo珠</li>
+                <li><strong>2025/04/20</strong>：永恆／強力輪迴星火使用5個時追加支付1個（最多10個）；怪物收藏登錄機率2倍</li>
+                <li><strong>2025/04/13</strong>：怪物公園完成經驗值追加250%；波羅和普里托、艾斯佩西亞的懸賞金狩獵經驗值3倍</li>
+                <li><strong>2025/04/06</strong>：燃燒地圖最多15階段／恢復速度提升／維持時間增加；菁英怪物2倍召喚</li>
+            </ul>
+        </div>
+
+        <script>
+            // 加载侧边栏
+            fetch('sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('加载侧边栏失败:', error);
+                });
+
+            // JavaScript 控制子菜单的展开和收起
+            function toggleSubMenu(id) {
+                const submenu = document.getElementById(id);
+                if (submenu.style.display === "block") {
+                    submenu.style.display = "none";
+                } else {
+                    submenu.style.display = "block";
+                }
+            }
+        </script>
+    </body>
+</html>
