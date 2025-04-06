@@ -157,7 +157,8 @@
                 `1 攻击力 ≈ ${attrGain > 0 ? (atkGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` +
                 `1 %攻击力 ≈ ${atkGain > 0 ? (atkPctGain / atkGain).toFixed(2) : 'N/A'} 攻击力\n` +
                 `1 %主属性 ≈ ${attrGain > 0 ? (mainPctGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` + 
-                `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性`;
+                `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性\n` +
+                `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / attrGain).toFixed(2) : 'N/A'} 主属性`;
 
             saveInputsToLocalStorage()
         }
