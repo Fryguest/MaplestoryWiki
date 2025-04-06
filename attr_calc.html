@@ -20,34 +20,34 @@
 
         <div class="input-group">
             <h3>攻击力</h3>
-            <label>基础攻击力：<input type="number" id="attack" /></label><br>
-            <label>攻击力百分比加成 (%)：<input type="number" id="attackPct" /></label><br>
+            <label>基础攻击力:<input type="number" id="attack" /></label><br>
+            <label>攻击力百分比加成 (%):<input type="number" id="attackPct" /></label><br>
         </div>
 
         <div class="input-group">
             <h3>主属性</h3>
-            <label>基础主属性：<input type="number" id="mainAttr" /></label><br>
-            <label>主属性百分比加成 (%)：<input type="number" id="mainAttrPct" /></label><br>
-            <label>不套用百分比主属性：<input type="number" id="extraMainAttr" /></label><br>
+            <label>基础主属性:<input type="number" id="mainAttr" /></label><br>
+            <label>主属性百分比加成 (%):<input type="number" id="mainAttrPct" /></label><br>
+            <label>不套用百分比主属性:<input type="number" id="extraMainAttr" /></label><br>
         </div>
 
         <div class="input-group">
             <h3>副属性</h3>
-            <label>基础副属性：<input type="number" id="subAttr" /></label><br>
-            <label>副属性百分比加成 (%)：<input type="number" id="subAttrPct" /></label><br>
-            <label>不套用百分比副属性：<input type="number" id="extraSubAttr" /></label><br>
+            <label>基础副属性:<input type="number" id="subAttr" /></label><br>
+            <label>副属性百分比加成 (%):<input type="number" id="subAttrPct" /></label><br>
+            <label>不套用百分比副属性:<input type="number" id="extraSubAttr" /></label><br>
         </div>
         <br>
 
         <!-- 切换按钮 -->
         <button onclick="toggleExtraSub()">我是暗影侠盗/影武者</button>
-        <!-- 副属性 2：默认隐藏 -->
+        <!-- 副属性 2:默认隐藏 -->
         <div id="extra-sub-block"
             style="display: none; margin-top: 10px; padding-left: 1em; border-left: 2px solid #ccc;">
-            <p style="margin: 0;">副属性 2：</p>
-            <label>基础副属性：<input type="number" id="subAttr2" /></label><br>
-            <label>副属性百分比加成 (%)：<input type="number" id="subAttrPct2" /></label><br>
-            <label>附加副属性：<input type="number" id="extraSubAttr2" /></label><br>
+            <p style="margin: 0;">副属性 2:</p>
+            <label>基础副属性:<input type="number" id="subAttr2" /></label><br>
+            <label>副属性百分比加成 (%):<input type="number" id="subAttrPct2" /></label><br>
+            <label>附加副属性:<input type="number" id="extraSubAttr2" /></label><br>
         </div>
 
         <br>
@@ -138,12 +138,6 @@
             const mainPctOutput = effAtk * newTotalAttrMainPct;
             const mainPctGain = mainPctOutput - baseOutput;
 
-            // +1%副属性
-            // const subPctUp = subAttr * (1 + subAttrPct + 0.01) + extraSubAttr;
-            // const newTotalAttrSubPct = effMain * 4 + subPctUp;
-            // const subPctOutput = effAtk * newTotalAttrSubPct;
-            // const subPctGain = subPctOutput - baseOutput;
-
             // +1%全属性
             const mainAllPct = mainAttr * (1 + mainAttrPct + 0.01) + extraMainAttr;
             const subAllPct = subAttr * (1 + subAttrPct + 0.01) + extraSubAttr;
@@ -153,20 +147,54 @@
             const allPctGain = allPctOutput - baseOutput;
 
             document.getElementById("result").innerText =
-                `🧮 当前输出：${baseOutput.toFixed(2)}\n\n` +
-                `📌 +1 攻击力：输出 ${atkUp.toFixed(2)}，提升 ${atkGain.toFixed(2)}\n` +
-                `📌 +1% 攻击力：输出 ${atkPctUp.toFixed(2)}，提升 ${atkPctGain.toFixed(2)}\n` +
-                `📌 +1 主属性：输出 ${attrUp.toFixed(2)}，提升 ${attrGain.toFixed(2)}\n` +
-                `📌 +1% 主属性：输出 ${mainPctOutput.toFixed(2)}，提升 ${mainPctGain.toFixed(2)}\n` +
-                `📌 +1% 全属性：输出 ${allPctOutput.toFixed(2)}，提升 ${allPctGain.toFixed(2)}\n\n` +
-                `✅ 常见等效换算：\n` +
+                `🧮 当前输出:${baseOutput.toFixed(2)}\n\n` +
+                `📌 +1 攻击力:输出 ${atkUp.toFixed(2)}，提升 ${atkGain.toFixed(2)}\n` +
+                `📌 +1% 攻击力:输出 ${atkPctUp.toFixed(2)}，提升 ${atkPctGain.toFixed(2)}\n` +
+                `📌 +1 主属性:输出 ${attrUp.toFixed(2)}，提升 ${attrGain.toFixed(2)}\n` +
+                `📌 +1% 主属性:输出 ${mainPctOutput.toFixed(2)}，提升 ${mainPctGain.toFixed(2)}\n` +
+                `📌 +1% 全属性:输出 ${allPctOutput.toFixed(2)}，提升 ${allPctGain.toFixed(2)}\n\n` +
+                `✅ 常见等效换算:\n` +
                 `1 攻击力 ≈ ${attrGain > 0 ? (atkGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` +
                 `1 %攻击力 ≈ ${atkGain > 0 ? (atkPctGain / atkGain).toFixed(2) : 'N/A'} 攻击力\n` +
                 `1 %主属性 ≈ ${attrGain > 0 ? (mainPctGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` + 
-                `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性` 
+                `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性`;
 
-
+            saveInputsToLocalStorage()
         }
+
+        function saveInputsToLocalStorage() {
+            const ids = [
+                "attack", "attackPct",
+                "mainAttr", "mainAttrPct", "extraMainAttr",
+                "subAttr", "subAttrPct", "extraSubAttr",
+                "subAttr2", "subAttrPct2", "extraSubAttr2"
+            ];
+            ids.forEach(id => {
+                const value = document.getElementById(id).value;
+                localStorage.setItem(id, value);
+            });
+        }
+
+        function loadInputsFromLocalStorage() {
+            const ids = [
+                "attack", "attackPct",
+                "mainAttr", "mainAttrPct", "extraMainAttr",
+                "subAttr", "subAttrPct", "extraSubAttr",
+                "subAttr2", "subAttrPct2", "extraSubAttr2"
+            ];
+            ids.forEach(id => {
+                if (localStorage.getItem(id) !== null) {
+                    document.getElementById(id).value = localStorage.getItem(id);
+                }
+            });
+
+            const showExtraSub = localStorage.getItem("extraSubEnabled") === "true";
+            if (showExtraSub) {
+                toggleExtraSub(); // 触发展开
+            }
+        }
+        
+        window.onload = loadInputsFromLocalStorage;
     </script>
 </body>
 
