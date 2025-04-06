@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六转进度计算器</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #f0f9ff, #e0f7fa);
+            color: #000;
+            margin: 0;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #000;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            background-color: #ffffffcc;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 3px 6px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px 6px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        label {
+            font-weight: bold;
+            color: #000;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        input[type="number"] {
+            padding: 6px 8px;
+            border: 1px solid #b2dfdb;
+            border-radius: 6px;
+            width: 65px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #00796b;
+            outline: none;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #00796b;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 121, 107, 0.2);
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #004d40;
+        }
+
+        .result {
+            flex: 1 1 30%;
+            padding: 4px 0;
+            font-size: 13px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .kong25 {
+            width: 20%;
+            box-sizing: border-box;
+        }
+
+        .input-group {
+            width: 20%;
+            box-sizing: border-box;
+        }
+
+        .inputone {
+            padding: 6px 8px;
+            border: 1px solid #b2dfdb;
+            border-radius: 6px;
+            width: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .skillname-label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .needfrag-label {
+            font-size: 12px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .result {
+                flex: 1 1 100%;
+            }
+
+            input[type="number"],
+            .inputone {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- JavaScript 动态加载左侧目录 -->
+    <div id="sidebar-container"></div>
+    <div class="content">
+        <h1>六转进度计算器（施工中） </h1>
+
+        <div class="form-group">
+            <div class="kong25">
+                <label class="_"></label>
+            </div>
+            <div class="kong25">
+                <label class="_"></label>
+            </div>
+            <div class="input-group">
+                <label class="currenttitle-label">当前等级</label>
+            </div>
+            <div class="input-group">
+                <label class="objecttitle-label">目标等级</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="skillLabel">起源技能</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainskillfrags"></label>
+            </div>
+            <div class="input-group">
+                <input id="skillLevel" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectskillLevel" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="masterLabel1">精通核心1</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainmasterfrags1"></label>
+            </div>
+            <div class="input-group">
+                <input id="masterLevel1" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectmasterLevel1" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="masterLabel2">精通核心2</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainmasterfrags2"></label>
+            </div>
+            <div class="input-group">
+                <input id="masterLevel2" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectmasterLevel2" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="masterLabel3">精通核心3</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainmasterfrags3"></label>
+            </div>
+            <div class="input-group">
+                <input id="masterLevel3" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectmasterLevel3" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="masterLabel4">精通核心4</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainmasterfrags4"></label>
+            </div>
+            <div class="input-group">
+                <input id="masterLevel4" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectmasterLevel4" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="enhanceLabel1">五转强化1</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainenhancefrags1"></label>
+            </div>
+            <div class="input-group">
+                <input id="enhancementLevel1" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectenhancementLevel1" class="object-input" type="number" min="0" max="30" step="1"
+                    required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="enhanceLabel2">五转强化2</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainenhancefrags2"></label>
+            </div>
+            <div class="input-group">
+                <input id="enhancementLevel2" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectenhancementLevel2" class="object-input" type="number" min="0" max="30" step="1"
+                    required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="enhanceLabel3">五转强化3</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainenhancefrags3"></label>
+            </div>
+            <div class="input-group">
+                <input id="enhancementLevel3" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectenhancementLevel3" class="object-input" type="number" min="0" max="30" step="1"
+                    required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="enhanceLabel4">五转强化4</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainenhancefrags4"></label>
+            </div>
+            <div class="input-group">
+                <input id="enhancementLevel4" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectenhancementLevel4" class="object-input" type="number" min="0" max="30" step="1"
+                    required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="skillname-label" id="commonLabel">双面神</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remaincommonfrags"></label>
+            </div>
+            <div class="input-group">
+                <input id="commonLevel" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectcommonLevel" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label for="remainFragments">剩余碎片</label>
+            </div>
+            <div class="input-group">
+            </div>
+            <div class="input-group">
+            </div>
+            <div class="input-group">
+                <input id="remainFragments" class="inputone" type="number" min="0" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label class="soul-label">剩余灵魂</label>
+            </div>
+            <div class="input-group">
+            </div>
+            <div class="input-group">
+            </div>
+            <div class="input-group">
+                <input id="currentsoul" class="inputone" type="number" min="0" step="1" required>
+            </div>
+        </div>
+        <button class="btn" onclick="calculate()">计算</button>
+        <div class="form-group">
+            <div class="result">
+                <p>获取碎片总计: <span id="currentConsumedLabel">0</span></p>
+            </div>
+            <div class="result">
+                <p>还需碎片: <span id="needFragsLabel">0</span></p>
+            </div>
+            <div class="result">
+                <p>碎片進度: <span id="fragsProgressLabel">0%</span></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="result">
+                <p>获取灵魂总计: <span id="currentConsumedSoulLabel">0</span></p>
+            </div>
+            <div class="result">
+                <p>还需灵魂: <span id="needSoulLabel">0</span></p>
+            </div>
+            <div class="result">
+                <p>灵魂进度: <span id="soulProgressLabel">0%</span></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        const fields = [
+            "skillLevel", "masterLevel1", "masterLevel2", "masterLevel3", "masterLevel4",
+            "enhancementLevel1", "enhancementLevel2", "enhancementLevel3", "enhancementLevel4",
+            "commonLevel", "objectskillLevel", "objectmasterLevel1", "objectmasterLevel2",
+            "objectmasterLevel3", "objectmasterLevel4", "objectenhancementLevel1",
+            "objectenhancementLevel2", "objectenhancementLevel3", "objectenhancementLevel4",
+            "objectcommonLevel", "remainFragments", "currentsoul"
+        ];
+
+        function saveToStorage() {
+            fields.forEach(id => localStorage.setItem(id, document.getElementById(id).value));
+        }
+
+        function loadFromStorage() {
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = localStorage.getItem(id) || 0;
+            });
+        }
+
+        window.onload = function () {
+            loadFromStorage();
+            calculate();
+        }
+
+        function calculate() {
+
+            var skillLevelArr = [0, 30, 35, 40, 45, 50, 55, 60, 65, 200, 80, 90, 100, 110, 120, 130, 140, 150, 160, 350, 170, 180, 190, 200, 210, 220, 230, 240, 250, 500, 0];
+            var masterLevelArr = [50, 15, 18, 20, 23, 25, 28, 30, 33, 100, 40, 45, 50, 55, 60, 65, 70, 75, 80, 175, 85, 90, 95, 100, 105, 110, 115, 120, 125, 250, 0];
+            var enhancementLevelArr = [75, 23, 27, 30, 34, 38, 42, 45, 49, 150, 60, 68, 75, 83, 90, 98, 105, 113, 120, 263, 128, 135, 143, 150, 158, 165, 173, 180, 188, 375, 0];
+            var commonLevelArr = [125, 38, 44, 50, 57, 63, 69, 75, 82, 300, 110, 124, 138, 152, 165, 179, 193, 207, 220, 525, 234, 248, 262, 275, 289, 303, 317, 330, 344, 750, 0];
+            var all_skill_frags = 4400;
+            var all_master_frags = 2252;
+            var all_enhance_frags = 3383;
+            var all_common_frags = 6268;
+            var allFrag = all_skill_frags + all_master_frags * 4 + all_enhance_frags * 4 + all_common_frags;
+
+            var skillLevelSoulArr = [0, 1, 1, 1, 2, 2, 2, 3, 3, 10, 3, 3, 4, 4, 4, 4, 4, 4, 5, 15, 5, 5, 5, 5, 5, 6, 6, 6, 7, 20];
+            var masterLevelSoulArr = [3, 1, 1, 1, 1, 1, 1, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 3, 8, 3, 3, 3, 3, 3, 3, 3, 3, 4, 10];
+            var enhancementLevelSoulArr = [4, 1, 1, 1, 2, 2, 2, 3, 3, 8, 3, 3, 3, 3, 3, 3, 3, 3, 4, 12, 4, 4, 4, 4, 4, 5, 5, 5, 6, 15];
+            var commonLevelSoulArr = [7, 2, 2, 2, 3, 3, 3, 5, 5, 14, 5, 5, 6, 6, 6, 6, 6, 6, 7, 17, 7, 7, 7, 7, 7, 9, 9, 9, 10, 20];
+            var all_skill_soul = 145;
+            var all_master_soul = 83;
+            var all_enhance_soul = 123;
+            var all_common_soul = 208;
+            var allSoul = all_skill_soul + all_master_soul * 4 + all_enhance_soul * 4 + all_common_soul;
+
+            var skillLevel = parseInt(document.getElementById('skillLevel').value) || 1;
+            var masterLevel1 = parseInt(document.getElementById('masterLevel1').value) || 0;
+            var masterLevel2 = parseInt(document.getElementById('masterLevel2').value) || 0;
+            var masterLevel3 = parseInt(document.getElementById('masterLevel3').value) || 0;
+            var masterLevel4 = parseInt(document.getElementById('masterLevel4').value) || 0;
+            var enhancementLevel1 = parseInt(document.getElementById('enhancementLevel1').value) || 0;
+            var enhancementLevel2 = parseInt(document.getElementById('enhancementLevel2').value) || 0;
+            var enhancementLevel3 = parseInt(document.getElementById('enhancementLevel3').value) || 0;
+            var enhancementLevel4 = parseInt(document.getElementById('enhancementLevel4').value) || 0;
+            var commonLevel = parseInt(document.getElementById('commonLevel').value) || 0;
+            var objectskillLevel = parseInt(document.getElementById('objectskillLevel').value) || 1;
+            var objectmasterLevel1 = parseInt(document.getElementById('objectmasterLevel1').value) || 0;
+            var objectmasterLevel2 = parseInt(document.getElementById('objectmasterLevel2').value) || 0;
+            var objectmasterLevel3 = parseInt(document.getElementById('objectmasterLevel3').value) || 0;
+            var objectmasterLevel4 = parseInt(document.getElementById('objectmasterLevel4').value) || 0;
+            var objectenhancementLevel1 = parseInt(document.getElementById('objectenhancementLevel1').value) || 0;
+            var objectenhancementLevel2 = parseInt(document.getElementById('objectenhancementLevel2').value) || 0;
+            var objectenhancementLevel3 = parseInt(document.getElementById('objectenhancementLevel3').value) || 0;
+            var objectenhancementLevel4 = parseInt(document.getElementById('objectenhancementLevel4').value) || 0;
+            var objectcommonLevel = parseInt(document.getElementById('objectcommonLevel').value) || 0;
+            var remainFragments = parseInt(document.getElementById('remainFragments').value) || 0;
+            var soul = parseInt(document.getElementById('currentsoul').value) || 0;
+
+            var currentLevel = [skillLevel, masterLevel1, masterLevel2, masterLevel3, masterLevel4, enhancementLevel1, enhancementLevel2, enhancementLevel3, enhancementLevel4, commonLevel, remainFragments];
+            var objectLevel = [objectskillLevel, objectmasterLevel1, objectmasterLevel2, objectmasterLevel3, objectmasterLevel4, objectenhancementLevel1, objectenhancementLevel2, objectenhancementLevel3, objectenhancementLevel4, objectcommonLevel]
+            for (let i = 0; i < 10; i++) {
+                if (currentLevel[i] > objectLevel[i]) {
+                    objectLevel[i] = currentLevel[i];
+                }
+            }
+
+            var s1 = skillLevelArr.slice(0, currentLevel[0]).reduce((a, b) => a + b, 0);
+            var m1 = masterLevelArr.slice(0, currentLevel[1]).reduce((a, b) => a + b, 0);
+            var m2 = masterLevelArr.slice(0, currentLevel[2]).reduce((a, b) => a + b, 0);
+            var m3 = masterLevelArr.slice(0, currentLevel[3]).reduce((a, b) => a + b, 0);
+            var m4 = masterLevelArr.slice(0, currentLevel[4]).reduce((a, b) => a + b, 0);
+            var e1 = enhancementLevelArr.slice(0, currentLevel[5]).reduce((a, b) => a + b, 0);
+            var e2 = enhancementLevelArr.slice(0, currentLevel[6]).reduce((a, b) => a + b, 0);
+            var e3 = enhancementLevelArr.slice(0, currentLevel[7]).reduce((a, b) => a + b, 0);
+            var e4 = enhancementLevelArr.slice(0, currentLevel[8]).reduce((a, b) => a + b, 0);
+            var c1 = commonLevelArr.slice(0, currentLevel[9]).reduce((a, b) => a + b, 0);
+            var os1 = skillLevelArr.slice(0, objectLevel[0]).reduce((a, b) => a + b, 0);
+            var om1 = masterLevelArr.slice(0, objectLevel[1]).reduce((a, b) => a + b, 0);
+            var om2 = masterLevelArr.slice(0, objectLevel[2]).reduce((a, b) => a + b, 0);
+            var om3 = masterLevelArr.slice(0, objectLevel[3]).reduce((a, b) => a + b, 0);
+            var om4 = masterLevelArr.slice(0, objectLevel[4]).reduce((a, b) => a + b, 0);
+            var oe1 = enhancementLevelArr.slice(0, objectLevel[5]).reduce((a, b) => a + b, 0);
+            var oe2 = enhancementLevelArr.slice(0, objectLevel[6]).reduce((a, b) => a + b, 0);
+            var oe3 = enhancementLevelArr.slice(0, objectLevel[7]).reduce((a, b) => a + b, 0);
+            var oe4 = enhancementLevelArr.slice(0, objectLevel[8]).reduce((a, b) => a + b, 0);
+            var oc1 = commonLevelArr.slice(0, objectLevel[9]).reduce((a, b) => a + b, 0);
+            var currentConsumed = s1 + m1 + m2 + e1 + e2 + e3 + e4 + c1 + currentLevel[8];
+            var needFrag = allFrag - currentConsumed;
+            var objectNeedFrags = [os1 - s1, om1 - m1, om2 - m2, om3 - m3, om4 - m4, oe1 - e1, oe2 - e2, oe3 - e3, oe4 - e4, oc1 - c1];
+            var objectNeedFrag = objectNeedFrags.reduce((a, b) => a + b, 0);
+            var s1s = skillLevelSoulArr.slice(0, currentLevel[0]).reduce((a, b) => a + b, 0);
+            var m1s = masterLevelSoulArr.slice(0, currentLevel[1]).reduce((a, b) => a + b, 0);
+            var m2s = masterLevelSoulArr.slice(0, currentLevel[2]).reduce((a, b) => a + b, 0);
+            var m3s = masterLevelSoulArr.slice(0, currentLevel[3]).reduce((a, b) => a + b, 0);
+            var m4s = masterLevelSoulArr.slice(0, currentLevel[4]).reduce((a, b) => a + b, 0);
+            var e1s = enhancementLevelSoulArr.slice(0, currentLevel[5]).reduce((a, b) => a + b, 0);
+            var e2s = enhancementLevelSoulArr.slice(0, currentLevel[6]).reduce((a, b) => a + b, 0);
+            var e3s = enhancementLevelSoulArr.slice(0, currentLevel[7]).reduce((a, b) => a + b, 0);
+            var e4s = enhancementLevelSoulArr.slice(0, currentLevel[8]).reduce((a, b) => a + b, 0);
+            var c1s = commonLevelSoulArr.slice(0, currentLevel[9]).reduce((a, b) => a + b, 0);
+            var os1s = skillLevelSoulArr.slice(0, objectLevel[0]).reduce((a, b) => a + b, 0);
+            var om1s = masterLevelSoulArr.slice(0, objectLevel[1]).reduce((a, b) => a + b, 0);
+            var om2s = masterLevelSoulArr.slice(0, objectLevel[2]).reduce((a, b) => a + b, 0);
+            var om3s = masterLevelSoulArr.slice(0, objectLevel[3]).reduce((a, b) => a + b, 0);
+            var om4s = masterLevelSoulArr.slice(0, objectLevel[4]).reduce((a, b) => a + b, 0);
+            var oe1s = enhancementLevelSoulArr.slice(0, objectLevel[5]).reduce((a, b) => a + b, 0);
+            var oe2s = enhancementLevelSoulArr.slice(0, objectLevel[6]).reduce((a, b) => a + b, 0);
+            var oe3s = enhancementLevelSoulArr.slice(0, objectLevel[7]).reduce((a, b) => a + b, 0);
+            var oe4s = enhancementLevelSoulArr.slice(0, objectLevel[8]).reduce((a, b) => a + b, 0);
+            var oc1s = commonLevelSoulArr.slice(0, objectLevel[9]).reduce((a, b) => a + b, 0);
+            var consumedSoul = s1s + m1s + m2s + m3s + m4s + e1s + e2s + e3s + e4s + c1s + soul;
+            var needSoul = allSoul - consumedSoul;
+            var objectNeedSouls = [os1s - s1s, om1s - m1s, om2s - m2s, om3s - m3s, om4s - m4s, oe1s - e1s, oe2s - e2s, oe3s - e3s, oe4s - e4s, oc1s - c1s];
+            var objectNeedSoul = objectNeedSouls.reduce((a, b) => a + b, 0);
+
+            // 計算結果防呆
+            if (soul > 20) {
+                soul = 20;
+                souls = 0;
+            }
+            if (soul == 20) {
+                souls = 0;
+            }
+            if (currentConsumed >= allFrag) {
+                needFrag = 0;
+            }
+
+            // 更新結果
+            document.getElementById('remainskillfrags').innerText = '已消耗:' + s1s + '/' + s1 + ' 还需:' + objectNeedSouls[0] + '/' + objectNeedFrags[0];
+            document.getElementById('remainmasterfrags1').innerText = '已消耗:' + m1s + '/' + m1 + ' 还需:' + objectNeedSouls[1] + '/' + objectNeedFrags[1];
+            document.getElementById('remainmasterfrags2').innerText = '已消耗:' + m2s + '/' + m2 + ' 还需:' + objectNeedSouls[2] + '/' + objectNeedFrags[2];
+            document.getElementById('remainmasterfrags3').innerText = '已消耗:' + m3s + '/' + m3 + ' 还需:' + objectNeedSouls[3] + '/' + objectNeedFrags[3];
+            document.getElementById('remainmasterfrags4').innerText = '已消耗:' + m4s + '/' + m4 + ' 还需:' + objectNeedSouls[4] + '/' + objectNeedFrags[4];
+            document.getElementById('remainenhancefrags1').innerText = '已消耗:' + e1s + '/' + e1 + ' 还需:' + objectNeedSouls[5] + '/' + objectNeedFrags[5];
+            document.getElementById('remainenhancefrags2').innerText = '已消耗:' + e2s + '/' + e2 + ' 还需:' + objectNeedSouls[6] + '/' + objectNeedFrags[6];
+            document.getElementById('remainenhancefrags3').innerText = '已消耗:' + e3s + '/' + e3 + ' 还需:' + objectNeedSouls[7] + '/' + objectNeedFrags[7];
+            document.getElementById('remainenhancefrags4').innerText = '已消耗:' + e4s + '/' + e4 + ' 还需:' + objectNeedSouls[8] + '/' + objectNeedFrags[8];
+            document.getElementById('remaincommonfrags').innerText = '已消耗:' + c1s + '/' + c1 + ' 还需:' + objectNeedSouls[9] + '/' + objectNeedFrags[9];
+
+            document.getElementById('currentConsumedLabel').innerText = currentConsumed;
+            document.getElementById('currentConsumedSoulLabel').innerText = consumedSoul;
+
+            document.getElementById('needFragsLabel').innerText = needFrag;
+            document.getElementById('needSoulLabel').innerText = needSoul;
+
+            document.getElementById('fragsProgressLabel').innerText = ((currentConsumed / allFrag) * 100).toFixed(2) + '%';
+            document.getElementById('soulProgressLabel').innerText = ((consumedSoul / allSoul) * 100).toFixed(2) + '%';
+
+            saveToStorage()
+        }
+
+        // 加载侧边栏
+        fetch('sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-container').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('加载侧边栏失败:', error);
+            });
+
+        // JavaScript 控制子菜单的展开和收起
+        function toggleSubMenu(id) {
+            const submenu = document.getElementById(id);
+            if (submenu.style.display === "block") {
+                submenu.style.display = "none";
+            } else {
+                submenu.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+</html>
