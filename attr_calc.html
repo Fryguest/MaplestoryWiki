@@ -45,6 +45,12 @@
         </div>
         <br>
 
+        <div class="input-group">
+            <h3>暴击</h3>
+            <label>暴击伤害:<input type="number" id="criDmg" /></label><br>
+        </div>
+        <br>
+
         <!-- 切换按钮 -->
         <button onclick="toggleExtraSub()">我是暗影侠盗/影武者</button>
         <!-- 副属性 2:默认隐藏 -->
@@ -104,6 +110,8 @@
             const mainAttrPct = Number(document.getElementById("mainAttrPct").value) / 100;
             const extraMainAttr = Number(document.getElementById("extraMainAttr").value);
 
+            const criDmg = (Number(document.getElementById("criDmg").value) + 35) / 100;
+
             const subAttr = Number(document.getElementById("subAttr").value);
             const subAttrPct = Number(document.getElementById("subAttrPct").value) / 100;
             const extraSubAttr = Number(document.getElementById("extraSubAttr").value);
@@ -125,30 +133,34 @@
             const totalAttr = effMain * 4 + effSub;
             const effAtk = attack * (1 + attackPct);
             const effDmgBonus = dmgBonus + bossBonus;
-            const baseOutput = effAtk * totalAttr * (1 + effDmgBonus);
+            const baseOutput = effAtk * totalAttr * (1 + effDmgBonus) * (1 + criDmg);
 
             // +1攻击力
-            const atkUp = (attack + 1) * (1 + attackPct) * totalAttr * (1 + effDmgBonus);
+            const atkUp = (attack + 1) * (1 + attackPct) * totalAttr * (1 + effDmgBonus) * (1 + criDmg);
             const atkGain = atkUp - baseOutput;
 
             // +1%攻击力
-            const atkPctUp = attack * (1 + attackPct + 0.01) * totalAttr * (1 + effDmgBonus);
+            const atkPctUp = attack * (1 + attackPct + 0.01) * totalAttr * (1 + effDmgBonus) * (1 + criDmg);
             const atkPctGain = atkPctUp - baseOutput;
 
+            // +1%爆伤
+            const criDmgUp = attack * (1 + attackPct) * totalAttr * (1 + effDmgBonus) * (1 + criDmg + 0.01);
+            const criDmgGain = criDmgUp - baseOutput;
+
             // +1% Dmg
-            const dmgUp = attack * (1 + attackPct) * totalAttr * (1 + effDmgBonus + 0.01);
+            const dmgUp = attack * (1 + attackPct) * totalAttr * (1 + effDmgBonus + 0.01) * (1 + criDmg);
             const dmgGain = dmgUp - baseOutput;
 
             // +1主属性
             const mainUp = (mainAttr + 1) * (1 + mainAttrPct) + extraMainAttr;
             const newTotalAttrMain = mainUp * 4 + effSub;
-            const attrUp = effAtk * newTotalAttrMain * (1 + effDmgBonus);
+            const attrUp = effAtk * newTotalAttrMain * (1 + effDmgBonus) * (1 + criDmg);
             const attrGain = attrUp - baseOutput;
 
             // +1%主属性
             const mainPctUp = mainAttr * (1 + mainAttrPct + 0.01) + extraMainAttr;
             const newTotalAttrMainPct = mainPctUp * 4 + effSub;
-            const mainPctOutput = effAtk * newTotalAttrMainPct * (1 + effDmgBonus);
+            const mainPctOutput = effAtk * newTotalAttrMainPct * (1 + effDmgBonus) * (1 + criDmg);
             const mainPctGain = mainPctOutput - baseOutput;
 
             // +1%全属性
@@ -156,7 +168,7 @@
             const subAllPct = subAttr * (1 + subAttrPct + 0.01) + extraSubAttr;
             const subAllPct2 = subAttr2 * (1 + subAttrPct2 + 0.01) + extraSubAttr2;
             const totalAttrAllPct = mainAllPct * 4 + subAllPct + subAllPct2;
-            const allPctOutput = effAtk * totalAttrAllPct * (1 + effDmgBonus);
+            const allPctOutput = effAtk * totalAttrAllPct * (1 + effDmgBonus) * (1 + criDmg);
             const allPctGain = allPctOutput - baseOutput;
 
             document.getElementById("result").innerText =
@@ -164,6 +176,7 @@
                 `📌 +1 攻击力:输出 ${atkUp.toFixed(2)}，提升 ${atkGain.toFixed(2)}\n` +
                 `📌 +1% 攻击力:输出 ${atkPctUp.toFixed(2)}，提升 ${atkPctGain.toFixed(2)}\n` +
                 `📌 +1% BOSS:输出 ${dmgUp.toFixed(2)}，提升 ${dmgGain.toFixed(2)}\n` +
+                `📌 +1% 爆伤:输出 ${criDmgUp.toFixed(2)}，提升 ${criDmgGain.toFixed(2)}\n` +
                 `📌 +1 主属性:输出 ${attrUp.toFixed(2)}，提升 ${attrGain.toFixed(2)}\n` +
                 `📌 +1% 主属性:输出 ${mainPctOutput.toFixed(2)}，提升 ${mainPctGain.toFixed(2)}\n` +
                 `📌 +1% 全属性:输出 ${allPctOutput.toFixed(2)}，提升 ${allPctGain.toFixed(2)}\n\n` +
@@ -171,6 +184,7 @@
                 `1 攻击力 ≈ ${attrGain > 0 ? (atkGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` +
                 `1 %攻击力 ≈ ${atkGain > 0 ? (atkPctGain / atkGain).toFixed(2) : 'N/A'} 攻击力\n` +
                 `40 BOSS伤 ≈ ${atkPctGain > 0 ? (dmgGain / atkPctGain * 40).toFixed(2) : 'N/A'} %攻击力\n` +
+                `1 $爆伤 ≈ ${mainPctGain > 0 ? (criDmgGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性\n` +
                 `1 %主属性 ≈ ${attrGain > 0 ? (mainPctGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` +
                 `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性\n` +
                 `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / attrGain).toFixed(2) : 'N/A'} 主属性`;
