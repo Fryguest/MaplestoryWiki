@@ -46,8 +46,8 @@
         <br>
 
         <div class="input-group">
-            <h3>暴击</h3>
-            <label>暴击伤害:<input type="number" id="criDmg" /></label><br>
+            <h3>爆击</h3>
+            <label>爆击伤害:<input type="number" id="criDmg" /></label><br>
         </div>
         <br>
 
@@ -135,15 +135,15 @@
             const effDmgBonus = dmgBonus + bossBonus;
             const baseOutput = effAtk * totalAttr * (1 + effDmgBonus) * (1 + criDmg);
 
-            // +1攻击力
+            // +1 攻击力
             const atkUp = (attack + 1) * (1 + attackPct) * totalAttr * (1 + effDmgBonus) * (1 + criDmg);
             const atkGain = atkUp - baseOutput;
 
-            // +1%攻击力
+            // +1% 攻击力
             const atkPctUp = attack * (1 + attackPct + 0.01) * totalAttr * (1 + effDmgBonus) * (1 + criDmg);
             const atkPctGain = atkPctUp - baseOutput;
 
-            // +1%爆伤
+            // +1% 爆伤
             const criDmgUp = attack * (1 + attackPct) * totalAttr * (1 + effDmgBonus) * (1 + criDmg + 0.01);
             const criDmgGain = criDmgUp - baseOutput;
 
@@ -184,7 +184,7 @@
                 `1 攻击力 ≈ ${attrGain > 0 ? (atkGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` +
                 `1 %攻击力 ≈ ${atkGain > 0 ? (atkPctGain / atkGain).toFixed(2) : 'N/A'} 攻击力\n` +
                 `40 BOSS伤 ≈ ${atkPctGain > 0 ? (dmgGain / atkPctGain * 40).toFixed(2) : 'N/A'} %攻击力\n` +
-                `1 $爆伤 ≈ ${mainPctGain > 0 ? (criDmgGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性\n` +
+                `1 %爆伤 ≈ ${mainPctGain > 0 ? (criDmgGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性\n` +
                 `1 %主属性 ≈ ${attrGain > 0 ? (mainPctGain / attrGain).toFixed(2) : 'N/A'} 主属性\n` +
                 `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / mainPctGain).toFixed(2) : 'N/A'}% 主属性\n` +
                 `1 %全属性 ≈ ${mainPctGain > 0 ? (allPctGain / attrGain).toFixed(2) : 'N/A'} 主属性`;
