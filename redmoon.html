@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红月期望计算器 （施工中）</title>
+    <style>
+        body {
+          font-family: sans-serif;
+          margin: 2em;
+          background-color: #f9f9f9;
+        }
+        h1 {
+          font-size: 1.5em;
+          margin-bottom: 0.5em;
+        }
+        label {
+          display: block;
+          margin-top: 1em;
+        }
+        .level-inputs {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 1em;
+        }
+        .level-input-pair {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .level-input-pair span {
+          width: 60px;
+        }
+        input[type="number"] {
+          width: 100px;
+          padding: 4px;
+        }
+        button {
+          padding: 8px 16px;
+          font-size: 1em;
+          cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- JavaScript 动态加载左侧目录 -->
+    <div id="sidebar-container"></div>
+
+    <div class="content">
+      <h1>红月宝玉模拟器 - 当前研磨状态</h1>
+    
+      <form id="gemForm">
+        <div class="level-inputs" id="levelInputs">
+          <!-- JavaScript 会填充这些输入框 -->
+        </div>
+    
+        <label for="materialCount">当前拥有的研磨材料数量：</label>
+        <input type="number" id="materialCount" name="materialCount" min="0" required>
+    
+        <label for="refineLevel">当前的加工等级：</label>
+        <input type="number" id="refineLevel" name="refineLevel" min="0" max="10" required>
+        <br><br>
+        <button type="submit">开始模拟</button>
+      </form>
+    </div>
+
+    <script>
+    const levelInputsDiv = document.getElementById("levelInputs");
+    for (let i = 1; i <= 10; i++) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "level-input-pair";
+
+      const label = document.createElement("span");
+      label.textContent = `第${i}级`;
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.name = `level${i}`;
+      input.min = 0;
+      input.required = true;
+      input.value = 0;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(input);
+      levelInputsDiv.appendChild(wrapper);
+    }
+
+    function getBaseAttributeWithRefine(bases, refineLevel) {
+      let total = 0;
+      for (let i = 0; i < 10; i++) {
+        if (i < refineLevel) {
+          total += bases[i] * (refineLevel <= 5 ? 3 : 4);
+        } else {
+          total += bases[i];
+        }
+      }
+      return total;
+    }
+
+    const grindProbability = {
+      1: [{ value: 25, prob: 0.65 }, { value: 50, prob: 0.05 }, { value: 75, prob: 0.10 }, { value: 100, prob: 0.20 }],
+      2: [{ value: 25, prob: 0.65 }, { value: 50, prob: 0.05 }, { value: 75, prob: 0.10 }, { value: 100, prob: 0.20 }],
+      3: [{ value: 25, prob: 0.65 }, { value: 50, prob: 0.05 }, { value: 75, prob: 0.10 }, { value: 100, prob: 0.20 }],
+      4: [{ value: 25, prob: 0.7 }, { value: 50, prob: 0.06 }, { value: 75, prob: 0.09 }, { value: 100, prob: 0.15 }],
+      5: [{ value: 25, prob: 0.7 }, { value: 50, prob: 0.06 }, { value: 75, prob: 0.09 }, { value: 100, prob: 0.15 }],
+      6: [{ value: 50, prob: 0.75 }, { value: 100, prob: 0.07 }, { value: 150, prob: 0.08 }, { value: 200, prob: 0.10 }],
+      7: [{ value: 50, prob: 0.75 }, { value: 100, prob: 0.07 }, { value: 150, prob: 0.08 }, { value: 200, prob: 0.10 }],
+      8: [{ value: 50, prob: 0.8 }, { value: 100, prob: 0.08 }, { value: 150, prob: 0.07 }, { value: 200, prob: 0.05 }],
+      9: [{ value: 50, prob: 0.8 }, { value: 100, prob: 0.08 }, { value: 150, prob: 0.07 }, { value: 200, prob: 0.05 }],
+      10: [{ value: 50, prob: 0.85 }, { value: 100, prob: 0.09 }, { value: 150, prob: 0.04 }, { value: 200, prob: 0.02 }]
+    };
+
+    function randomValueByProbTable(table) {
+      const r = Math.random();
+      let acc = 0;
+      for (const item of table) {
+        acc += item.prob;
+        if (r < acc) return item.value;
+      }
+      return table[table.length - 1].value;
+    }
+
+    function simulateOneGem() {
+      const result = [];
+      for (let level = 1; level <= 10; level++) {
+        const probTable = grindProbability[level];
+        if (!probTable || probTable.length === 0) return null;
+        result.push(randomValueByProbTable(probTable));
+      }
+      return result;
+    }
+
+    document.getElementById("gemForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = new FormData(this);
+      const gemLevels = [];
+      for (let i = 1; i <= 10; i++) {
+        gemLevels.push(Number(data.get(`level${i}`)));
+      }
+      const materialCount = Number(data.get("materialCount"));
+      const refineLevel = Number(data.get("refineLevel"));
+
+      const originalValue = getBaseAttributeWithRefine(gemLevels, refineLevel);
+      const maxTries = Math.floor(materialCount / 100);
+      const simCount = 10000;
+      let successCount = 0;
+
+      for (let i = 0; i < simCount; i++) {
+        let bestValue = 0;
+        for (let j = 0; j < maxTries; j++) {
+          const simulated = simulateOneGem();
+          if (!simulated) continue;
+          const simulatedValue = getBaseAttributeWithRefine(simulated, refineLevel);
+          if (simulatedValue > bestValue) {
+            bestValue = simulatedValue;
+          }
+        }
+        if (bestValue > originalValue) {
+          successCount++;
+        }
+      }
+
+      const rate = (successCount * 100.0 / simCount ).toFixed(2);
+      alert(`在 ${simCount} 次模拟中，有 ${rate}% 的几率在材料耗尽前打造出更强的宝玉。`);
+    });
+
+    // 加载侧边栏
+    fetch('sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      })
+      .catch(error => {
+        console.error('加载侧边栏失败:', error);
+      });
+
+    function toggleSubMenu(id) {
+      const submenu = document.getElementById(id);
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+    </script>
+  </body>
+</html>
