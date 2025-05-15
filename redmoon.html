@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>红月期望计算器 （施工中）</title>
+    <title>红月期望计算器</title>
     <style>
         body {
           font-family: sans-serif;
@@ -51,7 +51,7 @@
     <div id="sidebar-container"></div>
 
     <div class="content">
-      <h1>红月宝玉模拟器 - 当前研磨状态</h1>
+      <h1>红月宝玉研磨计算 - 我要不要重新研磨？</h1>
     
       <form id="gemForm">
         <div class="level-inputs" id="levelInputs">
@@ -66,6 +66,7 @@
         <br><br>
         <button type="submit">开始模拟</button>
       </form>
+      <p id="result"></p>
     </div>
 
     <script>
@@ -166,7 +167,8 @@
       }
 
       const rate = (successCount * 100.0 / simCount ).toFixed(2);
-      alert(`在 ${simCount} 次模拟中，有 ${rate}% 的几率在材料耗尽前打造出更强的宝玉。`);
+
+      document.getElementById("result").innerText =`在 ${simCount} 次模拟中，有 ${rate}% 的几率在材料耗尽前打造出更强的宝玉。`
     });
 
     // 加载侧边栏
