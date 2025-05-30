@@ -51,7 +51,7 @@
     <div id="sidebar-container"></div>
 
     <div class="content">
-      <h1>红月宝玉研磨计算 - 我要不要重新研磨？</h1>
+      <h1>红月宝玉研磨模拟 - 我就这么点材料, 我要不要重新研磨？</h1>
     
       <form id="gemForm">
         <div class="level-inputs" id="levelInputs">
@@ -67,6 +67,22 @@
         <button type="submit">开始模拟</button>
       </form>
       <p id="result"></p>
+
+      <h1>红月宝玉加工模拟 - 我就这么点钱, 我要不要开始加工？</h1>
+      <form id="refineForm">
+        <label for="currentRefineLevel">当前加工等级：</label>
+        <input type="number" id="currentRefineLevel" name="currentRefineLevel" min="0" max="9" required>
+        
+        <label for="targetRefineLevel">目标加工等级：</label>
+        <input type="number" id="targetRefineLevel" name="targetRefineLevel" min="1" max="10" required>
+        
+        <label for="budget">预算（亿）：</label>
+        <input type="number" id="budget" name="budget" min="1" step="1" required>
+        
+        <br><br>
+        <button type="submit">开始模拟</button>
+      </form>
+      <div id="refineResult"></div>
     </div>
 
     <script>
@@ -144,10 +160,10 @@
         gemLevels.push(Number(data.get(`level${i}`)));
       }
       const materialCount = Number(data.get("materialCount"));
-      const refineLevel = Number(data.get("refineLevel"));
+      const refineLevel = Number(data.get("refineLevel"));  
 
       const originalValue = getBaseAttributeWithRefine(gemLevels, refineLevel);
-      const maxTries = Math.floor(materialCount / 100);
+      const maxTries = Math.floor(materialCount / 110);
       const simCount = 10000;
       let successCount = 0;
 
@@ -169,6 +185,121 @@
       const rate = (successCount * 100.0 / simCount ).toFixed(2);
 
       document.getElementById("result").innerText =`在 ${simCount} 次模拟中，有 ${rate}% 的几率在材料耗尽前打造出更强的宝玉。`
+    });
+
+    // 加工概率表
+    const refineProbability = [
+      { cost: 1, success: 1.0, fail: 0.0, boom: 0.0 },    // 0->1
+      { cost: 1, success: 0.4, fail: 0.6, boom: 0.0 },    // 1->2
+      { cost: 1, success: 0.4, fail: 0.55, boom: 0.05 },  // 2->3
+      { cost: 1, success: 0.3, fail: 0.6, boom: 0.1 },    // 3->4
+      { cost: 1, success: 0.3, fail: 0.6, boom: 0.1 },    // 4->5
+      { cost: 2, success: 0.8, fail: 0.0, boom: 0.2 },    // 5->6
+      { cost: 2, success: 0.4, fail: 0.4, boom: 0.2 },    // 6->7
+      { cost: 2, success: 0.4, fail: 0.4, boom: 0.2 },    // 7->8
+      { cost: 3, success: 0.3, fail: 0.4, boom: 0.3 },    // 8->9
+      { cost: 3, success: 0.3, fail: 0.4, boom: 0.3 }     // 9->10
+    ];
+
+    // 模拟单次加工尝试
+    function simulateOneAttempt(level, prob) {
+        const r = Math.random();
+        if (r < prob.success) {
+            return { newLevel: level + 1, boomed: false, cost: prob.cost };
+        } else if (r < prob.success + prob.fail) {
+            return { newLevel: Math.max(0, level - 1), boomed: false, cost: prob.cost };
+        } else {
+            return { newLevel: 0, boomed: true, cost: prob.cost };
+        }
+    }
+
+    // 模拟单次完整加工过程
+    function simulateOneTry(currentLevel, targetLevel, budget) {
+        let level = currentLevel;
+        let cost = 0;
+        let attempts = 0;
+        let boomed = false;
+
+        while (level < targetLevel && cost + result.cost <= budget) {
+            const prob = refineProbability[level];
+            const result = simulateOneAttempt(level, prob);
+            
+            level = result.newLevel;
+            cost += result.cost;
+            attempts++;
+        }
+
+        return {
+            success: level >= targetLevel,
+            cost: cost,
+            attempts: attempts,
+            budgetExhausted: cost >= budget
+        };
+    }
+
+    // 更新统计数据
+    function updateStats(stats, result) {
+        if (result.success) {
+            stats.successCount++;
+            stats.totalCost += result.cost;
+            stats.maxCost = Math.max(stats.maxCost, result.cost);
+            stats.minCost = Math.min(stats.minCost, result.cost);
+        }
+        if (result.budgetExhausted) {
+            stats.budgetExhaustedCount++;
+        }
+        return stats;
+    }
+
+    // 主模拟函数
+    function simulateRefine(currentLevel, targetLevel, budget) {
+        const simCount = 100000;
+        const stats = {
+            successCount: 0,
+            totalCost: 0,
+            maxCost: 0,
+            minCost: Infinity,
+            budgetExhaustedCount: 0
+        };
+
+        for (let i = 0; i < simCount; i++) {
+            const result = simulateOneTry(currentLevel, targetLevel, budget);
+            updateStats(stats, result);
+        }
+
+        return {
+            successRate: (stats.successCount / simCount) * 100,
+            avgCost: stats.successCount > 0 ? stats.totalCost / stats.successCount : 0,
+            maxCost: stats.maxCost,
+            minCost: stats.minCost === Infinity ? 0 : stats.minCost,
+            budgetExhaustedRate: (stats.budgetExhaustedCount / simCount) * 100
+        };
+    }
+
+    document.getElementById("refineForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        
+        const currentLevel = Number(document.getElementById("currentRefineLevel").value);
+        const targetLevel = Number(document.getElementById("targetRefineLevel").value);
+        const budget = Number(document.getElementById("budget").value);
+
+        if (currentLevel >= targetLevel) {
+            document.getElementById("refineResult").innerHTML = "目标等级必须大于当前等级！";
+            return;
+        }
+
+        const result = simulateRefine(currentLevel, targetLevel, budget);
+        
+        let resultHtml = `
+            <h3>模拟结果：</h3>
+            <p>成功率：${result.successRate.toFixed(2)}%</p>
+            <p>失败率：${result.budgetExhaustedRate.toFixed(2)}%</p>
+            <p>平均成本：${result.avgCost.toFixed(2)}亿</p>
+            <p>最低成本：${result.minCost.toFixed(2)}亿</p>
+            <p>最高成本：${result.maxCost.toFixed(2)}亿</p>
+        `;
+
+        document.getElementById("refineResult").innerHTML = resultHtml;
     });
 
     // 加载侧边栏
