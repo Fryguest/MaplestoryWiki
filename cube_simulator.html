@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./static/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>魔方模拟器(施工中)</title>
+  <style>
+    /* 预留侧栏宽度后在剩余区域居中（通用） */
+    .remain-center {
+      padding-left: 240px;
+    }
+
+    .remain-center .inner {
+      margin: 0 auto;
+      width: min(1100px, calc(100vw - 240px));
+      min-width: 320px;
+      padding: 0 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- JavaScript 动态加载左侧目录 -->
+  <div id="sidebar-container"></div>
+  <div class="container my-4">
+    <div class="remain-center">
+      <div class="inner">
+        <h1 class="mb-4">魔方模拟器</h1>
+
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="card shadow-sm mb-4">
+              <div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#cubeCollapse" aria-expanded="true" aria-controls="cubeCollapse">魔方概率查询</div>
+              <div id="cubeCollapse" class="collapse show">
+                <div class="card-body">
+                  <div class="row g-3 align-items-end">
+                    <div class="col-12 col-md-3">
+                      <label class="form-label">装备类型</label>
+                      <select id="equipType" class="form-select">
+                        <option value="武器">武器</option>
+                        <option value="辅助武器">辅助武器</option>
+                        <option value="徽章">徽章</option>
+                        <option value="坠饰">坠饰</option>
+                        <option value="戒指">戒指</option>
+                        <option value="脸部装饰">脸部装饰</option>
+                        <option value="眼部装饰">眼部装饰</option>
+                        <option value="耳环">耳环</option>
+                        <option value="帽子">帽子</option>
+                        <option value="上衣">上衣</option>
+                        <option value="套服">套服</option>
+                        <option value="下衣">下衣</option>
+                        <option value="手套">手套</option>
+                        <option value="鞋子">鞋子</option>
+                        <option value="披风">披风</option>
+                        <option value="腰带">腰带</option>
+                        <option value="肩膀">肩膀</option>
+                        <option value="心脏">心脏</option>
+                        <option value="胸章">胸章</option>
+                      </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label class="form-label">装备等级</label>
+                      <select id="equipLevel" class="form-select">
+                        <option value="140">140</option>
+                        <option value="150" selected>150</option>
+                        <option value="160">160</option>
+                        <option value="200">200</option>
+                        <option value="250">250</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label class="form-label">当前潜能</label>
+                      <select id="currentTier" class="form-select">
+                        <option value="Rare">特殊 (Rare)</option>
+                        <option value="Epic">稀有 (Epic)</option>
+                        <option value="Unique" selected>罕见 (Unique)</option>
+                        <option value="Legendary">传说 (Legendary)</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label class="form-label">魔方类型</label>
+                      <select id="cubeType" class="form-select">
+                        <option>恢复方块</option>
+                        <option>闪耀镜射方块</option>
+                        <option>闪炫方块</option>
+                        <option>新对等方块</option>
+                        <option>结合方块</option>
+                      </select>
+                    </div>
+                    <div class="col-12 d-flex gap-2 flex-wrap">
+                      <button id="showBtn" class="btn btn-primary">准备打水漂</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#resultCollapse" aria-expanded="true" aria-controls="resultCollapse">跳框概率表</div>
+          <div id="resultCollapse" class="collapse show">
+            <div class="card-body">
+              <div id="probSummary" class="mb-2 small text-muted"></div>
+              <div class="table-responsive">
+                <div id="probTableContainer" class="mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#tierResultCollapse" aria-expanded="true" aria-controls="tierResultCollapse">结果概率表</div>
+          <div id="tierResultCollapse" class="collapse show">
+            <div class="card-body">
+              <div class="table-responsive">
+                <div id="resultTierTableContainer" class="mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    // --- 固定顺序与显示名 ---
+  const TIERS = ['Rare','Epic','Unique','Legendary'];
+  const TIER_LABEL = {
+    'Rare': '特殊 (Rare)',
+    'Epic': '稀有 (Epic)',
+    'Unique': '罕见 (Unique)',
+    'Legendary': '传说 (Legendary)'
+  };
+
+  // --- 概率配置（根据你给出的表） ---
+  const cubeData = {
+    "恢复方块": {
+      upgrade: {
+        "Rare": { "Epic": 97.7, "Unique": 2, "Legendary": 0.3 },
+        "Epic": { "Epic": 91.4, "Legendary": 8.0, "Legendary": 0.6 },
+        "Unique": { "Unique": 97.9, "Legendary": 2.1 },
+        "Legendary": { "Legendary": 100.0 }
+      }
+    },
+    "闪耀镜射方块": {
+      upgrade: {
+        "Rare": { "Rare": 3, "Epic": 97 },
+        "Epic": { "Epic": 97.75, "Unique": 2.25 },
+        "Unique": { "Unique": 99.01, "Legendary": 0.99 },
+        "Legendary": { "Legendary": 100.0 }
+      }
+    },
+    "闪炫方块": {
+      upgrade: {
+        "Rare": { "Rare": 3, "Epic": 97 },
+        "Epic": { "Epic": 97, "Unique": 3 },
+        "Unique": { "Unique": 98.65, "Legendary": 1.35 },
+        "Legendary": { "Legendary": 100.0 }
+      }
+    },
+    "新对等方块": {
+      upgrade: {
+        "Rare": { "Rare": 3, "Epic": 97 },
+        "Epic": { "Epic": 97, "Unique": 3 },
+        "Unique": { "Unique": 98.65, "Legendary": 1.35 },
+        "Legendary": { "Legendary": 100.0 }
+      }
+    },
+    "结合方块": {
+      upgrade: {
+        "Rare": { "Rare": 100.0 },
+        "Epic": { "Epic": 100.0 },
+        "Unique": { "Unique": 100.0 },
+        "Legendary": { "Legendary": 100.0 }
+      }
+    }
+  };
+
+  // --- 辅助函数：确保返回包含所有等级键（缺的设为0） ---
+  function normalizeToAllTiers(dist) {
+    const out = {};
+    for (const t of TIERS) out[t] = 0;
+    for (const k in dist) {
+      if (out.hasOwnProperty(k)) out[k] = Number(dist[k]) || 0;
+    }
+    return out;
+  }
+
+  // 计算「使用一次魔方后」的最终分布（最低从 Rare 开始）
+  function getResultDistribution(cubeType, current) {
+    const data = cubeData[cubeType];
+    if (!data) return normalizeToAllTiers({});
+    const up = (data.upgrade && data.upgrade[current]) ? data.upgrade[current] : { [current]: 100.0 };
+    return normalizeToAllTiers(up);
+  }
+
+  // 生成 HTML 表格并显示
+  function renderProbabilityTable(cubeType, equipType, equipLevel, current) {
+    const dist = getResultDistribution(cubeType, current);
+    // 计算晋阶概率（比当前更高的等级）
+    let promotionProb = 0;
+    const currentIdx = TIERS.indexOf(current);
+    for (let i = currentIdx + 1; i < TIERS.length; i++) {
+      promotionProb += (dist[TIERS[i]] || 0);
+    }
+
+    // summary
+    const summaryEl = document.getElementById('probSummary');
+    let summaryHtml = `<strong>选择：</strong> 魔方：${cubeType}； 装备：${equipType}（Lv.${equipLevel}）； 当前潜能：${TIER_LABEL[current]}<br>`;
+    summaryHtml += `<strong>晋阶概率（升到更高阶）：</strong> ${promotionProb.toFixed(2)}%`;
+    summaryEl.innerHTML = summaryHtml;
+
+    // table
+    const container = document.getElementById('probTableContainer');
+    let html = `<table class="table table-sm table-bordered" style="max-width:520px;"><thead><tr><th>潜能等级</th><th>概率</th></tr></thead><tbody>`;
+    for (const t of TIERS) {
+      html += `<tr><td>${TIER_LABEL[t]}</td><td style="min-width:140px">${(dist[t] || 0).toFixed(2)}%</td></tr>`;
+    }
+    html += `</tbody></table>`;
+
+    container.innerHTML = html;
+  }
+
+  // 渲染“结果概率表”：按当前输入显示到各潜能等级的概率（包含当前与更低等级，为直观对比）
+  // function renderResultTierTable(cubeType, equipType, equipLevel, current) {
+  //   const dist = getResultDistribution(cubeType, current);
+  //   const container = document.getElementById('resultTierTableContainer');
+  //   if (!container) return;
+
+  //   let html = `<table class="table table-sm table-bordered" style="max-width:520px;"><thead><tr><th>潜能等级</th><th>概率</th></tr></thead><tbody>`;
+  //   for (const t of TIERS) {
+  //     html += `<tr><td>${TIER_LABEL[t]}</td><td style="min-width:140px">${(dist[t] || 0).toFixed(2)}%</td></tr>`;
+  //   }
+  //   html += `</tbody></table>`;
+  //   container.innerHTML = html;
+  // }
+
+  // --- 事件绑定（仅在点击按钮时更新） ---
+  const inputs = ['equipType','equipLevel','currentTier','cubeType','showBtn'];
+  function setup() {
+    document.getElementById('showBtn').addEventListener('click', () => {
+      const equipType = document.getElementById('equipType').value;
+      const equipLevel = document.getElementById('equipLevel').value;
+      const current = document.getElementById('currentTier').value;
+      const cubeType = document.getElementById('cubeType').value;
+      renderProbabilityTable(cubeType, equipType, equipLevel, current);
+      renderResultTierTable(cubeType, equipType, equipLevel, current);
+    });
+  }
+    // 加载侧边栏
+    fetch('sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      })
+      .catch(error => {
+        console.error('加载侧边栏失败:', error);
+      });
+
+    function toggleSubMenu(id) {
+      const submenu = document.getElementById(id);
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+    // 绑定事件与首次渲染
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setup);
+    } else {
+      setup();
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
