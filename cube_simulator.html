@@ -95,6 +95,22 @@
                       <button id="showBtn" class="btn btn-primary">准备打水漂</button>
                     </div>
                   </div>
+                  <!-- 当前潜能选择框 -->
+                  <div class="row g-3 mt-2" id="currentLinesGroup">
+                    <div class="col-12 small text-muted">请选择当前三条潜能（默认均为“垃圾”）：</div>
+                    <div class="col-12 col-md-4">
+                      <label class="form-label">当前第1条</label>
+                      <select id="currentLine1" class="form-select"></select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                      <label class="form-label">当前第2条</label>
+                      <select id="currentLine2" class="form-select"></select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                      <label class="form-label">当前第3条</label>
+                      <select id="currentLine3" class="form-select"></select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2206,6 +2222,98 @@
       return out;
     }
 
+    // 计算给定装备类型与等级下的可选潜能（用于“当前潜能”三个下拉框）
+    function buildLabeledNameGlobal(tier, name, equipLevel) {
+      const isAllStat = name === '全属性%';
+      const isMainStat = /^(STR%|DEX%|INT%|LUK%|物理攻击力%|魔法攻击力%|总伤害%)$/.test(name);
+      const isHigh = Number(equipLevel) > 155;
+      if (!isAllStat && !isMainStat) return name;
+      let val;
+      if (tier === 'Legendary') val = isAllStat ? (isHigh ? 10 : 9) : (isHigh ? 13 : 12);
+      else val = isAllStat ? (isHigh ? 7 : 6) : (isHigh ? 10 : 9);
+      const base = name.replace('%', '');
+      return `${base}+${val}%`;
+    }
+
+    function pickPoolByType(source, cubeTypeKey, equipType) {
+      if (!source || !source[cubeTypeKey]) return null;
+      const dict = source[cubeTypeKey];
+      if (dict[equipType]) return dict[equipType];
+      return null;
+    }
+
+    function computeAvailableLines(equipType, equipLevel, currentTier) {
+      // 目前按“恢复方块”的词条池生成下拉（其词条定义最完整）
+      const poolLegend = pickPoolByType(legendaryData, '恢复方块', equipType) || {};
+      const poolUnique = pickPoolByType(uniqueData, '恢复方块', equipType) || {};
+
+      const options = [];
+      // 垃圾固定项
+      options.push({ value: 'TRASH', label: '垃圾' });
+
+      function pushFromPool(tier, pool) {
+        for (const k in pool) {
+          if (k === '物理攻击力' || k === '魔法攻击力') continue; // 排除非百分比的固定数值行
+          if (k === '垃圾') continue;
+          const label = buildLabeledNameGlobal(tier, k, equipLevel);
+          const value = `${tier}::${k}`;
+          options.push({ value, label });
+        }
+      }
+
+      if (currentTier === 'Legendary') {
+        // 传说可同时出现传说与罕见行
+        pushFromPool('Legendary', poolLegend);
+        pushFromPool('Unique', poolUnique);
+      } else {
+        // 非传说仅提供罕见词条
+        pushFromPool('Unique', poolUnique);
+      }
+
+      // 去重并按标签排序（字典序）
+      const seen = new Set();
+      const dedup = [];
+      for (const opt of options) {
+        const key = opt.value;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        dedup.push(opt);
+      }
+      dedup.sort((a, b) => a.label.localeCompare(b.label, 'zh-Hans-CN'));
+      // 确保“垃圾”在最前
+      dedup.sort((a, b) => (a.value === 'TRASH' ? -1 : (b.value === 'TRASH' ? 1 : 0)));
+      return dedup;
+    }
+
+    function fillCurrentLineSelects() {
+      const equipType = document.getElementById('equipType').value;
+      const equipLevel = document.getElementById('equipLevel').value;
+      const currentTier = document.getElementById('currentTier').value;
+      const opts = computeAvailableLines(equipType, equipLevel, currentTier);
+      const ids = ['currentLine1', 'currentLine2', 'currentLine3'];
+      ids.forEach(function (id) {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        sel.innerHTML = '';
+        opts.forEach(function (o) {
+          const opt = document.createElement('option');
+          opt.value = o.value;
+          opt.textContent = o.label;
+          sel.appendChild(opt);
+        });
+        sel.value = 'TRASH';
+      });
+    }
+
+    function updateCurrentLinesUI() {
+      const group = document.getElementById('currentLinesGroup');
+      if (!group) return;
+      const tier = document.getElementById('currentTier').value;
+      const show = tier === 'Legendary';
+      group.style.display = show ? '' : 'none';
+      if (show) fillCurrentLineSelects();
+    }
+
     // 计算「使用一次魔方后」的最终分布（最低从 Rare 开始）
     function getResultDistribution(cubeType, current) {
       const data = cubeData[cubeType];
@@ -2429,6 +2537,13 @@
         renderProbabilityTable(cubeType, equipType, equipLevel, current);
         renderResultTierTable(cubeType, equipType, equipLevel, current);
       });
+      // 条件变化时刷新“当前潜能”可选项
+      ['equipType', 'equipLevel', 'currentTier'].forEach(function (id) {
+        const el = document.getElementById(id);
+        el.addEventListener('change', updateCurrentLinesUI);
+      });
+      // 初始显示与填充（仅当Legendary时填充）
+      updateCurrentLinesUI();
     }
     // 加载侧边栏
     fetch('sidebar.html')
