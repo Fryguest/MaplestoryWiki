@@ -4,6 +4,8 @@
 <head>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="./static/css/bootstrap.min.css">
+  <link rel="icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>魔方模拟器(施工中)</title>
@@ -2225,7 +2227,7 @@
     // 计算给定装备类型与等级下的可选潜能（用于“当前潜能”三个下拉框）
     function buildLabeledNameGlobal(tier, name, equipLevel) {
       const isAllStat = name === '全属性%';
-      const isMainStat = /^(STR%|DEX%|INT%|LUK%|物理攻击力%|魔法攻击力%|总伤害%)$/.test(name);
+      const isMainStat = /^(STR%|DEX%|INT%|LUK%|最大HP%|物理攻击力%|魔法攻击力%|总伤害%)$/.test(name);
       const isHigh = Number(equipLevel) > 155;
       if (!isAllStat && !isMainStat) return name;
       let val;
@@ -2243,7 +2245,6 @@
     }
 
     function computeAvailableLines(equipType, equipLevel, currentTier) {
-      // 目前按“恢复方块”的词条池生成下拉（其词条定义最完整）
       const poolLegend = pickPoolByType(legendaryData, '恢复方块', equipType) || {};
       const poolUnique = pickPoolByType(uniqueData, '恢复方块', equipType) || {};
 
@@ -2255,8 +2256,10 @@
         for (const k in pool) {
           if (k === '物理攻击力' || k === '魔法攻击力') continue; // 排除非百分比的固定数值行
           if (k === '垃圾') continue;
-          const label = buildLabeledNameGlobal(tier, k, equipLevel);
-          const value = `${tier}::${k}`;
+          // 合并“爆击几率%”为一个跨阶项
+          const isCrit = k === '爆击几率%';
+          const label = isCrit ? '爆击几率%' : buildLabeledNameGlobal(tier, k, equipLevel);
+          const value = isCrit ? 'CRIT' : `${tier}::${k}`;
           options.push({ value, label });
         }
       }
@@ -2417,7 +2420,7 @@
       function normalizeEntries(pool) {
         const out = [];
         for (const k in pool) {
-          if (k === '物理攻击力' || k === '魔法攻击力') continue;
+          //if (k === '物理攻击力' || k === '魔法攻击力') continue;
           const v = Number(pool[k]) || 0;
           out.push({ name: k, p: v });
         }
@@ -2432,7 +2435,7 @@
       const isHigh = Number(equipLevel) > 155;
       function buildLabeledName(tier, name) {
         const isAllStat = name === '全属性%';
-        const isMainStat = /^(STR%|DEX%|INT%|LUK%|物理攻击力%|魔法攻击力%|总伤害%)$/.test(name);
+        const isMainStat = /^(STR%|DEX%|INT%|LUK%|最大HP%|物理攻击力%|魔法攻击力%|总伤害%)$/.test(name);
         if (!isAllStat && !isMainStat) return name;
         let val;
         if (tier === 'Legendary') val = isAllStat ? (isHigh ? 10 : 9) : (isHigh ? 13 : 12);
