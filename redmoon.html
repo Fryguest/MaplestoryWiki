@@ -218,9 +218,9 @@
         let level = currentLevel;
         let cost = 0;
         let attempts = 0;
-        let boomed = false;
+        let budgetBlocked = false;
 
-        while (level < targetLevel && cost + result.cost <= budget) {
+        while (level < targetLevel && cost + refineProbability[level].cost <= budget) {
             const prob = refineProbability[level];
             const result = simulateOneAttempt(level, prob);
             
@@ -229,11 +229,16 @@
             attempts++;
         }
 
+        if (level < targetLevel) {
+            const nextCost = refineProbability[level] ? refineProbability[level].cost : Infinity;
+            budgetBlocked = cost + nextCost > budget;
+        }
+
         return {
             success: level >= targetLevel,
             cost: cost,
             attempts: attempts,
-            budgetExhausted: cost >= budget
+            budgetExhausted: budgetBlocked
         };
     }
 
