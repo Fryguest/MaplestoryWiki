@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./static/css/bootstrap.min.css">
+  <link rel="icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>戒指研磨系统</title>
+  <style>
+    /* 预留侧栏宽度后在剩余区域居中（通用） */
+    .remain-center {
+      padding-left: 240px;
+    }
+
+    .remain-center .inner {
+      margin: 0 auto;
+      width: min(1100px, calc(100vw - 240px));
+      min-width: 320px;
+      padding: 0 12px;
+    }
+
+    .best-option {
+      background-color: #d4edda !important;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- JavaScript 动态加载左侧目录 -->
+  <div id="sidebar-container"></div>
+
+  <div class="container my-4">
+    <div class="remain-center">
+      <div class="inner">
+        <h1 class="mb-4">戒指研磨系统</h1>
+        
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="card shadow-sm mb-4">
+              <div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#systemCollapse"
+                aria-expanded="true" aria-controls="systemCollapse">研磨系统说明</div>
+              <div id="systemCollapse" class="collapse show">
+                <div class="card-body">
+                  <p class="mb-2">戒指研磨系统可以通过消耗研磨石和枫币，将戒指升级到下一个等级。</p>
+                  <p class="mb-0">可以一次性消耗更多的研磨石和枫币来提高成功率。不同等级的研磨消耗和成功率不同。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#rateCollapse"
+            aria-expanded="true" aria-controls="rateCollapse">研磨消耗与成功率</div>
+          <div id="rateCollapse" class="collapse show">
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="grindingLevel" class="form-label">选择研磨等级</label>
+                <select id="grindingLevel" class="form-select">
+                  <option value="lv4to5">Lv4 → Lv5</option>
+                  <option value="lv5to6">Lv5 → Lv6</option>
+                </select>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="text-center">研磨石数量</th>
+                      <th class="text-center">所需枫币（亿）</th>
+                      <th class="text-center">成功几率</th>
+                    </tr>
+                  </thead>
+                  <tbody id="grindingRateTable">
+                    <!-- 动态生成 -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#calcCollapse"
+            aria-expanded="true" aria-controls="calcCollapse">最优研磨方式计算</div>
+          <div id="calcCollapse" class="collapse show">
+            <div class="card-body">
+              <div class="row g-3 align-items-end">
+                <div class="col-12 col-md-4">
+                  <label for="totalMeso" class="form-label">当前拥有的枫币（亿）</label>
+                  <input type="number" id="totalMeso" class="form-control" placeholder="请输入枫币数量" 
+                         min="0" step="1" value="100">
+                </div>
+                <div class="col-12 col-md-4">
+                  <label for="stonePrice" class="form-label">研磨石价格（亿枫币/颗）</label>
+                  <input type="number" id="stonePrice" class="form-control" placeholder="请输入研磨石价格" 
+                         min="0" step="0.1" value="5">
+                </div>
+                <div class="col-12 col-md-4">
+                  <button id="calculateBtn" class="btn btn-primary w-100">计算最优方式</button>
+                </div>
+              </div>
+
+              <div id="resultSection" class="mt-4" style="display: none;">
+                <hr>
+                <h5 class="mb-3">计算结果</h5>
+                
+                <div class="alert alert-success" role="alert">
+                  <h6 class="alert-heading">推荐方案</h6>
+                  <p class="mb-1">
+                    <strong>研磨顺序：<span id="bestStones"></span></strong>
+                  </p>
+                  <p class="mb-1">
+                    <strong>总尝试次数：<span id="bestAttempts"></span> 次</strong>
+                  </p>
+                  <hr class="my-2">
+                  <p class="mb-1 small">
+                    需购买研磨石：<span id="bestStonesToBuy"></span> 颗<br>
+                    购买研磨石成本：<span id="bestStoneCost"></span> 亿枫币<br>
+                    研磨枫币成本：<span id="bestGrindingCost"></span> 亿枫币<br>
+                    总成本：<span id="bestTotalCost"></span> 亿枫币<br>
+                    至少成功1次的概率：<span id="bestFinalSuccessRate"></span>
+                  </p>
+                </div>
+
+                <div class="mt-3">
+                  <p class="small text-muted mb-1">
+                    <strong>说明：</strong><br>
+                    • 最优方案在预算范围内最大化至少成功1次的概率<br>
+                    • 总成本 = 购买研磨石成本 + 研磨枫币成本<br>
+                    • 至少成功1次的概率 = 1 - (所有尝试都失败的概率)<br>
+                    • 研磨顺序示例："5 + 2" 表示先用5颗研磨一次，再用2颗研磨一次
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- 获取基础路径（适配GitHub Pages） ---
+    function getBasePath() {
+      const path = window.location.pathname;
+      const match = path.match(/^\/([^\/]+)\//);
+      return match ? `/${match[1]}` : '';
+    }
+
+    // 研磨数据
+    const grindingDataMap = {
+      lv4to5: [
+        { stones: 1, meso: 5, successRate: 0.10 },
+        { stones: 2, meso: 10, successRate: 0.20 },
+        { stones: 3, meso: 20, successRate: 0.30 },
+        { stones: 4, meso: 35, successRate: 0.40 },
+        { stones: 5, meso: 50, successRate: 0.50 }
+      ],
+      lv5to6: [
+        { stones: 1, meso: 10, successRate: 0.05 },
+        { stones: 2, meso: 20, successRate: 0.10 },
+        { stones: 3, meso: 40, successRate: 0.15 },
+        { stones: 4, meso: 70, successRate: 0.20 },
+        { stones: 5, meso: 100, successRate: 0.25 }
+      ]
+    };
+    
+    // 当前选择的研磨等级
+    let currentLevel = 'lv4to5';
+    
+    // 初始化：显示默认等级的费率表
+    function updateRateTable() {
+      const grindingData = grindingDataMap[currentLevel];
+      const tbody = document.getElementById('grindingRateTable');
+      tbody.innerHTML = '';
+      
+      for (const option of grindingData) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="text-center">${option.stones}</td>
+          <td class="text-center">${option.meso}</td>
+          <td class="text-center">${(option.successRate * 100).toFixed(0)}%</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+
+    // 递归搜索最优组合方案（考虑预算限制）
+    function findOptimalCombination(totalMeso, stonePrice) {
+      const grindingData = grindingDataMap[currentLevel];
+      // memo[meso] = { prob: 最优成功概率, plan: 方案数组, stoneCost: 研磨石成本, grindingCost: 研磨成本 }
+      const memo = new Map();
+      
+      function dp(remainingMeso) {
+        if (remainingMeso < 0) {
+          return null; // 超出预算
+        }
+        
+        if (remainingMeso === 0 || remainingMeso < 5) {
+          // 钱不够研磨了
+          return { prob: 0, plan: [], stoneCost: 0, grindingCost: 0 };
+        }
+        
+        // 使用整数作为key避免浮点数精度问题
+        const key = Math.round(remainingMeso * 100);
+        if (memo.has(key)) {
+          return memo.get(key);
+        }
+        
+        let bestResult = { prob: 0, plan: [], stoneCost: 0, grindingCost: 0 };
+        
+        // 尝试每种研磨方案
+        for (const option of grindingData) {
+          const currentCost = stonePrice * option.stones + option.meso;
+          
+          if (currentCost > remainingMeso) continue;
+          
+          // 使用当前方案一次
+          const remaining = remainingMeso - currentCost;
+          const restResult = dp(remaining);
+          
+          if (restResult === null) continue;
+          
+          // 计算总失败概率
+          const currentFailProb = 1 - option.successRate;
+          const restFailProb = 1 - restResult.prob;
+          const totalFailProb = currentFailProb * restFailProb;
+          const totalSuccessProb = 1 - totalFailProb;
+          
+          const totalStoneCost = stonePrice * option.stones + restResult.stoneCost;
+          const totalGrindingCost = option.meso + restResult.grindingCost;
+          
+          // 如果这个方案更好（成功概率更高）
+          if (totalSuccessProb > bestResult.prob) {
+            bestResult = {
+              prob: totalSuccessProb,
+              plan: [option.stones].concat(restResult.plan),
+              stoneCost: totalStoneCost,
+              grindingCost: totalGrindingCost
+            };
+          }
+        }
+        
+        memo.set(key, bestResult);
+        return bestResult;
+      }
+      
+      return dp(totalMeso);
+    }
+
+    // 计算最优研磨方式
+    function calculateOptimalGrinding() {
+      const totalMeso = parseFloat(document.getElementById('totalMeso').value);
+      const stonePrice = parseFloat(document.getElementById('stonePrice').value);
+      
+      if (isNaN(totalMeso) || totalMeso < 0) {
+        alert('请输入有效的枫币数量！');
+        return;
+      }
+      
+      if (isNaN(stonePrice) || stonePrice < 0) {
+        alert('请输入有效的研磨石价格！');
+        return;
+      }
+      
+      const grindingData = grindingDataMap[currentLevel];
+      // 检查最少需要的枫币
+      const minCost = stonePrice * 1 + grindingData[0].meso; // 至少需要买1颗石头+最低研磨费
+      if (totalMeso < minCost) {
+        alert(`枫币不足！至少需要 ${minCost.toFixed(1)} 亿枫币（购买1颗研磨石+研磨费用）`);
+        return;
+      }
+
+      // 找到最优组合方案
+      const optimalResult = findOptimalCombination(totalMeso, stonePrice);
+      
+      if (!optimalResult || optimalResult.plan.length === 0) {
+        alert('无法找到可行方案，请增加预算！');
+        return;
+      }
+
+      // 显示结果
+      displayResults(optimalResult, stonePrice);
+    }
+
+    // 显示计算结果
+    function displayResults(optimalResult, stonePrice) {
+      // 对研磨顺序排序：消耗研磨石数量少的在前
+      const sortedPlan = [...optimalResult.plan].sort((a, b) => a - b);
+      
+      // 显示推荐方案
+      const planText = sortedPlan.join(' + ');
+      const attemptCount = sortedPlan.length;
+      const totalStones = sortedPlan.reduce((sum, s) => sum + s, 0);
+      const totalCost = optimalResult.stoneCost + optimalResult.grindingCost;
+      
+      document.getElementById('bestStones').textContent = planText + ' 颗';
+      document.getElementById('bestAttempts').textContent = attemptCount;
+      document.getElementById('bestStonesToBuy').textContent = totalStones;
+      document.getElementById('bestStoneCost').textContent = optimalResult.stoneCost.toFixed(1);
+      document.getElementById('bestGrindingCost').textContent = optimalResult.grindingCost.toFixed(0);
+      document.getElementById('bestTotalCost').textContent = totalCost.toFixed(1);
+      document.getElementById('bestFinalSuccessRate').textContent = (optimalResult.prob * 100).toFixed(2) + '%';
+
+      // 显示结果区域
+      document.getElementById('resultSection').style.display = 'block';
+    }
+
+    // 事件绑定
+    document.getElementById('calculateBtn').addEventListener('click', calculateOptimalGrinding);
+    
+    // 研磨等级切换事件
+    document.getElementById('grindingLevel').addEventListener('change', function(e) {
+      currentLevel = e.target.value;
+      updateRateTable();
+    });
+
+    // 支持回车键触发计算
+    document.getElementById('totalMeso').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        calculateOptimalGrinding();
+      }
+    });
+    
+    document.getElementById('stonePrice').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        calculateOptimalGrinding();
+      }
+    });
+    
+    // 页面加载时初始化费率表
+    updateRateTable();
+
+    // 加载侧边栏
+    const basePath = getBasePath();
+    fetch(`${basePath}/sidebar.html`)
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      })
+      .catch(error => {
+        console.error('加载侧边栏失败:', error);
+      });
+
+    function toggleSubMenu(id) {
+      const submenu = document.getElementById(id);
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
