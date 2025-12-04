@@ -1,0 +1,124 @@
+{
+    "恢复方块": {
+        "lowLevel": {
+            "1": 0,
+            "2": 80,
+            "3": 95
+        },
+        "upgrade": {
+            "Rare": {
+                "Epic": 97.7,
+                "Unique": 2,
+                "Legendary": 0.3
+            },
+            "Epic": {
+                "Epic": 91.4,
+                "Unique": 8.0,
+                "Legendary": 0.6
+            },
+            "Unique": {
+                "Unique": 97.9,
+                "Legendary": 2.1
+            },
+            "Legendary": {
+                "Legendary": 100.0
+            }
+        }
+    },
+    "闪耀镜射方块": {
+        "lowLevel": {
+            "1": 0,
+            "2": 80,
+            "3": 95
+        },
+        "upgrade": {
+            "Rare": {
+                "Rare": 3,
+                "Epic": 97
+            },
+            "Epic": {
+                "Epic": 97.75,
+                "Unique": 2.25
+            },
+            "Unique": {
+                "Unique": 99.01,
+                "Legendary": 0.99
+            },
+            "Legendary": {
+                "Legendary": 100.0
+            }
+        }
+    },
+    "闪炫方块": {
+        "lowLevel": {
+            "1": 0,
+            "2": 80,
+            "3": 85,
+            "4": 0,
+            "5": 80,
+            "6": 85
+        },
+        "upgrade": {
+            "Rare": {
+                "Rare": 3,
+                "Epic": 97
+            },
+            "Epic": {
+                "Epic": 97,
+                "Unique": 3
+            },
+            "Unique": {
+                "Unique": 98.65,
+                "Legendary": 1.35
+            },
+            "Legendary": {
+                "Legendary": 100.0
+            }
+        }
+    },
+    "新对等方块": {
+        "lowLevel": {
+            "1": 0,
+            "2": 0,
+            "3": 0
+        },
+        "upgrade": {
+            "Rare": {
+                "Rare": 3,
+                "Epic": 97
+            },
+            "Epic": {
+                "Epic": 97,
+                "Unique": 3
+            },
+            "Unique": {
+                "Unique": 98.65,
+                "Legendary": 1.35
+            },
+            "Legendary": {
+                "Legendary": 100.0
+            }
+        }
+    },
+    "结合方块": {
+        "lowLevel": {
+            "1": 85,
+            "2": 85,
+            "3": 85
+        },
+        "upgrade": {
+            "Rare": {
+                "Rare": 100.0
+            },
+            "Epic": {
+                "Epic": 100.0
+            },
+            "Unique": {
+                "Unique": 100.0
+            },
+            "Legendary": {
+                "Legendary": 100.0
+            }
+        }
+    }
+}
