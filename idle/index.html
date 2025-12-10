@@ -7,7 +7,7 @@
   <style>
     :root{--bg:#0b1220;--card:rgba(255,255,255,0.04);--muted:#9aa7c7;--accent:#4c7bf0}
     html,body{height:100%;margin:0;font-family:Inter, "Helvetica Neue", Arial;background:linear-gradient(180deg,var(--bg),#071028);color:#e6eef9}
-    .wrap{max-width:900px;margin:28px auto;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 10px 40px rgba(2,6,23,0.6);display:grid;grid-template-columns:320px 1fr;gap:16px}
+    .wrap{max-width:1400px;margin:28px auto;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 10px 40px rgba(2,6,23,0.6);display:grid;grid-template-columns:280px 280px 1fr;gap:16px}
     .card{background:var(--card);padding:14px;border-radius:10px}
     h1{margin:0 0 8px;font-size:18px}
     .stat{display:flex;flex-wrap:wrap;gap:8px}
@@ -22,7 +22,20 @@
     .hpbar > i{display:block;height:100%;background:linear-gradient(90deg,#ff6b6b,#ffb86b)}
     .row{display:flex;gap:8px;align-items:center}
     .center{display:flex;flex-direction:column;justify-content:center;align-items:center}
-    @media(max-width:840px){.wrap{grid-template-columns:1fr;}}
+    .inventory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:8px}
+    .item-slot{background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;cursor:pointer;transition:all 0.2s;position:relative}
+    .item-slot:hover{background:rgba(255,255,255,0.08);transform:translateY(-2px)}
+    .item-slot.equipment{border:1px solid rgba(76,123,240,0.3)}
+    .item-slot.consumable{border:1px solid rgba(76,240,123,0.3)}
+    .item-name{font-weight:700;font-size:14px}
+    .tooltip{position:absolute;background:rgba(10,15,30,0.98);border:1px solid rgba(76,123,240,0.5);padding:12px;border-radius:8px;font-size:13px;z-index:1000;pointer-events:none;opacity:0;transition:opacity 0.2s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+    .item-slot:hover .tooltip,.equipment-slot:hover .tooltip{opacity:1}
+    .tooltip-title{font-weight:700;margin-bottom:8px;color:#fff}
+    .tooltip-stat{color:var(--muted);margin:4px 0}
+    .tooltip-stat.positive{color:#4caf50}
+    .equipment-slot{position:relative}
+    @media(max-width:1200px){.wrap{grid-template-columns:1fr 1fr;}}
+    @media(max-width:768px){.wrap{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
@@ -67,27 +80,46 @@
         <button id="stopBtn" class="danger">停止挂机</button>
       </div>
 
-      <label>装备</label>
-      <div class="card" style="background:rgba(76,123,240,0.08);margin-top:8px">
-        <div class="small" style="margin-bottom:4px">武器</div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div id="weaponName" style="font-weight:700">长剑</div>
-          <div class="small">攻击力 +<span id="weaponAtk">20</span></div>
-        </div>
-      </div>
-      <div class="card" style="background:rgba(76,123,240,0.08);margin-top:8px">
-        <div class="small" style="margin-bottom:4px">帽子</div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div id="hatName" style="font-weight:700">新手帽子</div>
-          <div class="small">力量 +<span id="hatMain">5</span> 敏捷 +<span id="hatSub">5</span></div>
-        </div>
-      </div>
-
       <div style="margin-top:12px">
         <button id="resetBtn" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">重置进度</button>
       </div>
     </div>
 
+    <!-- 装备栏面板 -->
+    <div class="card">
+      <h1>装备栏</h1>
+      <div class="small" style="margin-bottom:8px">点击装备可卸下到物品栏</div>
+      
+      <div class="card equipment-slot" id="weaponSlot" style="background:rgba(76,123,240,0.08);margin-top:8px;cursor:pointer" title="点击卸下">
+        <div class="small" style="margin-bottom:4px">武器</div>
+        <div id="weaponName" style="font-weight:700">长剑</div>
+        <div class="tooltip" id="weaponTooltip" style="left:100%;top:0;margin-left:8px">
+          <div class="tooltip-title">长剑</div>
+          <div class="tooltip-stat positive">攻击力 +20</div>
+        </div>
+      </div>
+      
+      <div class="card equipment-slot" id="hatSlot" style="background:rgba(76,123,240,0.08);margin-top:8px;cursor:pointer" title="点击卸下">
+        <div class="small" style="margin-bottom:4px">帽子</div>
+        <div id="hatName" style="font-weight:700">新手帽子</div>
+        <div class="tooltip" id="hatTooltip" style="left:100%;top:0;margin-left:8px">
+          <div class="tooltip-title">新手帽子</div>
+          <div class="tooltip-stat positive">力量 +5</div>
+          <div class="tooltip-stat positive">敏捷 +5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 物品栏面板 -->
+    <div class="card">
+      <h1>物品栏</h1>
+      <div class="small" style="margin-bottom:8px">点击装备穿戴</div>
+      <div id="inventoryGrid" class="inventory-grid">
+        <!-- 物品将动态生成 -->
+      </div>
+    </div>
+
+    <!-- 地图与怪物面板 -->
     <div class="card">
       <h1>地图与怪物</h1>
 
@@ -118,8 +150,6 @@
           </div>
           <div class="hpbar"><i id="monHPbar" style="width:100%"></i></div>
         </div>
-
-
       </div>
     </div>
   </div>
@@ -176,10 +206,8 @@ let state = {
   currentMonsterIndex: 0,
   currentMonsterHP: 0,
   totalKillsSinceStart: 0,
-  equipment: {
-    weapon: { id: "long_sword", name: "长剑", atk: 20 },
-    hat: { id: "beginner_hat", name: "新手帽子", mainStat: 5, subStat: 5 }
-  }
+  equipment: {},
+  inventory: []
 };
 
 /* =========================
@@ -195,10 +223,9 @@ const expBarEl = document.getElementById("expBar");
 const plGoldEl = document.getElementById("plGold");
 
 const weaponNameEl = document.getElementById("weaponName");
-const weaponAtkEl = document.getElementById("weaponAtk");
+const weaponTooltipEl = document.getElementById("weaponTooltip");
 const hatNameEl = document.getElementById("hatName");
-const hatMainEl = document.getElementById("hatMain");
-const hatSubEl = document.getElementById("hatSub");
+const hatTooltipEl = document.getElementById("hatTooltip");
 
 const mapSelectEl = document.getElementById("mapSelect");
 const monsterSelectEl = document.getElementById("monsterSelect");
@@ -214,36 +241,81 @@ const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+const inventoryGridEl = document.getElementById("inventoryGrid");
+
 /* =========================
    存档 / 加载
    ========================= */
 function save() {
-  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  // 保存时排除running状态
+  const { running, ...saveState } = state;
+  localStorage.setItem(SAVE_KEY, JSON.stringify(saveState));
 }
 
-function load() {
+async function loadInitialState() {
+  try {
+    const response = await fetch('./init_state.json');
+    if (!response.ok) throw new Error('Failed to load init_state.json');
+    return await response.json();
+  } catch (error) {
+    console.error('加载初始状态失败:', error);
+    // 降级方案：返回硬编码的初始状态
+    return {
+      level: 200,
+      baseAtk: 100,
+      mainStat: 50,
+      subStat: 20,
+      exp: 0,
+      gold: 0,
+      currentMapIndex: 0,
+      currentMonsterIndex: 0,
+      currentMonsterHP: 0,
+      totalKillsSinceStart: 0,
+      equipment: {},
+      inventory: [
+        { id: "long_sword", name: "长剑", type: "equipment", slot: "weapon", atk: 20 },
+        { id: "beginner_hat", name: "新手帽子", type: "equipment", slot: "hat", mainStat: 5, subStat: 5 },
+        { id: "iron_sword", name: "铁剑", type: "equipment", slot: "weapon", atk: 35 },
+        { id: "leather_cap", name: "皮帽", type: "equipment", slot: "hat", mainStat: 8, subStat: 8 }
+      ]
+    };
+  }
+}
+
+async function load() {
   const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) return;
+  if (!raw) {
+    // 没有存档，加载初始状态
+    console.log('没有找到存档，加载初始状态...');
+    const initialState = await loadInitialState();
+    console.log('初始状态已加载:', initialState);
+    Object.assign(state, initialState);
+    state.expToLevel = EXP_TABLE[state.level] || 999999999;
+    state.running = false; // 确保running为false
+    console.log('state已更新:', state);
+    return;
+  }
   try {
     const s = JSON.parse(raw);
+    console.log('加载存档:', s);
     Object.assign(state, s);
     state.expToLevel = EXP_TABLE[state.level] || 999999999;
+    state.running = false; // 加载存档后强制设置running为false
     if (typeof state.level !== "number") state.level = 200;
     // 确保装备数据存在
     if (!state.equipment) {
-      state.equipment = {
-        weapon: { id: "long_sword", name: "长剑", atk: 20 },
-        hat: { id: "beginner_hat", name: "新手帽子", mainStat: 5, subStat: 5 }
-      };
-    }
-    // 确保帽子装备存在（兼容旧存档）
-    if (!state.equipment.hat) {
-      state.equipment.hat = { id: "beginner_hat", name: "新手帽子", mainStat: 5, subStat: 5 };
+      state.equipment = {};
     }
     // 兼容旧存档：如果有atk但没有baseAtk，转换为baseAtk
     if (state.atk && !state.baseAtk) {
       state.baseAtk = state.atk - (state.equipment.weapon?.atk || 0);
       delete state.atk;
+    }
+    // 确保inventory存在
+    if (!state.inventory || state.inventory.length === 0) {
+      console.log('inventory为空，加载初始inventory...');
+      const initialState = await loadInitialState();
+      state.inventory = initialState.inventory;
     }
   } catch(e){
     console.error("加载存档失败", e);
@@ -324,6 +396,83 @@ function getCurrentMonsterDef() {
   const map = MAPS[state.currentMapIndex];
   if (!map) return null;
   return map.monsters[state.currentMonsterIndex];
+}
+
+/* =========================
+   使用装备（从物品栏穿戴）
+   ========================= */
+function equipItem(itemIndex) {
+  const item = state.inventory[itemIndex];
+  if (!item) return;
+  
+  // 只有装备类型可以穿戴
+  if (!item.slot) {
+    alert('该物品无法装备');
+    return;
+  }
+  
+  const slot = item.slot;
+  
+  // 如果该位置已有装备，卸下到物品栏
+  if (state.equipment[slot]) {
+    state.inventory.push(state.equipment[slot]);
+  }
+  
+  // 穿上新装备
+  state.equipment[slot] = { ...item };
+  
+  // 从物品栏移除
+  state.inventory.splice(itemIndex, 1);
+  
+  updateUI();
+  save();
+}
+
+/* =========================
+   卸下装备到物品栏
+   ========================= */
+function unequipItem(slot) {
+  if (!state.equipment[slot]) return;
+  
+  // 放入物品栏
+  state.inventory.push(state.equipment[slot]);
+  
+  // 删除装备，槽位变为空
+  delete state.equipment[slot];
+  
+  updateUI();
+  save();
+}
+
+/* =========================
+   渲染物品栏
+   ========================= */
+function renderInventory() {
+  inventoryGridEl.innerHTML = '';
+  
+  if (state.inventory.length === 0) {
+    inventoryGridEl.innerHTML = '<div class="small" style="grid-column:1/-1;text-align:center;padding:20px">物品栏为空</div>';
+    return;
+  }
+  
+  state.inventory.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = `item-slot ${item.type || 'equipment'}`;
+    
+    // 构建悬浮提示内容
+    let tooltipHtml = `<div class="tooltip-title">${item.name}</div>`;
+    if (item.atk) tooltipHtml += `<div class="tooltip-stat positive">攻击力 +${item.atk}</div>`;
+    if (item.mainStat) tooltipHtml += `<div class="tooltip-stat positive">力量 +${item.mainStat}</div>`;
+    if (item.subStat) tooltipHtml += `<div class="tooltip-stat positive">敏捷 +${item.subStat}</div>`;
+    
+    div.innerHTML = `
+      <div class="item-name">${item.name}</div>
+      <div class="tooltip" style="bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:8px">${tooltipHtml}</div>
+    `;
+    
+    div.addEventListener('click', () => equipItem(index));
+    inventoryGridEl.appendChild(div);
+  });
 }
 
 /* =========================
@@ -489,12 +638,28 @@ function updateUI() {
   // 更新装备显示
   if (state.equipment?.weapon) {
     weaponNameEl.textContent = state.equipment.weapon.name;
-    weaponAtkEl.textContent = state.equipment.weapon.atk;
+    let weaponTooltip = `<div class="tooltip-title">${state.equipment.weapon.name}</div>`;
+    if (state.equipment.weapon.atk) {
+      weaponTooltip += `<div class="tooltip-stat positive">攻击力 +${state.equipment.weapon.atk}</div>`;
+    }
+    weaponTooltipEl.innerHTML = weaponTooltip;
+  } else {
+    weaponNameEl.textContent = '（空）';
+    weaponTooltipEl.innerHTML = '<div class="tooltip-title">无装备</div><div class="tooltip-stat">点击物品栏中的武器穿戴</div>';
   }
   if (state.equipment?.hat) {
     hatNameEl.textContent = state.equipment.hat.name;
-    hatMainEl.textContent = state.equipment.hat.mainStat;
-    hatSubEl.textContent = state.equipment.hat.subStat;
+    let hatTooltip = `<div class="tooltip-title">${state.equipment.hat.name}</div>`;
+    if (state.equipment.hat.mainStat) {
+      hatTooltip += `<div class="tooltip-stat positive">力量 +${state.equipment.hat.mainStat}</div>`;
+    }
+    if (state.equipment.hat.subStat) {
+      hatTooltip += `<div class="tooltip-stat positive">敏捷 +${state.equipment.hat.subStat}</div>`;
+    }
+    hatTooltipEl.innerHTML = hatTooltip;
+  } else {
+    hatNameEl.textContent = '（空）';
+    hatTooltipEl.innerHTML = '<div class="tooltip-title">无装备</div><div class="tooltip-stat">点击物品栏中的帽子穿戴</div>';
   }
 
   // exp 进度条
@@ -518,6 +683,9 @@ function updateUI() {
   }
 
   killInfoEl.textContent = `累计击杀: ${format(state.totalKillsSinceStart || 0)}`;
+  
+  // 渲染物品栏
+  renderInventory();
 }
 
 /* =========================
@@ -548,8 +716,25 @@ stopBtn.addEventListener("click", () => {
 });
 resetBtn.addEventListener("click", () => {
   if (!confirm("确定重置所有进度吗？")) return;
-  localStorage.removeItem(SAVE_KEY);
-  location.reload();
+  // 先停止挂机，避免自动保存覆盖删除的存档
+  state.running = false;
+  // 延迟删除存档和刷新，确保停止状态已设置
+  setTimeout(() => {
+    localStorage.removeItem(SAVE_KEY);
+    location.reload();
+  }, 100);
+});
+
+document.getElementById("weaponSlot").addEventListener("click", () => {
+  if (state.equipment.weapon) {
+    unequipItem('weapon');
+  }
+});
+
+document.getElementById("hatSlot").addEventListener("click", () => {
+  if (state.equipment.hat) {
+    unequipItem('hat');
+  }
 });
 
 /* =========================
@@ -567,7 +752,7 @@ async function init() {
     return;
   }
 
-  load();
+  await load();
   // 初始化 expToLevel（如果缺失）
   state.expToLevel = EXP_TABLE[state.level] || 999999999;
   // 构建地图（只显示可入场的）
