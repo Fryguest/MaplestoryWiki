@@ -1,0 +1,106 @@
+{
+    "Monthly": {
+        "Black Mage": {
+            "Hard": 4500000000,
+            "Extreme": 18000000000
+        }
+    },
+    "Weekly": {
+        "Cygnus": {
+            "Easy": 45562500,
+            "Normal": 72250000
+        },
+        "Hilla": {
+            "Hard": 56250000
+        },
+        "Pink Bean": {
+            "Chaos": 64000000
+        },
+        "Princess No": {
+            "Normal": 81000000
+        },
+        "Zakum": {
+            "Chaos": 81000000
+        },
+        "Pierre": {
+            "Chaos": 81000000
+        },
+        "Von Bon": {
+            "Chaos": 81000000
+        },
+        "Crimson Queen": {
+            "Chaos": 81000000
+        },
+        "Magnus": {
+            "Hard": 95062500
+        },
+        "Vellum": {
+            "Chaos": 105062500
+        },
+        "Papulatus": {
+            "Chaos": 132250000
+        },
+        "Akechi Mitsuhide": {
+            "Normal": 144000000
+        },
+        "Lotus": {
+            "Normal": 162562500,
+            "Hard": 444675000,
+            "Extreme": 1397500000
+        },
+        "Damien": {
+            "Normal": 169000000,
+            "Hard": 421875000
+        },
+        "Guardian Angel Slime": {
+            "Normal": 231673500,
+            "Chaos": 600578125
+        },
+        "Lucid": {
+            "Easy": 237009375,
+            "Normal": 253828125,
+            "Hard": 504000000
+        },
+        "Will": {
+            "Easy": 246744750,
+            "Normal": 279075000,
+            "Hard": 621810000
+        },
+        "Gloom": {
+            "Normal": 297675000,
+            "Chaos": 563945000
+        },
+        "Darknell": {
+            "Normal": 316875000,
+            "Hard": 667920000
+        },
+        "Verus Hilla": {
+            "Normal": 581880000,
+            "Hard": 762105000
+        },
+        "Chosen Seren": {
+            "Normal": 889021875,
+            "Hard": 1096562500,
+            "Extreme": 4235000000
+        },
+        "Kalos the Guardian": {
+            "Easy": 937500000,
+            "Normal": 1300000000,
+            "Chaos": 2600000000
+        },
+        "Kaling": {
+            "Easy": 1031250000,
+            "Normal": 1506500000,
+            "Hard": 2990000000,
+            "Extreme": 6026000000
+        },
+        "Limbo": {
+            "Normal": 2100000000,
+            "Hard": 3745000000
+        },
+        "Baldrix": {
+            "Normal": 2800000000,
+            "Hard": 4200000000
+        }
+    }
+}
