@@ -1,0 +1,161 @@
+[
+  {
+    "name": "消逝的旅途",
+    "requiredLevel": 200,
+    "monsters": [
+      { "id": "slime", "name": "喜悦艾尔达", "level": 200, "hp": 80, "gold": 5, "exp": 3 },
+      { "id": "slime", "name": "愤怒艾尔达", "level": 200, "hp": 80, "gold": 5, "exp": 3 },
+      { "id": "slime", "name": "悲伤艾尔达", "level": 200, "hp": 80, "gold": 5, "exp": 3 },
+      { "id": "slime", "name": "快乐艾尔达", "level": 200, "hp": 80, "gold": 5, "exp": 3 }
+    ]
+  },
+  {
+    "name": "反转城市",
+    "requiredLevel": 205,
+    "monsters": [
+      { "id": "slime", "name": "史莱姆", "level": 150, "hp": 80, "gold": 5, "exp": 3 },
+      { "id": "green_slime", "name": "绿史莱姆", "level": 180, "hp": 120, "gold": 8, "exp": 5 }
+    ]
+  },
+  {
+    "name": "啾啾艾尔兰",
+    "requiredLevel": 210,
+    "monsters": [
+      { "id": "ice_wolf", "name": "冰狼", "level": 210, "hp": 250, "gold": 15, "exp": 12 },
+      { "id": "snow_giant", "name": "雪巨人", "level": 230, "hp": 400, "gold": 20, "exp": 18 }
+    ]
+  },
+  {
+    "name": "嚼嚼艾尔兰",
+    "requiredLevel": 215,
+    "monsters": [
+      { "id": "ice_wolf", "name": "冰狼", "level": 210, "hp": 250, "gold": 15, "exp": 12 },
+      { "id": "snow_giant", "name": "雪巨人", "level": 230, "hp": 400, "gold": 20, "exp": 18 }
+    ]
+  },
+  {
+    "name": "梦之都拉契尔恩",
+    "requiredLevel": 220,
+    "monsters": [
+      { "id": "ice_wolf", "name": "冰狼", "level": 210, "hp": 250, "gold": 15, "exp": 12 },
+      { "id": "snow_giant", "name": "雪巨人", "level": 230, "hp": 400, "gold": 20, "exp": 18 }
+    ]
+  },
+  {
+    "name": "神秘森林阿尔卡娜",
+    "requiredLevel": 225,
+    "monsters": [
+      { "id": "fire_demon", "name": "阳光精灵", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "水精灵", "level": 280, "hp": 1000, "gold": 45, "exp": 40 },
+      { "id": "fire_demon", "name": "土精灵", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "fire_demon", "name": "阳光精灵", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "fire_demon", "name": "阳光精灵", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "fire_demon", "name": "阳光精灵", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "fire_demon", "name": "阳光精灵", "level": 260, "hp": 800, "gold": 35, "exp": 30 }
+    ]
+  },
+  {
+    "name": "记忆沼泽魔拉斯",
+    "requiredLevel": 230,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "初始之海艾斯佩拉",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "赛拉斯 繁星沉睡之地",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "月之桥",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "痛苦迷宫",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "利曼",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "赛尔尼温",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "奥迪温",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "桃源境",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "阿尔特利亚",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "卡尔西温",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  },
+  {
+    "name": "塔尔哈拉",
+    "requiredLevel": 235,
+    "monsters": [
+      { "id": "fire_demon", "name": "炎魔", "level": 260, "hp": 800, "gold": 35, "exp": 30 },
+      { "id": "lava_beast", "name": "熔岩兽", "level": 280, "hp": 1000, "gold": 45, "exp": 40 }
+    ]
+  }
+]

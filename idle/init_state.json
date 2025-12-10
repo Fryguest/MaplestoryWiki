@@ -1,0 +1,30 @@
+{
+  "level": 200,
+  "baseAtk": 100,
+  "mainStat": 50,
+  "subStat": 20,
+  "exp": 0,
+  "gold": 0,
+  "currentMapIndex": 0,
+  "currentMonsterIndex": 0,
+  "currentMonsterHP": 0,
+  "totalKillsSinceStart": 0,
+  "equipment": {},
+  "inventory": [
+    {
+      "id": "long_sword",
+      "name": "长剑",
+      "type": "equipment",
+      "slot": "weapon",
+      "atk": 20
+    },
+    {
+      "id": "beginner_hat",
+      "name": "新手帽子",
+      "type": "equipment",
+      "slot": "hat",
+      "mainStat": 5,
+      "subStat": 5
+    }
+  ]
+}
