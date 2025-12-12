@@ -344,6 +344,29 @@
         return 'keep';
       };
 
+      var calculateInheritStar = function (currentStar) {
+        var newStar = 12; // TMS default
+        
+        // GMS inheritance rules
+        if (currentServer === 'gms') {
+          if (currentStar >= 15 && currentStar <= 19) {
+            newStar = 12;
+          } else if (currentStar === 20) {
+            newStar = 15;
+          } else if (currentStar >= 21 && currentStar <= 22) {
+            newStar = 17;
+          } else if (currentStar >= 23 && currentStar <= 25) {
+            newStar = 19;
+          } else if (currentStar >= 26 && currentStar <= 30) {
+            newStar = 20;
+          } else {
+            newStar = 12; // fallback for lower stars
+          }
+        }
+        
+        return newStar;
+      };
+
       var doStrengthenStep = function () {
         var cost = getCostByLevelAndStage(state.currentLevel, state.currentStar);
         var chanceRow = getChanceRow(state.currentStar);
@@ -371,7 +394,8 @@
           state.awaitingInherit = false;
           setStrengthenLabel('强化');
         } else if (outcome === 'destroy') {
-          els.resultBox.textContent = '破坏！装备损毁，请选择“继承”将星级置为 12★。本次花费 ' + formatNumber(cost);
+          var inheritStar = calculateInheritStar(state.currentStar);
+          els.resultBox.textContent = '破坏！装备损毁，请选择"继承"（将继承至 ' + inheritStar + '★）。本次花费 ' + formatNumber(cost);
           state.awaitingInherit = true;
           setStrengthenLabel('继承');
         } else {
@@ -384,11 +408,12 @@
       };
 
       var doInherit = function () {
-        state.currentStar = 12;
+        var newStar = calculateInheritStar(state.currentStar);
+        state.currentStar = newStar;
         state.inheritCount += 1;
         state.awaitingInherit = false;
         setStrengthenLabel('强化');
-        els.resultBox.textContent = '已继承，星级置为 12★。';
+        els.resultBox.textContent = '已继承，星级置为 ' + newStar + '★。';
         render();
       };
 
