@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weekly Meso 计算器</title>
+    <style>
+        /* 小幅样式补充，遵循 starforce_simulator 风格 */
+        .content {
+            max-width: 900px;
+            margin: 24px auto;
+            padding: 8px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .summary {
+            margin-top: 12px;
+            font-weight: 600;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .counted {
+            background: #e8ffe8;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar-container"></div>
+
+    <div class="content">
+        <h2>Weekly Meso 计算器</h2>
+
+        <div class="controls">
+            <label for="serverSelect">服务器:</label>
+            <select id="serverSelect">
+                <option value="gms">GMS</option>
+                <option value="tms">TMS</option>
+            </select>
+
+            <button id="loadBtn">加载 Boss 列表</button>
+
+            <button id="calcBtn">计算每周 Meso</button>
+        </div>
+
+        <div id="note" class="muted">说明：从所选 boss 的已选择难度中，取收益最高的 14 个 boss 计算每周总 meso。</div>
+
+        <div id="bossContainer"></div>
+
+        <div id="result" class="summary"></div>
+    </div>
+
+    <script>
+        const serverSelect = document.getElementById('serverSelect');
+        const loadBtn = document.getElementById('loadBtn');
+        const bossContainer = document.getElementById('bossContainer');
+        const calcBtn = document.getElementById('calcBtn');
+        const resultDiv = document.getElementById('result');
+
+        // JSON 文件路径（基于仓库结构）
+        const serverToPath = {
+            gms: 'data/boss_meso/gms.json',
+            tms: 'data/boss_meso/tms.json'
+        };
+
+        loadBtn.addEventListener('click', () => {
+            loadBosses(serverSelect.value);
+        });
+
+        calcBtn.addEventListener('click', () => {
+            calculateWeeklyMeso();
+        });
+
+        // 初始加载默认服务器
+        loadBosses(serverSelect.value);
+
+        async function loadBosses(serverKey) {
+            bossContainer.innerHTML = '载入中...';
+            resultDiv.innerText = '';
+            const path = serverToPath[serverKey];
+            try {
+                const res = await fetch(path);
+                if (!res.ok) throw new Error('加载失败: ' + res.status);
+                const json = await res.json();
+                const weekly = json['Weekly'] || {};
+                renderBossTable(weekly);
+            } catch (err) {
+                bossContainer.innerHTML = `<div class="muted">无法加载 ${serverKey} 数据: ${err.message}</div>`;
+            }
+        }
+
+        function renderBossTable(weeklyObj) {
+            const bossNames = Object.keys(weeklyObj).sort((a, b) => a.localeCompare(b, 'zh-Hans-u-co-pinyin'));
+            if (bossNames.length === 0) {
+                bossContainer.innerHTML = '<div class="muted">未找到 Weekly boss 列表。</div>';
+                return;
+            }
+
+            let html = `<table>
+                <thead><tr><th>选择</th><th>Boss</th><th>难度 (每周 meso)</th></tr></thead><tbody>`;
+
+            for (const name of bossNames) {
+                const diffs = weeklyObj[name];
+                let options = `<option value="">（不选择）</option>`;
+                const diffKeys = Object.keys(diffs);
+                diffKeys.sort((a, b) => (diffs[b] - diffs[a]));
+                for (const d of diffKeys) {
+                    const v = diffs[d];
+                    options += `<option value="${encodeURIComponent(d)}|${v}">${d} — ${formatNumber(v)}</option>`;
+                }
+                html += `<tr>
+                    <td class="right"><input type="checkbox" class="boss-enable" data-boss="${escapeHtml(name)}"></td>
+                    <td>${escapeHtml(name)}</td>
+                    <td>
+                        <select class="boss-diff" data-boss="${escapeHtml(name)}">
+                            ${options}
+                        </select>
+                        <div class="muted">请先勾选左侧复选框，再在此处选择要挑战的难度（每个 boss 每周只能选一项）。</div>
+                    </td>
+                </tr>`;
+            }
+
+            html += `</tbody></table>`;
+            bossContainer.innerHTML = html;
+
+            document.querySelectorAll('.boss-enable').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const boss = e.target.dataset.boss;
+                    const sel = document.querySelector(`select.boss-diff[data-boss="${boss}"]`);
+                    if (sel) sel.disabled = !e.target.checked;
+                    if (!e.target.checked) sel.value = '';
+                    resultDiv.innerText = '';
+                });
+            });
+
+            document.querySelectorAll('.boss-diff').forEach(sel => sel.disabled = true);
+        }
+
+        function calculateWeeklyMeso() {
+            const rows = [];
+            document.querySelectorAll('.boss-enable').forEach(cb => {
+                const boss = cb.dataset.boss;
+                if (!cb.checked) return;
+                const sel = document.querySelector(`select.boss-diff[data-boss="${boss}"]`);
+                if (!sel) return;
+                const val = sel.value;
+                if (!val) return;
+                const [encDiff, vStr] = val.split('|');
+                const diff = decodeURIComponent(encDiff);
+                const value = Number(vStr) || 0;
+                rows.push({ boss, diff, value });
+            });
+
+            if (rows.length === 0) {
+                resultDiv.innerText = '未选择任何 boss 或难度。';
+                return;
+            }
+
+            rows.sort((a, b) => b.value - a.value);
+            const counted = rows.slice(0, 14);
+            const sum = counted.reduce((s, r) => s + r.value, 0);
+
+            let out = `<div>已选择 boss: ${rows.length} 个；计入最高 14 个 boss。</div>`;
+            out += `<table><thead><tr><th>计入</th><th>Boss</th><th>难度</th><th class="right">每周 meso</th></tr></thead><tbody>`;
+            for (let i = 0; i < rows.length; i++) {
+                const r = rows[i];
+                const isCounted = i < 14;
+                out += `<tr ${isCounted ? 'class="counted"' : ''}>
+                    <td class="right">${isCounted ? '✓' : ''}</td>
+                    <td>${escapeHtml(r.boss)}</td>
+                    <td>${escapeHtml(r.diff)}</td>
+                    <td class="right">${formatNumber(r.value)}</td>
+                </tr>`;
+            }
+            out += `</tbody></table>`;
+            out += `<div style="margin-top:8px;font-size:1.1em">每周总 meso（前 14 个）： ${formatNumber(sum)}</div>`;
+
+            resultDiv.innerHTML = out;
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function formatNumber(n) {
+            return Number(n).toLocaleString('en-US');
+        }
+
+        function escapeHtml(s) {
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+    </script>
+
+    <script>
+        // 加载侧边栏（与 starforce_simulator.html 保持一致）
+        fetch('sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-container').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('加载侧边栏失败:', error);
+            });
+
+        // 控制子菜单展开/收起（更健壮的实现）
+        function toggleSubMenu(id) {
+            const submenu = document.getElementById(id);
+            if (!submenu) return;
+            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+
+</html>
