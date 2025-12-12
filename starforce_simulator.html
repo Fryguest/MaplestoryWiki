@@ -41,6 +41,27 @@
                 <div class="card-body">
                   <div class="row g-3">
                     <div class="col-12">
+                      <div class="fw-bold mb-2">服务器选择</div>
+                      <div class="row g-3 align-items-end">
+                        <div class="col-12">
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="serverRadio" id="serverTMS" value="tms" checked>
+                            <label class="form-check-label" for="serverTMS">
+                              TMS (台服)
+                            </label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="serverRadio" id="serverGMS" value="gms">
+                            <label class="form-check-label" for="serverGMS">
+                              GMS (国际服)
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <hr class="my-2">
                       <div class="fw-bold mb-2">起始状态</div>
                       <div class="row g-3 align-items-end">
                         <div class="col-12 col-md-4">
@@ -173,102 +194,67 @@
       submenu.style.display = submenu.style.display === "block" ? "none" : "block";
     }
 
-    const enhanceChanceData = [
-      { stage: "0>1", success: 95.00, destroy: 0.00, keep: 5.00 },
-      { stage: "1>2", success: 90.00, destroy: 0.00, keep: 10.00 },
-      { stage: "2>3", success: 85.00, destroy: 0.00, keep: 15.00 },
-      { stage: "3>4", success: 85.00, destroy: 0.00, keep: 15.00 },
-      { stage: "4>5", success: 80.00, destroy: 0.00, keep: 20.00 },
-      { stage: "5>6", success: 75.00, destroy: 0.00, keep: 25.00 },
-      { stage: "6>7", success: 70.00, destroy: 0.00, keep: 30.00 },
-      { stage: "7>8", success: 65.00, destroy: 0.00, keep: 35.00 },
-      { stage: "8>9", success: 60.00, destroy: 0.00, keep: 40.00 },
-      { stage: "9>10", success: 55.00, destroy: 0.00, keep: 45.00 },
-      { stage: "10>11", success: 50.00, destroy: 0.00, keep: 50.00 },
-      { stage: "11>12", success: 45.00, destroy: 0.00, keep: 55.00 },
-      { stage: "12>13", success: 40.00, destroy: 0.00, keep: 60.00 },
-      { stage: "13>14", success: 35.00, destroy: 0.00, keep: 65.00 },
-      { stage: "14>15", success: 30.00, destroy: 0.00, keep: 70.00 },
-      { stage: "15>16", success: 30.00, destroy: 2.10, keep: 67.90 },
-      { stage: "16>17", success: 30.00, destroy: 2.10, keep: 67.90 },
-      { stage: "17>18", success: 15.00, destroy: 6.80, keep: 78.20 },
-      { stage: "18>19", success: 12.00, destroy: 8.20, keep: 79.80 },
-      { stage: "19>20", success: 10.00, destroy: 9.00, keep: 81.00 },
-      { stage: "20>21", success: 30.00, destroy: 10.50, keep: 59.50 },
-      { stage: "21>22", success: 20.00, destroy: 11.50, keep: 68.50 },
-      { stage: "22>23", success: 17.50, destroy: 12.25, keep: 70.25 },
-      { stage: "23>24", success: 8.50, destroy: 18.00, keep: 73.50 },
-      { stage: "24>25", success: 8.50, destroy: 18.00, keep: 73.50 },
-      { stage: "25>26", success: 8.00, destroy: 18.00, keep: 74.00 },
-      { stage: "26>27", success: 7.00, destroy: 18.60, keep: 74.40 },
-      { stage: "27>28", success: 5.00, destroy: 19.00, keep: 76.00 },
-      { stage: "28>29", success: 3.00, destroy: 19.40, keep: 77.60 },
-      { stage: "29>30", success: 1.00, destroy: 19.80, keep: 79.20 }
-    ];
+    // 全局变量存储当前服务器数据
+    let currentServerData = {
+      enhanceChanceData: [],
+      enhanceCostData: []
+    };
+    let currentServer = 'tms';
 
-    const enhanceCostData = [
-      { stage: "0>1", 130: 62000, 140: 77200, 150: 94800, 160: 114800, 200: 223200, 250: 435000 },
-      { stage: "1>2", 130: 123100, 140: 153400, 150: 188500, 160: 228600, 200: 445400, 250: 869100 },
-      { stage: "2>3", 130: 184100, 140: 229700, 150: 282300, 160: 342300, 200: 667700, 250: 1303100 },
-      { stage: "3>4", 130: 245100, 140: 305900, 150: 376000, 160: 456100, 200: 889900, 250: 1737100 },
-      { stage: "4>5", 130: 306100, 140: 382100, 150: 469800, 160: 569900, 200: 1112100, 250: 2171100 },
-      { stage: "5>6", 130: 367200, 140: 458300, 150: 563500, 160: 683700, 200: 1334300, 250: 2605200 },
-      { stage: "6>7", 130: 428200, 140: 534600, 150: 657300, 160: 797400, 200: 1556600, 250: 3039200 },
-      { stage: "7>8", 130: 489200, 140: 610800, 150: 751000, 160: 911200, 200: 1778800, 250: 3473200 },
-      { stage: "8>9", 130: 550300, 140: 687000, 150: 844800, 160: 1025000, 200: 2001000, 250: 3907300 },
-      { stage: "9>10", 130: 611300, 140: 763200, 150: 938500, 160: 1138800, 200: 2223200, 250: 4341300 },
-      { stage: "10>11", 130: 2495300, 140: 3116300, 150: 3832800, 160: 4651300, 200: 9083700, 250: 17740600 },
-      { stage: "11>12", 130: 5738100, 140: 7166500, 150: 8814200, 160: 10697000, 200: 20891500, 250: 40802800 },
-      { stage: "12>13", 130: 10449700, 140: 13025100, 150: 16052200, 160: 19481200, 200: 38048200, 250: 74132000 },
-      { stage: "13>14", 130: 17398100, 140: 21729500, 150: 26726100, 160: 32435400, 200: 63349500, 250: 123728500 },
-      { stage: "14>15", 130: 30754400, 140: 38411200, 150: 47243900, 160: 57336400, 200: 111981400, 250: 218718800 },
-      { stage: "15>16", 130: 19586000, 140: 39138900, 150: 48139000, 160: 58427000, 200: 114105800, 250: 222861900 },
-      { stage: "16>17", 130: 23069000, 140: 48020000, 150: 59062500, 160: 71697500, 200: 139998700, 250: 273434000 },
-      { stage: "17>18", 130: 26918600, 140: 61127000, 150: 75183500, 160: 91244700, 200: 178211400, 250: 348068200 },
-      { stage: "18>19", 130: 31149300, 140: 172905500, 150: 212666000, 160: 258097500, 200: 504095800, 250: 984561100 },
-      { stage: "19>20", 130: 35776100, 140: 297882700, 150: 366382500, 160: 444652400, 200: 868460800, 250: 1696211500 },
-      { stage: "20>21", 130: null, 140: 50974700, 150: 62696400, 160: 76090000, 200: 148612400, 250: 387009800 },
-      { stage: "21>22", 130: null, 140: 92474100, 150: 113738800, 160: 138036600, 200: 269601800, 250: 438404800 },
-      { stage: "22>23", 130: null, 140: 65166700, 150: 80152000, 160: 97274600, 200: 189988600, 250: 494760300 },
-      { stage: "23>24", 130: null, 140: 73102000, 150: 89912300, 160: 109120000, 200: 213124000, 250: 555008800 },
-      { stage: "24>25", 130: null, 140: 81620000, 150: 100389000, 160: 121834900, 200: 237957700, 250: 619680000 },
-      { stage: "25>26", 130: null, 140: 90737500, 150: 111603000, 160: 135444400, 200: 264539000, 250: 688902000 },
-      { stage: "26>27", 130: null, 140: 100471000, 150: 123574700, 160: 149973700, 200: 292916400, 250: 762801400 },
-      { stage: "27>28", 130: null, 140: 110837000, 150: 136324400, 160: 165447100, 200: 323138000, 250: 841503600 },
-      { stage: "28>29", 130: null, 140: 121851900, 150: 149872300, 160: 181889200, 200: 355251400, 250: 925132300 },
-      { stage: "29>30", 130: null, 140: 133531800, 150: 164238100, 160: 199324000, 200: 389303700, 250: 1013810000 }
-    ];
-    const tbody = document.querySelector("#enhanceChanceTable tbody");
-    enhanceChanceData.forEach(row => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.stage}</td>
-        <td>${row.success.toFixed(2)}%</td>
-        <td>${row.destroy.toFixed(2)}%</td>
-        <td>${row.keep.toFixed(2)}%</td>
-      `;
-      tbody.appendChild(tr);
-    });
+    // 从JSON文件加载服务器数据
+    async function loadServerData(server) {
+      try {
+        const response = await fetch(`./data/startforce/${server}.json`);
+        const data = await response.json();
+        currentServerData = data;
+        currentServer = server;
+        return data;
+      } catch (error) {
+        console.error(`加载${server}数据失败:`, error);
+        return null;
+      }
+    }
 
-    const tbody2 = document.querySelector("#enhanceCostTable tbody");
-    const formatNumber = function (n) { return n == null ? '-' : Number(n).toLocaleString(); };
-    enhanceCostData.forEach(row => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.stage}</td>
-        <td>${formatNumber(row["130"])}</td>
-        <td>${formatNumber(row["140"])}</td>
-        <td>${formatNumber(row["150"])}</td>
-        <td>${formatNumber(row["160"])}</td>
-        <td>${formatNumber(row["200"])}</td>
-        <td>${formatNumber(row["250"])}</td>
-      `;
-      tbody2.appendChild(tr);
-    });
+    // 渲染概率表
+    function renderChanceTable() {
+      const tbody = document.querySelector("#enhanceChanceTable tbody");
+      tbody.innerHTML = '';
+      currentServerData.enhanceChanceData.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.stage}</td>
+          <td>${row.success.toFixed(2)}%</td>
+          <td>${row.destroy.toFixed(2)}%</td>
+          <td>${row.keep.toFixed(2)}%</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 渲染消费表
+    function renderCostTable() {
+      const tbody2 = document.querySelector("#enhanceCostTable tbody");
+      const formatNumber = function (n) { return n == null ? '-' : Number(n).toLocaleString(); };
+      tbody2.innerHTML = '';
+      currentServerData.enhanceCostData.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.stage}</td>
+          <td>${formatNumber(row["130"])}</td>
+          <td>${formatNumber(row["140"])}</td>
+          <td>${formatNumber(row["150"])}</td>
+          <td>${formatNumber(row["160"])}</td>
+          <td>${formatNumber(row["200"])}</td>
+          <td>${formatNumber(row["250"])}</td>
+        `;
+        tbody2.appendChild(tr);
+      });
+    }
 
     // 单次模拟：基于当前星级，按成功/破坏/维持概率，计算下一步结果与花费
-    ; (function initSimulator() {
+    ; (async function initSimulator() {
       var els = {
+        serverRadios: document.getElementsByName('serverRadio'),
         startMesos: document.getElementById('startMesos'),
         equipLevel: document.getElementById('equipLevel'),
         startStar: document.getElementById('startStar'),
@@ -298,6 +284,8 @@
         inheritCount: 0,
         awaitingInherit: false
       };
+
+      var formatNumber = function (n) { return n == null ? '-' : Number(n).toLocaleString(); };
 
       var syncFromInputsToStart = function () {
         var startMesosVal = els.startMesos.value;
@@ -337,15 +325,14 @@
       var setStrengthenLabel = function (text) {
         els.btnStrengthen.textContent = text;
       };
-
       var getCostByLevelAndStage = function (equipLevel, fromStar) {
-        var row = enhanceCostData.find(function (r) { return r.stage === (fromStar + '>' + (fromStar + 1)); });
+        var row = currentServerData.enhanceCostData.find(function (r) { return r.stage === (fromStar + '>' + (fromStar + 1)); });
         if (!row) return null;
         return row[String(equipLevel)] == null ? null : Number(row[String(equipLevel)]);
       };
 
       var getChanceRow = function (fromStar) {
-        return enhanceChanceData.find(function (r) { return r.stage === (fromStar + '>' + (fromStar + 1)); });
+        return currentServerData.enhanceChanceData.find(function (r) { return r.stage === (fromStar + '>' + (fromStar + 1)); });
       };
 
       var pickOutcome = function (chanceRow) {
@@ -417,14 +404,33 @@
         resetToStart();
       });
 
-      // 当起始输入变动时，刷新起始与当前文案（不自动重置，以“重置”按钮为准）
+      // 当起始输入变动时，刷新起始与当前文案（不自动重置，以"重置"按钮为准）
       ['change', 'input'].forEach(function (evt) {
         els.startMesos.addEventListener(evt, function () { syncFromInputsToStart(); render(); });
         els.equipLevel.addEventListener(evt, function () { syncFromInputsToStart(); render(); });
         els.startStar.addEventListener(evt, function () { syncFromInputsToStart(); render(); });
       });
 
-      // 初始化
+      // 服务器选择变更事件
+      els.serverRadios.forEach(function (radio) {
+        radio.addEventListener('change', async function () {
+          if (this.checked) {
+            const selectedServer = this.value;
+            const data = await loadServerData(selectedServer);
+            if (data) {
+              renderChanceTable();
+              renderCostTable();
+              resetToStart(); // 自动重置模拟器
+              els.resultBox.textContent = `已切换到 ${selectedServer.toUpperCase()} 服务器，模拟器已重置。`;
+            }
+          }
+        });
+      });
+
+      // 初始化：加载默认服务器数据
+      await loadServerData('tms');
+      renderChanceTable();
+      renderCostTable();
       resetToStart();
     })();
   </script>
