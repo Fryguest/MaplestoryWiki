@@ -62,6 +62,27 @@
 
                     <div class="col-12">
                       <hr class="my-2">
+                      <div class="fw-bold mb-2">活动优惠</div>
+                      <div class="row g-3">
+                        <div class="col-12">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="discountCheckbox">
+                            <label class="form-check-label" for="discountCheckbox">
+                              上星7折（费用变为70%）
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="guaranteedCheckbox">
+                            <label class="form-check-label" for="guaranteedCheckbox">
+                              5, 10, 15星必成（5→6, 10→11, 15→16星成功率100%）
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <hr class="my-2">
                       <div class="fw-bold mb-2">起始状态</div>
                       <div class="row g-3 align-items-end">
                         <div class="col-12 col-md-4">
@@ -199,19 +220,70 @@
       enhanceChanceData: [],
       enhanceCostData: []
     };
+    let originalServerData = {
+      enhanceChanceData: [],
+      enhanceCostData: []
+    };
     let currentServer = 'tms';
+    let options = {
+      discount: false,
+      guaranteed: false
+    };
 
     // 从JSON文件加载服务器数据
     async function loadServerData(server) {
       try {
         const response = await fetch(`./data/startforce/${server}.json`);
         const data = await response.json();
+        // 深拷贝存储原始数据
+        originalServerData = {
+          enhanceChanceData: JSON.parse(JSON.stringify(data.enhanceChanceData)),
+          enhanceCostData: JSON.parse(JSON.stringify(data.enhanceCostData))
+        };
         currentServerData = data;
         currentServer = server;
         return data;
       } catch (error) {
         console.error(`加载${server}数据失败:`, error);
         return null;
+      }
+    }
+
+    // 应用选项到数据
+    function applyOptionsToData() {
+      // 深拷贝原始数据
+      currentServerData = {
+        enhanceChanceData: JSON.parse(JSON.stringify(originalServerData.enhanceChanceData)),
+        enhanceCostData: JSON.parse(JSON.stringify(originalServerData.enhanceCostData))
+      };
+
+      // 应用7折优惠
+      if (options.discount) {
+        currentServerData.enhanceCostData = currentServerData.enhanceCostData.map(row => {
+          const newRow = { ...row };
+          ['130', '140', '150', '160', '200', '250'].forEach(level => {
+            if (newRow[level] != null) {
+              newRow[level] = Math.floor(newRow[level] * 0.7);
+            }
+          });
+          return newRow;
+        });
+      }
+
+      // 应用5, 10, 15星必成
+      if (options.guaranteed) {
+        const guaranteedStages = ['5>6', '10>11', '15>16'];
+        currentServerData.enhanceChanceData = currentServerData.enhanceChanceData.map(row => {
+          if (guaranteedStages.includes(row.stage)) {
+            return {
+              ...row,
+              success: 100,
+              destroy: 0,
+              keep: 0
+            };
+          }
+          return row;
+        });
       }
     }
 
@@ -443,6 +515,7 @@
             const selectedServer = this.value;
             const data = await loadServerData(selectedServer);
             if (data) {
+              applyOptionsToData();
               renderChanceTable();
               renderCostTable();
               resetToStart(); // 自动重置模拟器
@@ -452,8 +525,31 @@
         });
       });
 
+      // 优惠选项变更事件
+      const discountCheckbox = document.getElementById('discountCheckbox');
+      const guaranteedCheckbox = document.getElementById('guaranteedCheckbox');
+      
+      discountCheckbox.addEventListener('change', function () {
+        options.discount = this.checked;
+        applyOptionsToData();
+        renderChanceTable();
+        renderCostTable();
+        resetToStart();
+        els.resultBox.textContent = this.checked ? '已启用上星7折优惠，模拟器已重置。' : '已关闭上星7折优惠，模拟器已重置。';
+      });
+
+      guaranteedCheckbox.addEventListener('change', function () {
+        options.guaranteed = this.checked;
+        applyOptionsToData();
+        renderChanceTable();
+        renderCostTable();
+        resetToStart();
+        els.resultBox.textContent = this.checked ? '已启用5, 10, 15星必成，模拟器已重置。' : '已关闭5, 10, 15星必成，模拟器已重置。';
+      });
+
       // 初始化：加载默认服务器数据
       await loadServerData('tms');
+      applyOptionsToData();
       renderChanceTable();
       renderCostTable();
       resetToStart();
