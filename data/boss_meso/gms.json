@@ -6,99 +6,99 @@
         }
     },
     "Weekly": {
-        "Cygnus": {
+        "西格诺斯 Cygnus": {
             "Easy": 45562500,
             "Normal": 72250000
         },
-        "Hilla": {
+        "希拉 Hilla": {
             "Hard": 56250000
         },
-        "Pink Bean": {
+        "品克宾 Pink Bean": {
             "Chaos": 64000000
         },
-        "Princess No": {
+        "濃姬 Princess No": {
             "Normal": 81000000
         },
-        "Zakum": {
+        "扎昆 Zakum": {
             "Chaos": 81000000
         },
-        "Pierre": {
+        "比艾樂 Pierre": {
             "Chaos": 81000000
         },
-        "Von Bon": {
+        "斑斑 Von Bon": {
             "Chaos": 81000000
         },
-        "Crimson Queen": {
+        "血腥皇后 Crimson Queen": {
             "Chaos": 81000000
         },
-        "Magnus": {
+        "麦格纳斯 Magnus": {
             "Hard": 95062500
         },
-        "Vellum": {
+        "貝倫 Vellum": {
             "Chaos": 105062500
         },
-        "Papulatus": {
+        "拉圖斯 Papulatus": {
             "Chaos": 132250000
         },
-        "Akechi Mitsuhide": {
+        "明智光秀 Akechi Mitsuhide": {
             "Normal": 144000000
         },
-        "Lotus": {
+        "史烏 Lotus": {
             "Normal": 162562500,
             "Hard": 444675000,
             "Extreme": 1397500000
         },
-        "Damien": {
+        "戴米安 Damien": {
             "Normal": 169000000,
             "Hard": 421875000
         },
-        "Guardian Angel Slime": {
+        "守護天使綠水靈 Guardian Angel Slime": {
             "Normal": 231673500,
             "Chaos": 600578125
         },
-        "Lucid": {
+        "露希妲 Lucid": {
             "Easy": 237009375,
             "Normal": 253828125,
             "Hard": 504000000
         },
-        "Will": {
+        "威爾 Will": {
             "Easy": 246744750,
             "Normal": 279075000,
             "Hard": 621810000
         },
-        "Gloom": {
+        "戴斯克 Gloom": {
             "Normal": 297675000,
             "Chaos": 563945000
         },
-        "Darknell": {
+        "頓凱爾 Darknell": {
             "Normal": 316875000,
             "Hard": 667920000
         },
-        "Verus Hilla": {
+        "真．希拉 Verus Hilla": {
             "Normal": 581880000,
             "Hard": 762105000
         },
-        "Chosen Seren": {
+        "受選的賽蓮 Chosen Seren": {
             "Normal": 889021875,
             "Hard": 1096562500,
             "Extreme": 4235000000
         },
-        "Kalos the Guardian": {
+        "監視者卡洛斯 Kalos the Guardian": {
             "Easy": 937500000,
             "Normal": 1300000000,
             "Chaos": 2600000000
         },
-        "Kaling": {
+        "咖凌 Kaling": {
             "Easy": 1031250000,
             "Normal": 1506500000,
             "Hard": 2990000000,
             "Extreme": 6026000000
         },
-        "Limbo": {
+        "林波 Limbo": {
             "Normal": 2100000000,
             "Hard": 3745000000
         },
-        "Baldrix": {
+        "巴德利斯 Baldrix": {
             "Normal": 2800000000,
             "Hard": 4200000000
         }

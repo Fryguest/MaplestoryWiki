@@ -5,20 +5,62 @@
     <link rel="stylesheet" href="style.css">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Weekly Meso 计算器</title>
+    <title>每周搬蛋计算器</title>
     <style>
         /* 小幅样式补充，遵循 starforce_simulator 风格 */
         .content {
-            max-width: 900px;
+            max-width: 1400px;
             margin: 24px auto;
-            padding: 8px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .controls {
             display: flex;
             gap: 12px;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .controls label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .controls select {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .controls button {
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .controls button:hover {
+            background: #45a049;
         }
 
         table {
@@ -29,13 +71,23 @@
 
         th,
         td {
-            border: 1px solid #ccc;
-            padding: 6px 8px;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
             text-align: left;
         }
 
         th {
-            background: #f5f5f5;
+            background: #4CAF50;
+            color: white;
+            font-weight: 600;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background: #f0f0f0;
         }
 
         .right {
@@ -50,10 +102,51 @@
         .muted {
             color: #666;
             font-size: 0.9em;
+            margin-top: 8px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
         }
 
         .counted {
-            background: #e8ffe8;
+            background: #e8ffe8 !important;
+        }
+
+        .boss-options {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            align-items: center;
+        }
+
+        .boss-options label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .boss-options label:hover {
+            background: #e8f5e9;
+        }
+
+        .boss-options input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .boss-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .no-fight-option {
+            color: #999;
+            font-style: italic;
         }
     </style>
 </head>
@@ -62,21 +155,17 @@
     <div id="sidebar-container"></div>
 
     <div class="content">
-        <h2>Weekly Meso 计算器</h2>
+        <h2>每周搬蛋计算器</h2>
 
         <div class="controls">
             <label for="serverSelect">服务器:</label>
             <select id="serverSelect">
                 <option value="gms">GMS</option>
-                <option value="tms">TMS</option>
+                <!-- <option value="tms">TMS</option> -->
             </select>
-
-            <button id="loadBtn">加载 Boss 列表</button>
-
-            <button id="calcBtn">计算每周 Meso</button>
         </div>
 
-        <div id="note" class="muted">说明：从所选 boss 的已选择难度中，取收益最高的 14 个 boss 计算每周总 meso。</div>
+        <div id="note" class="muted">说明：选择你攻略的所有BOSS, 会自动计算价格最高的14个结晶</div>
 
         <div id="bossContainer"></div>
 
@@ -85,9 +174,8 @@
 
     <script>
         const serverSelect = document.getElementById('serverSelect');
-        const loadBtn = document.getElementById('loadBtn');
+        // const loadBtn = document.getElementById('loadBtn');
         const bossContainer = document.getElementById('bossContainer');
-        const calcBtn = document.getElementById('calcBtn');
         const resultDiv = document.getElementById('result');
 
         // JSON 文件路径（基于仓库结构）
@@ -96,13 +184,9 @@
             tms: 'data/boss_meso/tms.json'
         };
 
-        loadBtn.addEventListener('click', () => {
-            loadBosses(serverSelect.value);
-        });
-
-        calcBtn.addEventListener('click', () => {
-            calculateWeeklyMeso();
-        });
+        // loadBtn.addEventListener('click', () => {
+        //     loadBosses(serverSelect.value);
+        // });
 
         // 初始加载默认服务器
         loadBosses(serverSelect.value);
@@ -123,32 +207,51 @@
         }
 
         function renderBossTable(weeklyObj) {
-            const bossNames = Object.keys(weeklyObj).sort((a, b) => a.localeCompare(b, 'zh-Hans-u-co-pinyin'));
+            const bossNames = Object.keys(weeklyObj);
+            
+            // 按每个boss的最低难度meso数量从少到多排序
+            bossNames.sort((a, b) => {
+                const diffsA = Object.values(weeklyObj[a]);
+                const diffsB = Object.values(weeklyObj[b]);
+                const minA = Math.min(...diffsA);
+                const minB = Math.min(...diffsB);
+                return minA - minB;
+            });
+            
             if (bossNames.length === 0) {
                 bossContainer.innerHTML = '<div class="muted">未找到 Weekly boss 列表。</div>';
                 return;
             }
 
             let html = `<table>
-                <thead><tr><th>选择</th><th>Boss</th><th>难度 (每周 meso)</th></tr></thead><tbody>`;
+                <thead><tr><th>Boss</th><th>难度选择 (每周 meso)</th></tr></thead><tbody>`;
 
             for (const name of bossNames) {
                 const diffs = weeklyObj[name];
-                let options = `<option value="">（不选择）</option>`;
+                const groupName = `boss_${name.replace(/\s+/g, '_')}`;
+                
+                let options = `<label class="no-fight-option">
+                    <input type="radio" name="${groupName}" value="" data-boss="${escapeHtml(name)}" class="boss-radio" checked>
+                    不打
+                </label>`;
+                
+                // 按meso数量从少到多排序
                 const diffKeys = Object.keys(diffs);
-                diffKeys.sort((a, b) => (diffs[b] - diffs[a]));
+                diffKeys.sort((a, b) => (diffs[a] - diffs[b]));
                 for (const d of diffKeys) {
                     const v = diffs[d];
-                    options += `<option value="${encodeURIComponent(d)}|${v}">${d} — ${formatNumber(v)}</option>`;
+                    options += `<label>
+                        <input type="radio" name="${groupName}" value="${encodeURIComponent(d)}|${v}" data-boss="${escapeHtml(name)}" class="boss-radio">
+                        ${escapeHtml(d)} — ${formatNumber(v)}
+                    </label>`;
                 }
+                
                 html += `<tr>
-                    <td class="right"><input type="checkbox" class="boss-enable" data-boss="${escapeHtml(name)}"></td>
-                    <td>${escapeHtml(name)}</td>
+                    <td class="boss-name">${escapeHtml(name)}</td>
                     <td>
-                        <select class="boss-diff" data-boss="${escapeHtml(name)}">
+                        <div class="boss-options">
                             ${options}
-                        </select>
-                        <div class="muted">请先勾选左侧复选框，再在此处选择要挑战的难度（每个 boss 每周只能选一项）。</div>
+                        </div>
                     </td>
                 </tr>`;
             }
@@ -156,28 +259,20 @@
             html += `</tbody></table>`;
             bossContainer.innerHTML = html;
 
-            document.querySelectorAll('.boss-enable').forEach(cb => {
-                cb.addEventListener('change', (e) => {
-                    const boss = e.target.dataset.boss;
-                    const sel = document.querySelector(`select.boss-diff[data-boss="${boss}"]`);
-                    if (sel) sel.disabled = !e.target.checked;
-                    if (!e.target.checked) sel.value = '';
-                    resultDiv.innerText = '';
+            document.querySelectorAll('.boss-radio').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    calculateWeeklyMeso();
                 });
             });
-
-            document.querySelectorAll('.boss-diff').forEach(sel => sel.disabled = true);
         }
 
         function calculateWeeklyMeso() {
             const rows = [];
-            document.querySelectorAll('.boss-enable').forEach(cb => {
-                const boss = cb.dataset.boss;
-                if (!cb.checked) return;
-                const sel = document.querySelector(`select.boss-diff[data-boss="${boss}"]`);
-                if (!sel) return;
-                const val = sel.value;
-                if (!val) return;
+            document.querySelectorAll('.boss-radio:checked').forEach(radio => {
+                const boss = radio.dataset.boss;
+                const val = radio.value;
+                if (!val) return; // 跳过"不打这个boss"选项
+                
                 const [encDiff, vStr] = val.split('|');
                 const diff = decodeURIComponent(encDiff);
                 const value = Number(vStr) || 0;
@@ -186,7 +281,7 @@
 
             if (rows.length === 0) {
                 resultDiv.innerText = '未选择任何 boss 或难度。';
-                return;
+                return; 
             }
 
             rows.sort((a, b) => b.value - a.value);
@@ -209,7 +304,6 @@
             out += `<div style="margin-top:8px;font-size:1.1em">每周总 meso（前 14 个）： ${formatNumber(sum)}</div>`;
 
             resultDiv.innerHTML = out;
-            resultDiv.scrollIntoView({ behavior: 'smooth' });
         }
 
         function formatNumber(n) {
