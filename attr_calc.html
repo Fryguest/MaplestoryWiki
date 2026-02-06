@@ -8,6 +8,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>属性计算器</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #f0f9ff, #e0f7fa);
+            color: #000;
+            margin: 0;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .content {
+            background: transparent;
+        }
+
+        h1 {
+            text-align: center;
+            color: #000;
+            font-size: 22px;
+            margin: 6px 0 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin: 0 0 16px;
+            font-size: 13px;
+            color: #000;
+            opacity: 0.8;
+            font-weight: bold;
+        }
+
+        .calc-layout {
+            max-width: 920px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .calc-card {
+            background-color: #ffffffcc;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 12px;
+        }
+
+        .calc-card h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: #000;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px 10px;
+            padding: 6px 0;
+        }
+
+        .form-row label {
+            font-weight: bold;
+            color: #000;
+            font-size: 14px;
+            flex: 1 1 260px;
+        }
+
+        input[type="number"] {
+            padding: 6px 8px;
+            border: 1px solid #b2dfdb;
+            border-radius: 6px;
+            width: 160px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #00796b;
+            outline: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 12px;
+            background-color: #00796b;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 121, 107, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #004d40;
+        }
+
+        .btn-wide {
+            width: 100%;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #00796b;
+            border: 1px solid #00796b;
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0f2f1;
+        }
+
+        .extra-sub-block {
+            display: none;
+            margin-top: 10px;
+            padding-left: 12px;
+            border-left: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .result-box {
+            margin-top: 10px;
+            background-color: #ffffffcc;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 12px;
+            white-space: pre-wrap;
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 44px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-row label {
+                flex: 1 1 auto;
+            }
+
+            input[type="number"] {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -17,58 +167,97 @@
     <!-- 页面内容区 -->
     <div class="content">
         <h1>属性计算器</h1>
-        <hr>
-        <p>这里是属性计算器,用于计算两种属性的等比换算,暂时只支持攻击力/属性</p>
+        <p class="subtitle">用于计算两种属性的等比换算（攻击力 / 属性）</p>
 
-        <div class="input-group">
-            <h3>攻击力</h3>
-            <label>基础攻击力:<input type="number" id="attack" /></label><br>
-            <label>攻击力百分比加成 (%):<input type="number" id="attackPct" /></label><br>
+        <div class="calc-layout">
+            <div class="calc-card">
+                <h2>攻击力</h2>
+                <div class="form-row">
+                    <label for="attack">基础攻击力</label>
+                    <input type="number" id="attack" min="0" step="1" inputmode="numeric" />
+                </div>
+                <div class="form-row">
+                    <label for="attackPct">攻击力百分比加成 (%)</label>
+                    <input type="number" id="attackPct" step="0.1" inputmode="decimal" />
+                </div>
+            </div>
+
+            <div class="calc-card">
+                <h2>伤害加成</h2>
+                <div class="form-row">
+                    <label for="dmgPct">总伤害 (%)</label>
+                    <input type="number" id="dmgPct" step="0.1" inputmode="decimal" />
+                </div>
+                <div class="form-row">
+                    <label for="bossPct">BOSS伤害 (%)</label>
+                    <input type="number" id="bossPct" step="0.1" inputmode="decimal" />
+                </div>
+            </div>
+
+            <div class="calc-card">
+                <h2>主属性</h2>
+                <div class="form-row">
+                    <label for="mainAttr">基础主属性</label>
+                    <input type="number" id="mainAttr" min="0" step="1" inputmode="numeric" />
+                </div>
+                <div class="form-row">
+                    <label for="mainAttrPct">主属性百分比加成 (%)</label>
+                    <input type="number" id="mainAttrPct" step="0.1" inputmode="decimal" />
+                </div>
+                <div class="form-row">
+                    <label for="extraMainAttr">不套用百分比主属性</label>
+                    <input type="number" id="extraMainAttr" min="0" step="1" inputmode="numeric" />
+                </div>
+            </div>
+
+            <div class="calc-card">
+                <h2>副属性</h2>
+                <div class="form-row">
+                    <label for="subAttr">基础副属性</label>
+                    <input type="number" id="subAttr" min="0" step="1" inputmode="numeric" />
+                </div>
+                <div class="form-row">
+                    <label for="subAttrPct">副属性百分比加成 (%)</label>
+                    <input type="number" id="subAttrPct" step="0.1" inputmode="decimal" />
+                </div>
+                <div class="form-row">
+                    <label for="extraSubAttr">不套用百分比副属性</label>
+                    <input type="number" id="extraSubAttr" min="0" step="1" inputmode="numeric" />
+                </div>
+            </div>
+
+            <div class="calc-card">
+                <h2>爆击</h2>
+                <div class="form-row">
+                    <label for="criDmg">爆击伤害 (%)</label>
+                    <input type="number" id="criDmg" step="0.1" inputmode="decimal" />
+                </div>
+            </div>
+
+            <div class="calc-card">
+                <h2>双副属性（特定职业）</h2>
+                <button type="button" class="btn btn-secondary btn-wide" onclick="toggleExtraSub()">我是暗影侠盗/影武者/卡蒂娜</button>
+                <div id="extra-sub-block" class="extra-sub-block">
+                    <div class="form-row">
+                        <label for="subAttr2">基础副属性（副属性 2）</label>
+                        <input type="number" id="subAttr2" min="0" step="1" inputmode="numeric" />
+                    </div>
+                    <div class="form-row">
+                        <label for="subAttrPct2">副属性百分比加成（副属性 2, %）</label>
+                        <input type="number" id="subAttrPct2" step="0.1" inputmode="decimal" />
+                    </div>
+                    <div class="form-row">
+                        <label for="extraSubAttr2">附加副属性（副属性 2）</label>
+                        <input type="number" id="extraSubAttr2" min="0" step="1" inputmode="numeric" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="calc-card">
+                <button type="button" class="btn btn-wide" onclick="calculateEquivalence()">计算等效属性</button>
+                <pre id="result" class="result-box"></pre>
+            </div>
         </div>
-
-        <div class="input-group">
-            <h3>伤害加成</h3>
-            <label>总伤害 (%)：<input type="number" id="dmgPct" /></label><br>
-            <label>BOSS伤害 (%)：<input type="number" id="bossPct" /></label><br>
-        </div>
-
-        <div class="input-group">
-            <h3>主属性</h3>
-            <label>基础主属性:<input type="number" id="mainAttr" /></label><br>
-            <label>主属性百分比加成 (%):<input type="number" id="mainAttrPct" /></label><br>
-            <label>不套用百分比主属性:<input type="number" id="extraMainAttr" /></label><br>
-        </div>
-
-        <div class="input-group">
-            <h3>副属性</h3>
-            <label>基础副属性:<input type="number" id="subAttr" /></label><br>
-            <label>副属性百分比加成 (%):<input type="number" id="subAttrPct" /></label><br>
-            <label>不套用百分比副属性:<input type="number" id="extraSubAttr" /></label><br>
-        </div>
-        <br>
-
-        <div class="input-group">
-            <h3>爆击</h3>
-            <label>爆击伤害:<input type="number" id="criDmg" /></label><br>
-        </div>
-        <br>
-
-        <!-- 切换按钮 -->
-        <button onclick="toggleExtraSub()">我是暗影侠盗/影武者/卡蒂娜</button>
-        <!-- 副属性 2:默认隐藏 -->
-        <div id="extra-sub-block"
-            style="display: none; margin-top: 10px; padding-left: 1em; border-left: 2px solid #ccc;">
-            <p style="margin: 0;">副属性 2:</p>
-            <label>基础副属性:<input type="number" id="subAttr2" /></label><br>
-            <label>副属性百分比加成 (%):<input type="number" id="subAttrPct2" /></label><br>
-            <label>附加副属性:<input type="number" id="extraSubAttr2" /></label><br>
-        </div>
-
-        <br>
-
-        <br>
-        <button onclick="calculateEquivalence()">计算等效属性</button>
-        <p id="result"></p>
     </div>
 
     <script>
@@ -98,6 +287,7 @@
             extraSubEnabled = !extraSubEnabled;
             const block = document.getElementById("extra-sub-block");
             block.style.display = extraSubEnabled ? "block" : "none";
+            localStorage.setItem("extraSubEnabled", String(extraSubEnabled));
         }
 
         function calculateEquivalence() {
@@ -197,22 +387,27 @@
         function saveInputsToLocalStorage() {
             const ids = [
                 "attack", "attackPct",
+                "dmgPct", "bossPct",
                 "mainAttr", "mainAttrPct", "extraMainAttr",
                 "subAttr", "subAttrPct", "extraSubAttr",
-                "subAttr2", "subAttrPct2", "extraSubAttr2"
+                "subAttr2", "subAttrPct2", "extraSubAttr2",
+                "criDmg"
             ];
             ids.forEach(id => {
                 const value = document.getElementById(id).value;
                 localStorage.setItem(id, value);
             });
+            localStorage.setItem("extraSubEnabled", String(extraSubEnabled));
         }
 
         function loadInputsFromLocalStorage() {
             const ids = [
                 "attack", "attackPct",
+                "dmgPct", "bossPct",
                 "mainAttr", "mainAttrPct", "extraMainAttr",
                 "subAttr", "subAttrPct", "extraSubAttr",
-                "subAttr2", "subAttrPct2", "extraSubAttr2"
+                "subAttr2", "subAttrPct2", "extraSubAttr2",
+                "criDmg"
             ];
             ids.forEach(id => {
                 if (localStorage.getItem(id) !== null) {
