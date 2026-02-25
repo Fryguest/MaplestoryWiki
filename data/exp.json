@@ -1,5 +1,5 @@
 {
-    "Upgrade": {
+    "upgrade": {
         "200": {
             "level": 200,
             "total_level": 11462335230,
@@ -605,6 +605,570 @@
             "total_level": 8514022615723348,
             "exp_to_next_level": null,
             "previous_level_multiplier": null
+        }
+    },
+    "exp_ticket": {
+        "200": {
+            "level": 200,
+            "exp_per_ticket": 7404000
+        },
+        "201": {
+            "level": 201,
+            "exp_per_ticket": 7605000
+        },
+        "202": {
+            "level": 202,
+            "exp_per_ticket": 7808000
+        },
+        "203": {
+            "level": 203,
+            "exp_per_ticket": 8035000
+        },
+        "204": {
+            "level": 204,
+            "exp_per_ticket": 8242000
+        },
+        "205": {
+            "level": 205,
+            "exp_per_ticket": 8450000
+        },
+        "206": {
+            "level": 206,
+            "exp_per_ticket": 8661000
+        },
+        "207": {
+            "level": 207,
+            "exp_per_ticket": 8895000
+        },
+        "208": {
+            "level": 208,
+            "exp_per_ticket": 9109000
+        },
+        "209": {
+            "level": 209,
+            "exp_per_ticket": 9325000
+        },
+        "210": {
+            "level": 210,
+            "exp_per_ticket": 18601000
+        },
+        "211": {
+            "level": 211,
+            "exp_per_ticket": 19026000
+        },
+        "212": {
+            "level": 212,
+            "exp_per_ticket": 19504000
+        },
+        "213": {
+            "level": 213,
+            "exp_per_ticket": 19936000
+        },
+        "214": {
+            "level": 214,
+            "exp_per_ticket": 20372000
+        },
+        "215": {
+            "level": 215,
+            "exp_per_ticket": 20861000
+        },
+        "216": {
+            "level": 216,
+            "exp_per_ticket": 21340000
+        },
+        "217": {
+            "level": 217,
+            "exp_per_ticket": 21801000
+        },
+        "218": {
+            "level": 218,
+            "exp_per_ticket": 22249000
+        },
+        "219": {
+            "level": 219,
+            "exp_per_ticket": 22755000
+        },
+        "220": {
+            "level": 220,
+            "exp_per_ticket": 23211000
+        },
+        "221": {
+            "level": 221,
+            "exp_per_ticket": 23724000
+        },
+        "222": {
+            "level": 222,
+            "exp_per_ticket": 24186000
+        },
+        "223": {
+            "level": 223,
+            "exp_per_ticket": 24707000
+        },
+        "224": {
+            "level": 224,
+            "exp_per_ticket": 25176000
+        },
+        "225": {
+            "level": 225,
+            "exp_per_ticket": 25704000
+        },
+        "226": {
+            "level": 226,
+            "exp_per_ticket": 26238000
+        },
+        "227": {
+            "level": 227,
+            "exp_per_ticket": 26717000
+        },
+        "228": {
+            "level": 228,
+            "exp_per_ticket": 27258000
+        },
+        "229": {
+            "level": 229,
+            "exp_per_ticket": 27802000
+        },
+        "230": {
+            "level": 230,
+            "exp_per_ticket": 29503000
+        },
+        "231": {
+            "level": 231,
+            "exp_per_ticket": 30080000
+        },
+        "232": {
+            "level": 232,
+            "exp_per_ticket": 30660000
+        },
+        "233": {
+            "level": 233,
+            "exp_per_ticket": 31178000
+        },
+        "234": {
+            "level": 234,
+            "exp_per_ticket": 31766000
+        },
+        "235": {
+            "level": 235,
+            "exp_per_ticket": 32360000
+        },
+        "236": {
+            "level": 236,
+            "exp_per_ticket": 32959000
+        },
+        "237": {
+            "level": 237,
+            "exp_per_ticket": 33488000
+        },
+        "238": {
+            "level": 238,
+            "exp_per_ticket": 34093000
+        },
+        "239": {
+            "level": 239,
+            "exp_per_ticket": 34701000
+        },
+        "240": {
+            "level": 240,
+            "exp_per_ticket": 35312000
+        },
+        "241": {
+            "level": 241,
+            "exp_per_ticket": 36422000
+        },
+        "242": {
+            "level": 242,
+            "exp_per_ticket": 37051000
+        },
+        "243": {
+            "level": 243,
+            "exp_per_ticket": 37610000
+        },
+        "244": {
+            "level": 244,
+            "exp_per_ticket": 38248000
+        },
+        "245": {
+            "level": 245,
+            "exp_per_ticket": 38889000
+        },
+        "246": {
+            "level": 246,
+            "exp_per_ticket": 39533000
+        },
+        "247": {
+            "level": 247,
+            "exp_per_ticket": 40182000
+        },
+        "248": {
+            "level": 248,
+            "exp_per_ticket": 40835000
+        },
+        "249": {
+            "level": 249,
+            "exp_per_ticket": 41492000
+        },
+        "250": {
+            "level": 250,
+            "exp_per_ticket": 43861000
+        },
+        "251": {
+            "level": 251,
+            "exp_per_ticket": 44553000
+        },
+        "252": {
+            "level": 252,
+            "exp_per_ticket": 45249000
+        },
+        "253": {
+            "level": 253,
+            "exp_per_ticket": 45949000
+        },
+        "254": {
+            "level": 254,
+            "exp_per_ticket": 46654000
+        },
+        "255": {
+            "level": 255,
+            "exp_per_ticket": 47360000
+        },
+        "256": {
+            "level": 256,
+            "exp_per_ticket": 48073000
+        },
+        "257": {
+            "level": 257,
+            "exp_per_ticket": 48788000
+        },
+        "258": {
+            "level": 258,
+            "exp_per_ticket": 49595000
+        },
+        "259": {
+            "level": 259,
+            "exp_per_ticket": 50321000
+        },
+        "260": {
+            "level": 260,
+            "exp_per_ticket": 76572000
+        },
+        "261": {
+            "level": 261,
+            "exp_per_ticket": 76572000
+        },
+        "262": {
+            "level": 262,
+            "exp_per_ticket": 76572000
+        },
+        "263": {
+            "level": 263,
+            "exp_per_ticket": 76572000
+        },
+        "264": {
+            "level": 264,
+            "exp_per_ticket": 76572000
+        },
+        "265": {
+            "level": 265,
+            "exp_per_ticket": 76572000
+        },
+        "266": {
+            "level": 266,
+            "exp_per_ticket": 76572000
+        },
+        "267": {
+            "level": 267,
+            "exp_per_ticket": 76572000
+        },
+        "268": {
+            "level": 268,
+            "exp_per_ticket": 76572000
+        },
+        "269": {
+            "level": 269,
+            "exp_per_ticket": 76572000
+        },
+        "270": {
+            "level": 270,
+            "exp_per_ticket": 76572000
+        },
+        "271": {
+            "level": 271,
+            "exp_per_ticket": 76572000
+        },
+        "272": {
+            "level": 272,
+            "exp_per_ticket": 76572000
+        },
+        "273": {
+            "level": 273,
+            "exp_per_ticket": 76572000
+        },
+        "274": {
+            "level": 274,
+            "exp_per_ticket": 76572000
+        },
+        "275": {
+            "level": 275,
+            "exp_per_ticket": 76572000
+        },
+        "276": {
+            "level": 276,
+            "exp_per_ticket": 76572000
+        },
+        "277": {
+            "level": 277,
+            "exp_per_ticket": 76572000
+        },
+        "278": {
+            "level": 278,
+            "exp_per_ticket": 76572000
+        },
+        "279": {
+            "level": 279,
+            "exp_per_ticket": 76572000
+        },
+        "280": {
+            "level": 280,
+            "exp_per_ticket": 76572000
+        },
+        "281": {
+            "level": 281,
+            "exp_per_ticket": 76572000
+        },
+        "282": {
+            "level": 282,
+            "exp_per_ticket": 76572000
+        },
+        "283": {
+            "level": 283,
+            "exp_per_ticket": 76572000
+        },
+        "284": {
+            "level": 284,
+            "exp_per_ticket": 76572000
+        },
+        "285": {
+            "level": 285,
+            "exp_per_ticket": 76572000
+        },
+        "286": {
+            "level": 286,
+            "exp_per_ticket": 76572000
+        },
+        "287": {
+            "level": 287,
+            "exp_per_ticket": 76572000
+        },
+        "288": {
+            "level": 288,
+            "exp_per_ticket": 76572000
+        },
+        "289": {
+            "level": 289,
+            "exp_per_ticket": 76572000
+        },
+        "290": {
+            "level": 290,
+            "exp_per_ticket": 76572000
+        },
+        "291": {
+            "level": 291,
+            "exp_per_ticket": 76572000
+        },
+        "292": {
+            "level": 292,
+            "exp_per_ticket": 76572000
+        },
+        "293": {
+            "level": 293,
+            "exp_per_ticket": 76572000
+        },
+        "294": {
+            "level": 294,
+            "exp_per_ticket": 76572000
+        },
+        "295": {
+            "level": 295,
+            "exp_per_ticket": 76572000
+        },
+        "296": {
+            "level": 296,
+            "exp_per_ticket": 76572000
+        },
+        "297": {
+            "level": 297,
+            "exp_per_ticket": 76572000
+        },
+        "298": {
+            "level": 298,
+            "exp_per_ticket": 76572000
+        },
+        "299": {
+            "level": 299,
+            "exp_per_ticket": 76572000
+        }
+    },
+    "advanced_exp_ticket": {
+        "260": {
+            "level": 260,
+            "exp_per_ticket": 388229000
+        },
+        "261": {
+            "level": 261,
+            "exp_per_ticket": 393816000
+        },
+        "262": {
+            "level": 262,
+            "exp_per_ticket": 399411000
+        },
+        "263": {
+            "level": 263,
+            "exp_per_ticket": 405046000
+        },
+        "264": {
+            "level": 264,
+            "exp_per_ticket": 411393000
+        },
+        "265": {
+            "level": 265,
+            "exp_per_ticket": 462820000
+        },
+        "266": {
+            "level": 266,
+            "exp_per_ticket": 469175000
+        },
+        "267": {
+            "level": 267,
+            "exp_per_ticket": 475554000
+        },
+        "268": {
+            "level": 268,
+            "exp_per_ticket": 482760000
+        },
+        "269": {
+            "level": 269,
+            "exp_per_ticket": 489212000
+        },
+        "270": {
+            "level": 270,
+            "exp_per_ticket": 511726000
+        },
+        "271": {
+            "level": 271,
+            "exp_per_ticket": 536006000
+        },
+        "272": {
+            "level": 272,
+            "exp_per_ticket": 542983000
+        },
+        "273": {
+            "level": 273,
+            "exp_per_ticket": 572884000
+        },
+        "274": {
+            "level": 274,
+            "exp_per_ticket": 581154000
+        },
+        "275": {
+            "level": 275,
+            "exp_per_ticket": 653181000
+        },
+        "276": {
+            "level": 276,
+            "exp_per_ticket": 661414000
+        },
+        "277": {
+            "level": 277,
+            "exp_per_ticket": 670728000
+        },
+        "278": {
+            "level": 278,
+            "exp_per_ticket": 679048000
+        },
+        "279": {
+            "level": 279,
+            "exp_per_ticket": 688437000
+        },
+        "280": {
+            "level": 280,
+            "exp_per_ticket": 773107000
+        },
+        "281": {
+            "level": 281,
+            "exp_per_ticket": 783656000
+        },
+        "282": {
+            "level": 282,
+            "exp_per_ticket": 793073000
+        },
+        "283": {
+            "level": 283,
+            "exp_per_ticket": 803703000
+        },
+        "284": {
+            "level": 284,
+            "exp_per_ticket": 813213000
+        },
+        "285": {
+            "level": 285,
+            "exp_per_ticket": 914168000
+        },
+        "286": {
+            "level": 286,
+            "exp_per_ticket": 924819000
+        },
+        "287": {
+            "level": 287,
+            "exp_per_ticket": 936844000
+        },
+        "288": {
+            "level": 288,
+            "exp_per_ticket": 948944000
+        },
+        "289": {
+            "level": 289,
+            "exp_per_ticket": 959736000
+        },
+        "290": {
+            "level": 290,
+            "exp_per_ticket": 1078497000
+        },
+        "291": {
+            "level": 291,
+            "exp_per_ticket": 1078497000
+        },
+        "292": {
+            "level": 292,
+            "exp_per_ticket": 1078497000
+        },
+        "293": {
+            "level": 293,
+            "exp_per_ticket": 1078497000
+        },
+        "294": {
+            "level": 294,
+            "exp_per_ticket": 1078497000
+        },
+        "295": {
+            "level": 295,
+            "exp_per_ticket": 1078497000
+        },
+        "296": {
+            "level": 296,
+            "exp_per_ticket": 1078497000
+        },
+        "297": {
+            "level": 297,
+            "exp_per_ticket": 1078497000
+        },
+        "298": {
+            "level": 298,
+            "exp_per_ticket": 1078497000
+        },
+        "299": {
+            "level": 299,
+            "exp_per_ticket": 1078497000
         }
     }
 }
