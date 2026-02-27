@@ -8,7 +8,7 @@
 	<link rel="shortcut icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>升级经验表</title>
+	<title>经验数据</title>
 	<style>
 		/* 预留侧栏宽度后在剩余区域居中（通用） */
 		.remain-center {
@@ -31,22 +31,71 @@
 	<div class="container my-4">
 		<div class="remain-center">
 			<div class="inner">
-				<h1 class="mb-4">升级经验表</h1>
+				<h1 class="mb-4">经验数据</h1>
+				<div id="loadError" class="text-danger small mb-2" style="display:none;"></div>
 
 				<div class="card shadow-sm mb-4">
-					<div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#expCollapse"
-						aria-expanded="true" aria-controls="expCollapse">升级经验</div>
+					<div class="card-header fw-bold" role="button" data-bs-toggle="collapse"
+						data-bs-target="#expCollapse" aria-expanded="true" aria-controls="expCollapse">升级经验</div>
 					<div id="expCollapse" class="collapse show">
 						<div class="card-body">
-							<div id="loadError" class="text-danger small" style="display:none;"></div>
 							<div class="table-responsive">
 								<table id="expTable" class="table table-sm table-striped table-hover align-middle mb-0">
 									<thead class="table-light">
 										<tr>
 											<th>等级</th>
 											<th>升级所需经验</th>
-											<th>升级需要吃多少张exp券</th>
+											<th>总经验需求</th>
+											<th>经验倍率</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card shadow-sm mb-4">
+					<div class="card-header fw-bold" role="button" data-bs-toggle="collapse"
+						data-bs-target="#expTicketCollapse" aria-expanded="true" aria-controls="expTicketCollapse">经验券
+					</div>
+					<div id="expTicketCollapse" class="collapse show">
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="expTicketTable"
+									class="table table-sm table-striped table-hover align-middle mb-0">
+									<thead class="table-light">
+										<tr>
+											<th>等级</th>
+											<th>升级所需经验</th>
+											<th>exp券获得经验</th>
+											<th>升级需要吃多少张exp(如果有小数点则向上取整)</th>
+											<th>相比上一级的数量倍率</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card shadow-sm mb-4">
+					<div class="card-header fw-bold" role="button" data-bs-toggle="collapse"
+						data-bs-target="#advancedExpTicketCollapse" aria-expanded="true"
+						aria-controls="advancedExpTicketCollapse">高级经验券</div>
+					<div id="advancedExpTicketCollapse" class="collapse show">
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="advancedExpTicketTable" class="table table-sm table-striped table-hover align-middle mb-0">
+									<thead class="table-light">
+										<tr>
+											<th>等级</th>
+											<th>升级所需经验</th>
+											<th>高级exp券获得经验</th>
 											<th>升级需要吃多少张高级exp券</th>
+											<th>相比上一级的数量倍率</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -81,6 +130,12 @@
 			return value.toLocaleString('en-US');
 		}
 
+		function formatPercent(value) {
+			if (value === null || value === undefined) return 'N/A';
+			if (typeof value !== 'number' || !Number.isFinite(value)) return 'N/A';
+			return `${value.toFixed(2)}%`;
+		}
+
 		function safeCeilDiv(numerator, denominator) {
 			if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator <= 0) return null;
 			return Math.ceil(numerator / denominator);
@@ -88,8 +143,12 @@
 
 		async function init() {
 			const tbody = document.querySelector('#expTable tbody');
+			const ticketTbody = document.querySelector('#expTicketTable tbody');
+			const advancedTicketTbody = document.querySelector('#advancedExpTicketTable tbody');
 			const loadErrorEl = document.getElementById('loadError');
 			tbody.innerHTML = '';
+			ticketTbody.innerHTML = '';
+			advancedTicketTbody.innerHTML = '';
 			loadErrorEl.style.display = 'none';
 
 			try {
@@ -99,23 +158,27 @@
 
 				const upgrade = expData?.upgrade || {};
 				const expTicket = expData?.exp_ticket || {};
-				const advanceExpTicket = expData?.advance_exp_ticket || {};
+				const advancedExpTicket = expData?.advanced_exp_ticket || {};
 
 				const levels = Object.keys(upgrade)
 					.map(k => parseInt(k, 10))
 					.filter(n => Number.isFinite(n))
 					.sort((a, b) => a - b);
 
+				let prevExpToNext = null;
+				let prevTicketNeed = null;
+				let prevAdvancedTicketNeed = null;
+
 				for (const level of levels) {
 					const levelKey = String(level);
 					const rowData = upgrade[levelKey];
 					const expToNext = rowData?.exp_to_next_level ?? null;
+					const totalLevel = rowData?.total_level ?? null;
 
-					const expPerTicket = expTicket[levelKey]?.exp_per_ticket ?? null;
-					const expPerAdvance = advanceExpTicket[levelKey]?.exp_per_ticket ?? null;
-
-					const ticketsNeeded = expToNext === null ? null : safeCeilDiv(expToNext, expPerTicket);
-					const advanceTicketsNeeded = expToNext === null ? null : safeCeilDiv(expToNext, expPerAdvance);
+					let multiplier = null;
+					if (Number.isFinite(expToNext) && Number.isFinite(prevExpToNext) && prevExpToNext > 0) {
+						multiplier = (expToNext / prevExpToNext) * 100;
+					}
 
 					const tr = document.createElement('tr');
 
@@ -125,17 +188,91 @@
 					const tdExp = document.createElement('td');
 					tdExp.textContent = formatNumber(expToNext);
 
-					const tdTicket = document.createElement('td');
-					tdTicket.textContent = ticketsNeeded === null ? 'N/A' : formatNumber(ticketsNeeded);
+					const tdTotal = document.createElement('td');
+					tdTotal.textContent = formatNumber(totalLevel);
 
-					const tdAdvance = document.createElement('td');
-					tdAdvance.textContent = advanceTicketsNeeded === null ? 'N/A' : formatNumber(advanceTicketsNeeded);
+					const tdMultiplier = document.createElement('td');
+					tdMultiplier.textContent = formatPercent(multiplier);
 
 					tr.appendChild(tdLevel);
 					tr.appendChild(tdExp);
-					tr.appendChild(tdTicket);
-					tr.appendChild(tdAdvance);
+					tr.appendChild(tdTotal);
+					tr.appendChild(tdMultiplier);
 					tbody.appendChild(tr);
+
+					// 经验券表
+					const expPerTicket = expTicket[levelKey]?.exp_per_ticket ?? null;
+					const expPerAdvancedTicket = advancedExpTicket[levelKey]?.exp_per_ticket ?? null;
+
+					const ticketNeed = expToNext === null ? null : safeCeilDiv(expToNext, expPerTicket);
+					const advancedTicketNeed = expToNext === null ? null : safeCeilDiv(expToNext, expPerAdvancedTicket);
+
+					let ticketNeedMultiplier = null;
+					if (Number.isFinite(ticketNeed) && Number.isFinite(prevTicketNeed) && prevTicketNeed > 0) {
+						ticketNeedMultiplier = (ticketNeed / prevTicketNeed) * 100;
+					}
+
+					const ticketTr = document.createElement('tr');
+
+					const ttdLevel = document.createElement('td');
+					ttdLevel.textContent = level;
+
+					const ttdExpToNext = document.createElement('td');
+					ttdExpToNext.textContent = formatNumber(expToNext);
+
+					const ttdExpPer = document.createElement('td');
+					ttdExpPer.textContent = formatNumber(expPerTicket);
+
+					const ttdNeed = document.createElement('td');
+					ttdNeed.textContent = ticketNeed === null ? 'N/A' : formatNumber(ticketNeed);
+
+					const ttdNeedMult = document.createElement('td');
+					ttdNeedMult.textContent = formatPercent(ticketNeedMultiplier);
+
+					ticketTr.appendChild(ttdLevel);
+					ticketTr.appendChild(ttdExpToNext);
+					ticketTr.appendChild(ttdExpPer);
+					ticketTr.appendChild(ttdNeed);
+					ticketTr.appendChild(ttdNeedMult);
+					ticketTbody.appendChild(ticketTr);
+
+					// 高级经验券表（260+ 才能使用）
+					if (level >= 260) {
+						let advancedTicketNeedMultiplier = null;
+						if (Number.isFinite(advancedTicketNeed) && Number.isFinite(prevAdvancedTicketNeed) && prevAdvancedTicketNeed > 0) {
+							advancedTicketNeedMultiplier = (advancedTicketNeed / prevAdvancedTicketNeed) * 100;
+						}
+
+						const advancedTr = document.createElement('tr');
+
+						const atdLevel = document.createElement('td');
+						atdLevel.textContent = level;
+
+						const atdExpToNext = document.createElement('td');
+						atdExpToNext.textContent = formatNumber(expToNext);
+
+						const atdExpPer = document.createElement('td');
+						atdExpPer.textContent = formatNumber(expPerAdvancedTicket);
+
+						const atdNeed = document.createElement('td');
+						atdNeed.textContent = advancedTicketNeed === null ? 'N/A' : formatNumber(advancedTicketNeed);
+
+						const atdNeedMult = document.createElement('td');
+						atdNeedMult.textContent = formatPercent(advancedTicketNeedMultiplier);
+
+						advancedTr.appendChild(atdLevel);
+						advancedTr.appendChild(atdExpToNext);
+						advancedTr.appendChild(atdExpPer);
+						advancedTr.appendChild(atdNeed);
+						advancedTr.appendChild(atdNeedMult);
+						advancedTicketTbody.appendChild(advancedTr);
+					}
+
+					prevExpToNext = Number.isFinite(expToNext) ? expToNext : prevExpToNext;
+					prevTicketNeed = Number.isFinite(ticketNeed) ? ticketNeed : prevTicketNeed;
+					if (level >= 260) {
+						prevAdvancedTicketNeed = Number.isFinite(advancedTicketNeed) ? advancedTicketNeed : prevAdvancedTicketNeed;
+					}
 				}
 			} catch (e) {
 				console.error('加载经验数据失败:', e);
