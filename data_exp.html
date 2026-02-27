@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="./static/css/bootstrap.min.css">
+	<link rel="icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>升级经验表</title>
+	<style>
+		/* 预留侧栏宽度后在剩余区域居中（通用） */
+		.remain-center {
+			padding-left: 240px;
+		}
+
+		.remain-center .inner {
+			margin: 0 auto;
+			width: min(1100px, calc(100vw - 240px));
+			min-width: 320px;
+			padding: 0 12px;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- JavaScript 动态加载左侧目录 -->
+	<div id="sidebar-container"></div>
+
+	<div class="container my-4">
+		<div class="remain-center">
+			<div class="inner">
+				<h1 class="mb-4">升级经验表</h1>
+
+				<div class="card shadow-sm mb-4">
+					<div class="card-header fw-bold" role="button" data-bs-toggle="collapse" data-bs-target="#expCollapse"
+						aria-expanded="true" aria-controls="expCollapse">升级经验</div>
+					<div id="expCollapse" class="collapse show">
+						<div class="card-body">
+							<div id="loadError" class="text-danger small" style="display:none;"></div>
+							<div class="table-responsive">
+								<table id="expTable" class="table table-sm table-striped table-hover align-middle mb-0">
+									<thead class="table-light">
+										<tr>
+											<th>等级</th>
+											<th>升级所需经验</th>
+											<th>升级需要吃多少张exp券</th>
+											<th>升级需要吃多少张高级exp券</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// 加载侧边栏
+		fetch('sidebar.html')
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById('sidebar-container').innerHTML = data;
+			})
+			.catch(error => {
+				console.error('加载侧边栏失败:', error);
+			});
+
+		function toggleSubMenu(id) {
+			const submenu = document.getElementById(id);
+			submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+		}
+
+		function formatNumber(value) {
+			if (value === null || value === undefined) return 'N/A';
+			if (typeof value !== 'number' || !Number.isFinite(value)) return 'N/A';
+			return value.toLocaleString('en-US');
+		}
+
+		function safeCeilDiv(numerator, denominator) {
+			if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator <= 0) return null;
+			return Math.ceil(numerator / denominator);
+		}
+
+		async function init() {
+			const tbody = document.querySelector('#expTable tbody');
+			const loadErrorEl = document.getElementById('loadError');
+			tbody.innerHTML = '';
+			loadErrorEl.style.display = 'none';
+
+			try {
+				const resp = await fetch('data/exp.json', { cache: 'no-store' });
+				if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+				const expData = await resp.json();
+
+				const upgrade = expData?.upgrade || {};
+				const expTicket = expData?.exp_ticket || {};
+				const advanceExpTicket = expData?.advance_exp_ticket || {};
+
+				const levels = Object.keys(upgrade)
+					.map(k => parseInt(k, 10))
+					.filter(n => Number.isFinite(n))
+					.sort((a, b) => a - b);
+
+				for (const level of levels) {
+					const levelKey = String(level);
+					const rowData = upgrade[levelKey];
+					const expToNext = rowData?.exp_to_next_level ?? null;
+
+					const expPerTicket = expTicket[levelKey]?.exp_per_ticket ?? null;
+					const expPerAdvance = advanceExpTicket[levelKey]?.exp_per_ticket ?? null;
+
+					const ticketsNeeded = expToNext === null ? null : safeCeilDiv(expToNext, expPerTicket);
+					const advanceTicketsNeeded = expToNext === null ? null : safeCeilDiv(expToNext, expPerAdvance);
+
+					const tr = document.createElement('tr');
+
+					const tdLevel = document.createElement('td');
+					tdLevel.textContent = level;
+
+					const tdExp = document.createElement('td');
+					tdExp.textContent = formatNumber(expToNext);
+
+					const tdTicket = document.createElement('td');
+					tdTicket.textContent = ticketsNeeded === null ? 'N/A' : formatNumber(ticketsNeeded);
+
+					const tdAdvance = document.createElement('td');
+					tdAdvance.textContent = advanceTicketsNeeded === null ? 'N/A' : formatNumber(advanceTicketsNeeded);
+
+					tr.appendChild(tdLevel);
+					tr.appendChild(tdExp);
+					tr.appendChild(tdTicket);
+					tr.appendChild(tdAdvance);
+					tbody.appendChild(tr);
+				}
+			} catch (e) {
+				console.error('加载经验数据失败:', e);
+				loadErrorEl.textContent = '加载 data/exp.json 失败，请检查文件路径与 JSON 格式。';
+				loadErrorEl.style.display = 'block';
+			}
+		}
+
+		init();
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
