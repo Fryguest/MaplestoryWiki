@@ -77,21 +77,21 @@
             },
             {
                 "en_name": "Lantern Erda",
-                "tw_name": "安息的艾爾達斯",
+                "tw_name": "艾爾達斯的燈火",
                 "level": 208,
                 "hp": 56571000,
                 "exp": 121453
             },
             {
                 "en_name": "Arma's Follower",
-                "tw_name": "",
+                "tw_name": "亞勒瑪部下",
                 "level": 209,
                 "hp": 58208400,
                 "exp": 124322
             },
             {
                 "en_name": "Arma's Follower[Augmented]",
-                "tw_name": "",
+                "tw_name": "亞勒瑪部下[强化版]",
                 "level": 209,
                 "hp": 100894560,
                 "exp": 207204
@@ -162,42 +162,42 @@
             },
             {
                 "en_name": "Strong Seeker T-Drone Model A",
-                "tw_name": "",
+                "tw_name": "强大搜索型 T無人機 A型",
                 "level": 210,
                 "hp": 119599200,
                 "exp": 248003
             },
             {
                 "en_name": "Strong Seeker T-Drone Model B",
-                "tw_name": "",
+                "tw_name": "强大搜索型 T無人機 B型",
                 "level": 210,
                 "hp": 119599200,
                 "exp": 248003
             },
             {
                 "en_name": "Strong Combat T-Drone Model A",
-                "tw_name": "",
+                "tw_name": "强大戰鬥型 T無人機 A型",
                 "level": 211,
                 "hp": 122820000,
                 "exp": 253673
             },
             {
                 "en_name": "Strong Combat T-Drone Model B",
-                "tw_name": "",
+                "tw_name": "强大戰鬥型 T無人機 B型",
                 "level": 212,
                 "hp": 126219600,
                 "exp": 260047
             },
             {
                 "en_name": "Strong Exterminator T-Drone Model A",
-                "tw_name": "",
+                "tw_name": "强大殲滅型 T無人機 A型",
                 "level": 213,
                 "hp": 129519600,
                 "exp": 265808
             },
             {
                 "en_name": "Strong Exterminator T-Drone Model B",
-                "tw_name": "",
+                "tw_name": "强大殲滅型 T無人機 B型",
                 "level": 214,
                 "hp": 129519600,
                 "exp": 265808
@@ -282,6 +282,70 @@
         "tw_name": "利曼",
         "level_requirement": 255,
         "monster": [
+            {
+                "en_name": "Ancestion",
+                "tw_name": "安薩斯迪溫",
+                "level": 260,
+                "hp": 633547200,
+                "exp": 680638
+            },
+            {
+                "en_name": "Transcendion",
+                "ch_name": "超越三角锥",
+                "tw_name": "特蘭森迪溫",
+                "level": 261,
+                "hp": 644226000,
+                "exp": 690432
+            },
+            {
+                "en_name": "Ascendion",
+                "tw_name": "奧賽西翁",
+                "level": 262,
+                "hp": 655470200,
+                "exp": 700242
+            },
+            {
+                "en_name": "Powerful Ascendion",
+                "tw_name": "强力的奧賽西翁",
+                "level": 262,
+                "hp": 1310940400,
+                "exp": 840290
+            },
+            {
+                "en_name": "Turbion",
+                "tw_name": "塔比翁",
+                "level": 260,
+                "hp": 633547200,
+                "exp": 680638
+            },
+            {
+                "en_name": "Foreberion",
+                "tw_name": "普歐維里",
+                "level": 263,
+                "hp": 666329400,
+                "exp": 710121
+            },
+            {
+                "en_name": "Powerful Foreberion",
+                "tw_name": "强力的普歐維里",
+                "level": 263,
+                "hp": 1332658800,
+                "exp": 852145
+            },
+            {
+                "en_name": "Embrion",
+                "tw_name": "安普里歐",
+                "level": 264,
+                "hp": 677762800,
+                "exp": 721247
+            },
+            {
+                "en_name": "Powerful Embrion",
+                "tw_name": "强力的安普里歐",
+                "level": 264,
+                "hp": 1355525600,
+                "exp": 865496
+            }
         ]
     }
 
