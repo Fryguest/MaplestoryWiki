@@ -350,14 +350,14 @@
                 "tw_name": "",
                 "level": 220,
                 "hp": 187966240,
-                "exp": 	309470
+                "exp": 309470
             },
             {
                 "en_name": "Potent Bunshroom",
                 "tw_name": "",
                 "level": 220,
                 "hp": 187966240,
-                "exp": 	309470
+                "exp": 309470
             },
             {
                 "en_name": "Lytone",
@@ -378,14 +378,14 @@
                 "tw_name": "",
                 "level": 220,
                 "hp": 187966240,
-                "exp": 	309470
+                "exp": 309470
             },
             {
                 "en_name": "Potent Stonepy",
                 "tw_name": "",
                 "level": 220,
                 "hp": 187966240,
-                "exp": 	309470
+                "exp": 309470
             },
             {
                 "en_name": "Kumpider",
@@ -406,14 +406,14 @@
                 "tw_name": "",
                 "level": 220,
                 "hp": 187966240,
-                "exp": 	309470
+                "exp": 309470
             },
             {
                 "en_name": "Potent Squirrelnon",
                 "tw_name": "",
                 "level": 220,
                 "hp": 187966240,
-                "exp": 	309470
+                "exp": 309470
             }
         ]
     },
@@ -422,7 +422,99 @@
         "ch_name": "梦之都拉克兰",
         "tw_name": "夢之都拉契爾恩",
         "level_requirement": 220,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Paper Bag Alley Citizen",
+                "tw_name": "紙袋後街居民",
+                "level": 220,
+                "hp": 187966240,
+                "exp": 309470
+            },
+            {
+                "en_name": "Wood Board Alley Citizen",
+                "tw_name": "木板後街居民",
+                "level": 221,
+                "hp": 192566700,
+                "exp": 316316
+            },
+            {
+                "en_name": "Gallina",
+                "tw_name": "卡利納",
+                "level": 221,
+                "hp": 192566700,
+                "exp": 316316
+            },
+            {
+                "en_name": "Gallus",
+                "tw_name": "卡魯斯",
+                "level": 222,
+                "hp": 197219720,
+                "exp": 322473
+            },
+            {
+                "en_name": "Angry Victory Plate",
+                "tw_name": "生氣的優勝碟",
+                "level": 222,
+                "hp": 197219720,
+                "exp": 322473
+            },
+            {
+                "en_name": "Crooked Victory Plate",
+                "tw_name": "鬧脾氣的優勝碟",
+                "level": 223,
+                "hp": 201925300,
+                "exp": 329417
+            },
+            {
+                "en_name": "Angry Masquerade Citizen",
+                "tw_name": "生氣的舞會居民",
+                "level": 223,
+                "hp": 201925300,
+                "exp": 329417
+            },
+            {
+                "en_name": "Insane Masquerade Citizen",
+                "tw_name": "狂放的舞會居民",
+                "level": 224,
+                "hp": 206683440,
+                "exp": 335675
+            },
+            {
+                "en_name": "Weakened Dreamkeeper",
+                "tw_name": "弱化的清潔劑",
+                "level": 224,
+                "hp": 206683440,
+                "exp": 335675
+            },
+            {
+                "en_name": "Red Dancing Shoes",
+                "tw_name": "跳舞的紅皮鞋",
+                "level": 225,
+                "hp": 211494140,
+                "exp": 342720
+            },
+            {
+                "en_name": "Dreamkeeper",
+                "tw_name": "清潔劑",
+                "level": 226,
+                "hp": 216357400,
+                "exp": 349836
+            },
+            {
+                "en_name": "Blue-eyed Gargoyle",
+                "tw_name": "藍眼石像怪",
+                "level": 227,
+                "hp": 221273220,
+                "exp": 356216
+            },
+            {
+                "en_name": "Red-eyed Gargoyle",
+                "tw_name": "紅眼石像怪",
+                "level": 228,
+                "hp": 226241600,
+                "exp": 363430
+            }
+        ]
     },
     "Arcana": {
         "en_name": "The Mysterious Forest of Arcana",
