@@ -210,6 +210,119 @@
         "tw_name": "啾啾艾爾蘭",
         "level_requirement": 210,
         "monster": [
+            {
+                "en_name": "Pinedeer",
+                "ch_name": "菠萝鹿",
+                "tw_name": "鳳梨鹿兒",
+                "level": 210,
+                "hp": 119599200,
+                "exp": 248003
+            },
+            {
+                "en_name": "Ewenana",
+                "tw_name": "猶娜娜",
+                "level": 210,
+                "hp": 119599200,
+                "exp": 248003
+            },
+            {
+                "en_name": "Bighorn Pinedeer",
+                "tw_name": "大角鳳梨鹿兒",
+                "level": 211,
+                "hp": 122820000,
+                "exp": 253673
+            },
+            {
+                "en_name": "Ramanana",
+                "tw_name": "雷娜娜",
+                "level": 211,
+                "hp": 122820000,
+                "exp": 253673
+            },
+            {
+                "en_name": "Flyon",
+                "tw_name": "普利溫",
+                "level": 212,
+                "hp": 126219600,
+                "exp": 260047
+            },
+            {
+                "en_name": "Unripe Wolfruit",
+                "tw_name": "幼年烏普洛",
+                "level": 212,
+                "hp": 126219600,
+                "exp": 260047
+            },
+            {
+                "en_name": "Angry Flyon",
+                "tw_name": "生氣的普利溫",
+                "level": 213,
+                "hp": 129519600,
+                "exp": 265808
+            },
+            {
+                "en_name": "Ripe Wolfruit",
+                "tw_name": "成熟的烏普洛",
+                "level": 213,
+                "hp": 129519600,
+                "exp": 265808
+            },
+            {
+                "en_name": "Green Catfish",
+                "tw_name": "綠鯰魚",
+                "level": 214,
+                "hp": 129519600,
+                "exp": 265808
+            },
+            {
+                "en_name": "Rhyturtle",
+                "tw_name": "拉伊托特",
+                "level": 215,
+                "hp": 136530000,
+                "exp": 278138
+            },
+            {
+                "en_name": "Blue Catfish",
+                "tw_name": "藍鯰魚",
+                "level": 216,
+                "hp": 139950000,
+                "exp": 284043
+            },
+            {
+                "en_name": "Boss Rhyturtle",
+                "tw_name": "隊長拉伊托特",
+                "level": 216,
+                "hp": 139950000,
+                "exp": 284043
+            },
+            {
+                "en_name": "Crilia",
+                "tw_name": "克利拉",
+                "level": 217,
+                "hp": 143560800,
+                "exp": 290679
+            },
+            {
+                "en_name": "Birdshark",
+                "tw_name": "巴薩克",
+                "level": 218,
+                "hp": 147060000,
+                "exp": 296653
+            },
+            {
+                "en_name": "Patriarch Crilia",
+                "tw_name": "族長克利拉",
+                "level": 219,
+                "hp": 150754800,
+                "exp": 303394
+            },
+            {
+                "en_name": "Patriarch Birdshark",
+                "tw_name": "族長巴薩克",
+                "level": 219,
+                "hp": 150754800,
+                "exp": 303394
+            }
         ]
     },
     "Yum Yum Island": {
@@ -217,64 +330,56 @@
         "ch_name": "真香岛",
         "tw_name": "嚼嚼艾爾蘭",
         "level_requirement": 215,
-        "monster": [
-        ]
+        "monster": []
     },
-    "Lachelein" : {
+    "Lachelein": {
         "en_name": "Lachelein, the Dreaming City",
         "ch_name": "梦之都拉克兰",
         "tw_name": "夢之都拉契爾恩",
         "level_requirement": 220,
-        "monster": [
-        ]
+        "monster": []
     },
     "Arcana": {
         "en_name": "The Mysterious Forest of Arcana",
         "ch_name": "神秘森林阿尔卡娜",
         "tw_name": "神秘森林阿爾卡娜",
         "level_requirement": 225,
-        "monster": [
-        ]
+        "monster": []
     },
     "Morass": {
         "en_name": "Morass, the Swamp of Memory",
         "ch_name": "记忆沼泽魔拉斯",
         "tw_name": "記憶沼澤魔拉斯",
         "level_requirement": 230,
-        "monster": [
-        ]
+        "monster": []
     },
     "Esfera": {
         "en_name": "Esfera, the Origin Sea",
         "ch_name": "初始之海艾斯佩拉",
         "tw_name": "初始之海艾斯佩拉",
         "level_requirement": 235,
-        "monster": [
-        ]
+        "monster": []
     },
     "Sellas": {
         "en_name": "Sellas, Where the Stars Rest",
         "ch_name": "塞拉斯，星陨之地",
         "tw_name": "賽拉斯, 繁星沉睡之地",
         "level_requirement": 240,
-        "monster": [
-        ]
+        "monster": []
     },
     "Moonbridge": {
         "en_name": "Moonbridge",
         "ch_name": "月桥",
         "tw_name": "月之橋",
         "level_requirement": 245,
-        "monster": [
-        ]
+        "monster": []
     },
     "Labyrinth of Suffering": {
         "en_name": "Labyrinth of Suffering",
         "ch_name": "痛苦迷宫",
         "tw_name": "苦痛迷宮",
         "level_requirement": 250,
-        "monster": [
-        ]
+        "monster": []
     },
     "Limina": {
         "en_name": "Limina",
@@ -348,5 +453,4 @@
             }
         ]
     }
-
 }
