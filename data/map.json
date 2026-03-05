@@ -330,7 +330,92 @@
         "ch_name": "真香岛",
         "tw_name": "嚼嚼艾爾蘭",
         "level_requirement": 215,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Monkeyrog",
+                "tw_name": "猴洛古",
+                "level": 215,
+                "hp": 136530000,
+                "exp": 278138
+            },
+            {
+                "en_name": "Bunshroom",
+                "tw_name": "胖胖菇",
+                "level": 216,
+                "hp": 139950000,
+                "exp": 284043
+            },
+            {
+                "en_name": "Potent Monkeyrog",
+                "tw_name": "",
+                "level": 220,
+                "hp": 187966240,
+                "exp": 	309470
+            },
+            {
+                "en_name": "Potent Bunshroom",
+                "tw_name": "",
+                "level": 220,
+                "hp": 187966240,
+                "exp": 	309470
+            },
+            {
+                "en_name": "Lytone",
+                "tw_name": "萊頓",
+                "level": 217,
+                "hp": 143560800,
+                "exp": 290679
+            },
+            {
+                "en_name": "Stonepy",
+                "tw_name": "史頓畢",
+                "level": 218,
+                "hp": 147060000,
+                "exp": 296653
+            },
+            {
+                "en_name": "Potent Lytone",
+                "tw_name": "",
+                "level": 220,
+                "hp": 187966240,
+                "exp": 	309470
+            },
+            {
+                "en_name": "Potent Stonepy",
+                "tw_name": "",
+                "level": 220,
+                "hp": 187966240,
+                "exp": 	309470
+            },
+            {
+                "en_name": "Kumpider",
+                "tw_name": "庫派德",
+                "level": 219,
+                "hp": 150754800,
+                "exp": 303394
+            },
+            {
+                "en_name": "Squirrelnon",
+                "tw_name": "達朗紐",
+                "level": 219,
+                "hp": 150754800,
+                "exp": 303394
+            },
+            {
+                "en_name": "Potent Kumpider",
+                "tw_name": "",
+                "level": 220,
+                "hp": 187966240,
+                "exp": 	309470
+            },
+            {
+                "en_name": "Potent Squirrelnon",
+                "tw_name": "",
+                "level": 220,
+                "hp": 187966240,
+                "exp": 	309470
+            }
+        ]
     },
     "Lachelein": {
         "en_name": "Lachelein, the Dreaming City",
