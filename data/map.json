@@ -521,7 +521,85 @@
         "ch_name": "神秘森林阿尔卡娜",
         "tw_name": "神秘森林阿爾卡娜",
         "level_requirement": 225,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Water Spirit",
+                "tw_name": "水精靈",
+                "level": 230,
+                "hp": 258998400,
+                "exp": 393361
+            },
+            {
+                "en_name": "Sun Spirit",
+                "tw_name": "陽光精靈",
+                "level": 231,
+                "hp": 264616000,
+                "exp": 401055
+            },
+            {
+                "en_name": "Earth Spirit",
+                "tw_name": "土精靈",
+                "level": 232,
+                "hp": 270291200,
+                "exp": 408778
+            },
+            {
+                "en_name": "Snow Cloud Spirit",
+                "tw_name": "冰雹雲精靈",
+                "level": 233,
+                "hp": 276278400,
+                "exp": 415702
+            },
+            {
+                "en_name": "Thunder Cloud Spirit",
+                "tw_name": "閃電雲精靈",
+                "level": 234,
+                "hp": 282072000,
+                "exp": 423542
+            },
+            {
+                "en_name": "Toxic Spirit",
+                "tw_name": "猛毒的精靈",
+                "level": 235,
+                "hp": 288184000,
+                "exp": 431459
+            },
+            {
+                "en_name": "Volatile Spirit",
+                "tw_name": "狂暴精靈",
+                "level": 236,
+                "hp": 294096000,
+                "exp": 439402
+            },
+            {
+                "en_name": "Befuddled Spirit",
+                "tw_name": "混沌精靈",
+                "level": 237,
+                "hp": 300065600,
+                "exp": 446505
+            },
+            {
+                "en_name": "Anguished Spirit",
+                "tw_name": "絕望精靈",
+                "level": 238,
+                "hp": 306363200,
+                "exp": 454564
+            },
+            {
+                "en_name": "Mournful Spirit",
+                "tw_name": "悲嘆精靈",
+                "level": 239,
+                "hp": 312451200,
+                "exp": 462670
+            },
+            {
+                "en_name": "Discordant Spirit",
+                "tw_name": "不協調精靈",
+                "level": 240,
+                "hp": 318873600,
+                "exp": 470824
+            }
+        ]
     },
     "Morass": {
         "en_name": "Morass, the Swamp of Memory",
