@@ -606,7 +606,106 @@
         "ch_name": "记忆沼泽魔拉斯",
         "tw_name": "記憶沼澤魔拉斯",
         "level_requirement": 230,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Xenoroid Echo Type A",
+                "tw_name": "記憶中的新世代機器人A型",
+                "level": 236,
+                "hp": 294096000,
+                "exp": 439402
+            },
+            {
+                "en_name": "Xenoroid Echo Type B",
+                "tw_name": "記憶中的新世代機器人B型",
+                "level": 236,
+                "hp": 294096000,
+                "exp": 439402
+            },
+            {
+                "en_name": "Xenoroid Echo Type C",
+                "tw_name": "記憶中的新世代機器人C型",
+                "level": 236,
+                "hp": 294096000,
+                "exp": 439402
+            },
+            {
+                "en_name": "Nameless Cat",
+                "tw_name": "不知名的貓咪",
+                "level": 237,
+                "hp": 300065600,
+                "exp": 446505
+            },
+            {
+                "en_name": "Powerful Gangster",
+                "tw_name": "大力老兄",
+                "level": 238,
+                "hp": 306363200,
+                "exp": 454564
+            },
+            {
+                "en_name": "Strong Gangster",
+                "tw_name": "強悍老兄",
+                "level": 238,
+                "hp": 306363200,
+                "exp": 454564
+            },
+            {
+                "en_name": "Blue Shadow",
+                "tw_name": "藍色影子",
+                "level": 239,
+                "hp": 312451200,
+                "exp": 462670
+            },
+            {
+                "en_name": "Red Shadow",
+                "tw_name": "紅色影子",
+                "level": 240,
+                "hp": 318873600,
+                "exp": 470824
+            },
+            {
+                "en_name": "Experiment Gone Wrong",
+                "tw_name": "實驗的副產物A",
+                "level": 241,
+                "hp": 406700000,
+                "exp": 485614
+            },
+            {
+                "en_name": "Big Experiment Gone Wrong",
+                "tw_name": "實驗的副產物B",
+                "level": 241,
+                "hp": 406700000,
+                "exp": 485614
+            },
+            {
+                "en_name": "Thralled Guard",
+                "tw_name": "被儀式捲走的禁衛兵",
+                "level": 242,
+                "hp": 414534000,
+                "exp": 494006
+            },
+            {
+                "en_name": "Thralled Warhammer Knight",
+                "tw_name": "被儀式捲走的錘子兵",
+                "level": 243,
+                "hp": 422798000,
+                "exp": 501461
+            },
+            {
+                "en_name": "Thralled Wizard",
+                "tw_name": "被儀式捲走的魔法師",
+                "level": 244,
+                "hp": 431142000,
+                "exp": 509964
+            },
+            {
+                "en_name": "Thralled Wizard",
+                "tw_name": "被儀式捲走的弓兵",
+                "level": 245,
+                "hp": 439566000,
+                "exp": 518511
+            }
+        ]
     },
     "Esfera": {
         "en_name": "Esfera, the Origin Sea",
