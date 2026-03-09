@@ -1068,7 +1068,50 @@
         "ch_name": "圣地塞尔提乌",
         "tw_name": "神的都市賽爾尼溫",
         "level_requirement": 260,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Ebonstar Foot Soldier",
+                "tw_name": "黑色太陽步兵",
+                "level": 260,
+                "hp": 3743688000,
+                "exp": 1725461
+            },
+            {
+                "en_name": "Ebonstar Archer",
+                "tw_name": "黑色太陽弓兵",
+                "level": 260,
+                "hp": 3743688000,
+                "exp": 1725461
+            },
+            {
+                "en_name": "Monster Gull",
+                "tw_name": "怪物海鷗",
+                "level": 260,
+                "hp": 3743688000,
+                "exp": 1725461
+            },
+            {
+                "en_name": "Fire Spirit",
+                "tw_name": "火焰精靈",
+                "level": 261,
+                "hp": 3806790000,
+                "exp": 1750290
+            },
+            {
+                "en_name": "Wandering Scholar Ghost",
+                "tw_name": "漂泊的學者幽靈",
+                "level": 261,
+                "hp": 3806790000,
+                "exp": 1750290
+            },
+            {
+                "en_name": "Curious Scholar Ghost",
+                "tw_name": "充滿好奇心的學者幽靈",
+                "level": 261,
+                "hp": 3806790000,
+                "exp": 1750290
+            }
+        ]
     },
     "Hotel Arcus": {
         "en_name": "Hotel Arcus",
