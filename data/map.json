@@ -847,14 +847,149 @@
         "ch_name": "月桥",
         "tw_name": "月之橋",
         "level_requirement": 245,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Soot Beast",
+                "tw_name": "混沌的創造物",
+                "level": 250,
+                "hp": 530750000,
+                "exp": 584807
+            },
+            {
+                "en_name": "Soot Talon",
+                "tw_name": "破壞的創造物",
+                "level": 251,
+                "hp": 540540000,
+                "exp": 594040
+            },
+            {
+                "en_name": "Soot Slug",
+                "tw_name": "突襲的恐怖",
+                "level": 252,
+                "hp": 550418000,
+                "exp": 603318
+            },
+            {
+                "en_name": "Soot Core",
+                "tw_name": "注視的恐怖",
+                "level": 253,
+                "hp": 560384000,
+                "exp": 612643
+            },
+            {
+                "en_name": "Crushing Glare",
+                "tw_name": "虛空的爪牙",
+                "level": 254,
+                "hp": 570438000,
+                "exp": 622041
+            },
+            {
+                "en_name": "Burst Glare",
+                "tw_name": "黃昏的爪牙",
+                "level": 254,
+                "hp": 570438000,
+                "exp": 622041
+            }
+        ]
     },
     "Labyrinth of Suffering": {
         "en_name": "Labyrinth of Suffering",
         "ch_name": "痛苦迷宫",
         "tw_name": "苦痛迷宮",
         "level_requirement": 250,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Entangled Fragment",
+                "tw_name": "交織碎片",
+                "level": 255,
+                "hp": 581026600,
+                "exp": 631458
+            },
+            {
+                "en_name": "Faith Fragment",
+                "tw_name": "服從碎片",
+                "level": 255,
+                "hp": 581026600,
+                "exp": 631458
+            },
+            {
+                "en_name": "Dark Miscreation",
+                "tw_name": "黑暗的失敗之作",
+                "level": 256,
+                "hp": 591261000,
+                "exp": 640971
+            },
+            {
+                "en_name": "Dark Construct",
+                "tw_name": "黑暗的被造物",
+                "level": 256,
+                "hp": 591261000,
+                "exp": 640971
+            },
+            {
+                "en_name": "Despairing Wing",
+                "tw_name": "絕望的翅膀",
+                "level": 257,
+                "hp": 601583400,
+                "exp": 650504
+            },
+            {
+                "en_name": "Despairing Blade",
+                "tw_name": "絕望的刀刃",
+                "level": 257,
+                "hp": 601583400,
+                "exp": 650504
+            },
+            {
+                "en_name": "Silent Knight",
+                "tw_name": "沉默的騎士",
+                "level": 258,
+                "hp": 611993800,
+                "exp": 661261
+            },
+            {
+                "en_name": "Silent Scout",
+                "tw_name": "沉默的偵查者",
+                "level": 258,
+                "hp": 611993800,
+                "exp": 661261
+            },
+            {
+                "en_name": "Silent Rogue",
+                "tw_name": "沉默的流浪者",
+                "level": 258,
+                "hp": 611993800,
+                "exp": 661261
+            },
+            {
+                "en_name": "Silent Watchman",
+                "tw_name": "沉默的監視者",
+                "level": 259,
+                "hp": 622956400,
+                "exp": 670940
+            },
+            {
+                "en_name": "Silent Assassin",
+                "tw_name": "沉默的暗殺者",
+                "level": 259,
+                "hp": 622956400,
+                "exp": 670940
+            },
+            {
+                "en_name": "Despairing Soul",
+                "tw_name": "陷入絕望之者",
+                "level": 259,
+                "hp": 622956400,
+                "exp": 670940
+            },
+            {
+                "en_name": "Despairing Prisoner",
+                "tw_name": "掙扎於絕望之者",
+                "level": 259,
+                "hp": 622956400,
+                "exp": 670940
+            }
+        ]
     },
     "Limina": {
         "en_name": "Limina",
