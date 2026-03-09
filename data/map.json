@@ -1062,5 +1062,54 @@
                 "exp": 865496
             }
         ]
+    },
+    "Cernium": {
+        "en_name": "Cernium, the Holy City",
+        "ch_name": "圣地塞尔提乌",
+        "tw_name": "神的都市賽爾尼溫",
+        "level_requirement": 260,
+        "monster": []
+    },
+    "Hotel Arcus": {
+        "en_name": "Hotel Arcus",
+        "ch_name": "亚克斯旅馆",
+        "tw_name": "飯店阿爾克斯",
+        "level_requirement": 260,
+        "monster": []
+    },
+    "Odium": {
+        "en_name": "Odium",
+        "ch_name": "奥迪乌姆",
+        "tw_name": "奧迪溫",
+        "level_requirement": 260,
+        "monster": []
+    },
+    "Shangri-La": {
+        "en_name": "Sinners' Paradise Shangri-La",
+        "ch_name": "桃源境",
+        "tw_name": "桃源境",
+        "level_requirement": 260,
+        "monster": []
+    },
+    "Arteria": {
+        "en_name": "Battleship Arteria",
+        "ch_name": "阿尔特里亚",
+        "tw_name": "阿爾特利亞",
+        "level_requirement": 260,
+        "monster": []
+    },
+    "Carcion": {
+        "en_name": "Carcion, the Cradle of Life",
+        "ch_name": "卡西翁",
+        "tw_name": "卡爾西溫",
+        "level_requirement": 260,
+        "monster": []
+    },
+    "Tallahart": {
+        "en_name": "Grave of the Gods Tallahart",
+        "ch_name": "塔拉哈特",
+        "tw_name": "塔拉哈特",
+        "level_requirement": 260,
+        "monster": []
     }
 }
