@@ -712,7 +712,78 @@
         "ch_name": "初始之海艾斯佩拉",
         "tw_name": "初始之海艾斯佩拉",
         "level_requirement": 235,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Ahtuin",
+                "tw_name": "阿圖音",
+                "level": 240,
+                "hp": 318873600,
+                "exp": 470824
+            },
+            {
+                "en_name": "Atus",
+                "tw_name": "阿圖斯",
+                "level": 241,
+                "hp": 406700000,
+                "exp": 485614
+            },
+            {
+                "en_name": "Bellalion",
+                "tw_name": "瓦列利安",
+                "level": 242,
+                "hp": 414534000,
+                "exp": 494006
+            },
+            {
+                "en_name": "Bellalis",
+                "tw_name": "瓦列利斯",
+                "level": 243,
+                "hp": 422798000,
+                "exp": 501461
+            },
+            {
+                "en_name": "Aranya",
+                "tw_name": "黑蜘蛛",
+                "level": 244,
+                "hp": 431142000,
+                "exp": 509964
+            },
+            {
+                "en_name": "Aranea",
+                "tw_name": "蜘蛛女",
+                "level": 245,
+                "hp": 439566000,
+                "exp": 518511
+            },
+            {
+                "en_name": "Keeper of Light",
+                "tw_name": "光之注視者",
+                "level": 246,
+                "hp": 447700000,
+                "exp": 527106
+            },
+            {
+                "en_name": "Keeper of Darkness",
+                "tw_name": "暗之注視者",
+                "level": 247,
+                "hp": 456280000,
+                "exp": 535749
+            },
+            {
+                "en_name": "Light Executor",
+                "tw_name": "光之執行者",
+                "level": 248,
+                "hp": 464940000,
+                "exp": 544459
+            },
+            {
+                "en_name": "Dark Executor",
+                "tw_name": "暗之執行者",
+                "level": 249,
+                "hp": 473680000,
+                "exp": 553217
+            }
+        ]
     },
     "Sellas": {
         "en_name": "Sellas, Where the Stars Rest",
