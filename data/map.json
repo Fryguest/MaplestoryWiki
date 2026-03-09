@@ -1113,6 +1113,56 @@
             }
         ]
     },
+    "Burning Cernium": {
+        "en_name": "Burning Cernium",
+        "ch_name": "燃烧的塞尔提乌",
+        "tw_name": "燃燒的賽爾尼溫",
+        "level_requirement": 260,
+        "monster": [
+            {
+                "en_name": "Flora Foot Soldier",
+                "tw_name": "雷普步兵",
+                "level": 262,
+                "hp": 3873233000,
+                "exp": 1775159
+            },
+            {
+                "en_name": "Flora Magician",
+                "tw_name": "雷普法師",
+                "level": 262,
+                "hp": 3873233000,
+                "exp": 1775159
+            },
+            {
+                "en_name": "Flora Assassin",
+                "tw_name": "雷普暗殺者",
+                "level": 263,
+                "hp": 3937401000,
+                "exp": 1800203
+            },
+            {
+                "en_name": "Flora Heavy Infantry",
+                "tw_name": "雷普機甲兵",
+                "level": 263,
+                "hp": 3937401000,
+                "exp": 1800203
+            },
+            {
+                "en_name": "Ebonstar Bombardier",
+                "tw_name": "黑色太陽炸彈兵",
+                "level": 264,
+                "hp": 4004962000,
+                "exp": 1828409
+            },
+            {
+                "en_name": "Ebonstar Magician",
+                "tw_name": "黑色太陽士兵",
+                "level": 264,
+                "hp": 4004962000,
+                "exp": 1828409
+            }
+        ]
+    },
     "Hotel Arcus": {
         "en_name": "Hotel Arcus",
         "ch_name": "亚克斯旅馆",
