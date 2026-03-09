@@ -790,7 +790,57 @@
         "ch_name": "塞拉斯，星陨之地",
         "tw_name": "賽拉斯, 繁星沉睡之地",
         "level_requirement": 240,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Veritate",
+                "tw_name": "",
+                "level": 245,
+                "hp": 439566000,
+                "exp": 518511
+            },
+            {
+                "en_name": "Volar",
+                "tw_name": "",
+                "level": 246,
+                "hp": 447700000,
+                "exp": 527106
+            },
+            {
+                "en_name": "Oceanleli",
+                "tw_name": "",
+                "level": 247,
+                "hp": 456280000,
+                "exp": 535749
+            },
+            {
+                "en_name": "Hyades",
+                "tw_name": "",
+                "level": 248,
+                "hp": 464940000,
+                "exp": 544459
+            },
+            {
+                "en_name": "Denebola",
+                "tw_name": "",
+                "level": 249,
+                "hp": 473680000,
+                "exp": 553217
+            },
+            {
+                "en_name": "Lilli Borea",
+                "tw_name": "",
+                "level": 250,
+                "hp": 530750000,
+                "exp": 584807
+            },
+            {
+                "en_name": "Angelus",
+                "tw_name": "",
+                "level": 251,
+                "hp": 540540000,
+                "exp": 594040
+            }
+        ]
     },
     "Moonbridge": {
         "en_name": "Moonbridge",
