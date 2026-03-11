@@ -1474,6 +1474,56 @@
         "ch_name": "塔拉哈特",
         "tw_name": "塔拉哈特",
         "level_requirement": 290,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Ash-Devouring Soul",
+                "tw_name": "",
+                "level": 290,
+                "hp": 28811166384,
+                "exp": 4793318
+            },
+            {
+                "en_name": "Silence-Swallowing Soul",
+                "tw_name": "",
+                "level": 291,
+                "hp": 29229292400,
+                "exp": 4847012
+            },
+            {
+                "en_name": "Soul Slayer",
+                "tw_name": "",
+                "level": 291,
+                "hp": 29229292400,
+                "exp": 4847012
+            },
+            {
+                "en_name": "Judge of Storms",
+                "tw_name": "",
+                "level": 292,
+                "hp": 29633050040,
+                "exp": 4907812
+            },
+            {
+                "en_name": "Executor of Eternity",
+                "tw_name": "",
+                "level": 293,
+                "hp": 30057073992,
+                "exp": 4968977
+            },
+            {
+                "en_name": "Night Guide",
+                "tw_name": "",
+                "level": 294,
+                "hp": 30484109656,
+                "exp": 5023491
+            },
+            {
+                "en_name": "Phantasmal Guide",
+                "tw_name": "",
+                "level": 294,
+                "hp": 30484109656,
+                "exp": 5023491
+            }
+        ]
     }
 }
