@@ -1296,7 +1296,64 @@
         "ch_name": "桃源境",
         "tw_name": "桃源境",
         "level_requirement": 275,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Withered Spring Researcher",
+                "tw_name": "",
+                "level": 275,
+                "hp": 10500341040,
+                "exp": 2903024
+            },
+            {
+                "en_name": "Ink-Shaded Butterfly",
+                "tw_name": "",
+                "level": 275,
+                "hp": 10500341040,
+                "exp": 2903024
+            },
+            {
+                "en_name": "Gentle Summer Researcher",
+                "tw_name": "",
+                "level": 276,
+                "hp": 10663732800,
+                "exp": 2939616
+            },
+            {
+                "en_name": "Ink-Shaded Red-Crowned Crane",
+                "tw_name": "",
+                "level": 276,
+                "hp": 10663732800,
+                "exp": 2939616
+            },
+            {
+                "en_name": "Drowsy Autumn Researcher",
+                "tw_name": "",
+                "level": 277,
+                "hp": 10828381200,
+                "exp": 2981010
+            },
+            {
+                "en_name": "Inkblot Sable",
+                "tw_name": "",
+                "level": 277,
+                "hp": 10828381200,
+                "exp": 2981010
+            },
+            {
+                "en_name": "Harsh Winter Researcher",
+                "tw_name": "",
+                "level": 278,
+                "hp": 10994286240,
+                "exp": 3017988
+            },
+            {
+                "en_name": "Ink-Winged Owl",
+                "tw_name": "",
+                "level": 279,
+                "hp": 11161447920,
+                "exp": 3059716
+            }
+        ]
     },
     "Arteria": {
         "en_name": "Battleship Arteria",
