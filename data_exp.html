@@ -21,6 +21,7 @@
 			min-width: 320px;
 			padding: 0 12px;
 		}
+
 	</style>
 </head>
 
@@ -45,6 +46,7 @@
 										<tr>
 											<th>等级</th>
 											<th>升级所需经验</th>
+											<th>怪物基础经验倍率</th>
 											<th>总经验需求</th>
 											<th>经验倍率</th>
 										</tr>
@@ -62,6 +64,7 @@
 					</div>
 					<div id="expTicketCollapse" class="collapse show">
 						<div class="card-body">
+							<div class="text-muted small mb-2">注：exp券性价比 = exp券获得经验 / 当前等级最高单只怪经验（含等级修正）</div>
 							<div class="table-responsive">
 								<table id="expTicketTable"
 									class="table table-sm table-striped table-hover align-middle mb-0">
@@ -70,8 +73,9 @@
 											<th>等级</th>
 											<th>升级所需经验</th>
 											<th>exp券获得经验</th>
-											<th>升级需要吃多少张exp(如果有小数点则向上取整)</th>
-											<th>相比上一级的数量倍率</th>
+											<th>exp券性价比</th>
+											<th>升级数量需求</th>
+											<th>相比上一级的倍率</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -87,6 +91,7 @@
 						aria-controls="advancedExpTicketCollapse">高级经验券</div>
 					<div id="advancedExpTicketCollapse" class="collapse show">
 						<div class="card-body">
+							<div class="text-muted small mb-2">注：exp券性价比 = exp券获得经验 / 当前等级最高单只怪经验（含等级修正）</div>
 							<div class="table-responsive">
 								<table id="advancedExpTicketTable" class="table table-sm table-striped table-hover align-middle mb-0">
 									<thead class="table-light">
@@ -94,8 +99,9 @@
 											<th>等级</th>
 											<th>升级所需经验</th>
 											<th>高级exp券获得经验</th>
-											<th>升级需要吃多少张高级exp券</th>
-											<th>相比上一级的数量倍率</th>
+											<th>高级exp券性价比</th>
+											<th>升级数量需求</th>
+											<th>相比上一级的倍率</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -136,10 +142,143 @@
 			return `${value.toFixed(2)}%`;
 		}
 
+		function formatFloat(value, digits = 2) {
+			if (value === null || value === undefined) return 'N/A';
+			if (typeof value !== 'number' || !Number.isFinite(value)) return 'N/A';
+			return value.toLocaleString('en-US', {
+				minimumFractionDigits: digits,
+				maximumFractionDigits: digits,
+			});
+		}
+
 		function safeCeilDiv(numerator, denominator) {
 			if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator <= 0) return null;
 			return Math.ceil(numerator / denominator);
 		}
+
+		// 经验等级修正：返回百分比（如 +20 表示 +20%）
+		function getExpLevelModifierPercent(playerLevel, monsterLevel) {
+			playerLevel = Number(playerLevel);
+			monsterLevel = Number(monsterLevel);
+			if (!Number.isFinite(playerLevel) || !Number.isFinite(monsterLevel)) return null;
+
+			const diff = playerLevel - monsterLevel;
+
+			// +0 to +1, -0 to -1 => +20%
+			if (diff >= -1 && diff <= 1) return 20;
+
+			// +2 to +4, -2 to -4 => +10%
+			if ((diff >= 2 && diff <= 4) || (diff <= -2 && diff >= -4)) return 10;
+
+			// +5 to +9, -5 to -9 => +5%
+			if ((diff >= 5 && diff <= 9) || (diff <= -5 && diff >= -9)) return 5;
+
+			// +10, -10 => 0%
+			if (diff === 10 || diff === -10) return 0;
+
+			// 玩家等级高于怪物
+			if (diff > 10) {
+				if (diff >= 11 && diff <= 12) return -1;
+				if (diff >= 13 && diff <= 14) return -2;
+				if (diff >= 15 && diff <= 16) return -3;
+				if (diff >= 17 && diff <= 18) return -4;
+				if (diff >= 19 && diff <= 20) return -5;
+				if (diff === 21) return -11;
+				if (diff >= 22 && diff <= 39) return -(diff - 10);
+				// +40 or higher
+				return -30;
+			}
+
+			// 玩家等级低于怪物（diff < -10）
+			if (diff === -11) return -1;
+			if (diff === -12) return -2;
+			if (diff === -13) return -3;
+			if (diff === -14) return -4;
+			if (diff === -15) return -5;
+			if (diff === -16) return -6;
+			if (diff === -17) return -7;
+			if (diff === -18) return -8;
+			if (diff === -19) return -9;
+			if (diff === -20) return -10;
+			if (diff === -21) return -30;
+			if (diff <= -36) return -90;
+			// -22 to -35: -34%, -38%, ..., -86% （每级 -4%）
+			if (diff <= -22) {
+				const stepsFromMinus22 = Math.abs(diff) - 22;
+				return -34 - (stepsFromMinus22 * 4);
+			}
+
+			return null;
+		}
+
+		function calcFinalExpPerKill(baseExp, modifierPercent, rounding = 'floor') {
+			baseExp = Number(baseExp);
+			modifierPercent = Number(modifierPercent);
+			if (!Number.isFinite(baseExp) || !Number.isFinite(modifierPercent)) return null;
+			const raw = (baseExp * (100 + modifierPercent)) / 100;
+			if (rounding === 'none') return raw;
+			if (rounding === 'round') return Math.round(raw);
+			if (rounding === 'ceil') return Math.ceil(raw);
+			return Math.floor(raw);
+		}
+
+		// 计算“当前等级打一只怪可获得的最高经验”。
+		// 注意：仅统计达到地图 level_requirement 的地图。
+		function findMaxMonsterExpAtLevel(playerLevel, mapData, options = {}) {
+			playerLevel = Number(playerLevel);
+			if (!Number.isFinite(playerLevel)) return null;
+			const rounding = options?.rounding ?? 'floor';
+
+			let best = null;
+			for (const [mapKey, mapInfo] of Object.entries(mapData || {})) {
+				const mapRequirement = Number(mapInfo?.level_requirement);
+				if (!Number.isFinite(mapRequirement)) continue;
+				if (playerLevel < mapRequirement) continue;
+
+				const monsters = Array.isArray(mapInfo?.monster) ? mapInfo.monster : [];
+				for (const monster of monsters) {
+					const monsterLevel = Number(monster?.level);
+					const baseExp = Number(monster?.exp);
+					if (!Number.isFinite(monsterLevel) || !Number.isFinite(baseExp)) continue;
+
+					const modifierPercent = getExpLevelModifierPercent(playerLevel, monsterLevel);
+					if (!Number.isFinite(modifierPercent)) continue;
+
+					const finalExp = calcFinalExpPerKill(baseExp, modifierPercent, rounding);
+					if (!Number.isFinite(finalExp)) continue;
+
+					if (!best || finalExp > best.finalExp) {
+						best = {
+							playerLevel,
+							finalExp,
+							baseExp,
+							modifierPercent,
+							mapKey,
+							mapName: mapInfo?.ch_name || mapInfo?.tw_name || mapInfo?.en_name || mapKey,
+							mapRequirement,
+							monsterName: monster?.tw_name || monster?.en_name || '',
+							monsterEnName: monster?.en_name || '',
+							monsterLevel,
+						};
+					}
+				}
+			}
+
+			return best;
+		}
+
+		async function getMaxMonsterExpAtLevel(playerLevel, options = {}) {
+			const resp = await fetch('data/map.json', { cache: 'no-store' });
+			if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+			const mapData = await resp.json();
+			return findMaxMonsterExpAtLevel(playerLevel, mapData, options);
+		}
+
+		// 方便在控制台/其他脚本中直接调用
+		window.getExpLevelModifierPercent = getExpLevelModifierPercent;
+		window.calcFinalExpPerKill = calcFinalExpPerKill;
+		window.findMaxMonsterExpAtLevel = findMaxMonsterExpAtLevel;
+		window.getMaxMonsterExpAtLevel = getMaxMonsterExpAtLevel;
 
 		async function init() {
 			const tbody = document.querySelector('#expTable tbody');
@@ -152,9 +291,19 @@
 			loadErrorEl.style.display = 'none';
 
 			try {
-				const resp = await fetch('data/exp.json', { cache: 'no-store' });
-				if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-				const expData = await resp.json();
+				const [expResp, mapResp] = await Promise.all([
+					fetch('data/exp.json', { cache: 'no-store' }),
+					fetch('data/map.json', { cache: 'no-store' }),
+				]);
+				if (!expResp.ok) throw new Error(`HTTP ${expResp.status}`);
+				const expData = await expResp.json();
+
+				let mapData = null;
+				if (mapResp.ok) {
+					mapData = await mapResp.json();
+				} else {
+					console.warn(`加载 data/map.json 失败: HTTP ${mapResp.status}`);
+				}
 
 				const upgrade = expData?.upgrade || {};
 				const expTicket = expData?.exp_ticket || {};
@@ -175,6 +324,14 @@
 					const expToNext = rowData?.exp_to_next_level ?? null;
 					const totalLevel = rowData?.total_level ?? null;
 
+					let killNeed = null;
+					let perKillExp = null;
+					if (Number.isFinite(expToNext) && mapData) {
+						const best = findMaxMonsterExpAtLevel(level, mapData, { rounding: 'floor' });
+						perKillExp = Number(best?.finalExp);
+						killNeed = safeCeilDiv(expToNext, perKillExp);
+					}
+
 					let multiplier = null;
 					if (Number.isFinite(expToNext) && Number.isFinite(prevExpToNext) && prevExpToNext > 0) {
 						multiplier = (expToNext / prevExpToNext) * 100;
@@ -188,6 +345,9 @@
 					const tdExp = document.createElement('td');
 					tdExp.textContent = formatNumber(expToNext);
 
+					const tdKillNeed = document.createElement('td');
+					tdKillNeed.textContent = killNeed === null ? 'N/A' : formatNumber(killNeed);
+
 					const tdTotal = document.createElement('td');
 					tdTotal.textContent = formatNumber(totalLevel);
 
@@ -196,6 +356,7 @@
 
 					tr.appendChild(tdLevel);
 					tr.appendChild(tdExp);
+					tr.appendChild(tdKillNeed);
 					tr.appendChild(tdTotal);
 					tr.appendChild(tdMultiplier);
 					tbody.appendChild(tr);
@@ -203,6 +364,13 @@
 					// 经验券表
 					const expPerTicket = expTicket[levelKey]?.exp_per_ticket ?? null;
 					const expPerAdvancedTicket = advancedExpTicket[levelKey]?.exp_per_ticket ?? null;
+
+					const ticketEqualsKills = (Number.isFinite(expPerTicket) && Number.isFinite(perKillExp) && perKillExp > 0)
+						? (expPerTicket / perKillExp)
+						: null;
+					const advancedTicketEqualsKills = (Number.isFinite(expPerAdvancedTicket) && Number.isFinite(perKillExp) && perKillExp > 0)
+						? (expPerAdvancedTicket / perKillExp)
+						: null;
 
 					const ticketNeed = expToNext === null ? null : safeCeilDiv(expToNext, expPerTicket);
 					const advancedTicketNeed = expToNext === null ? null : safeCeilDiv(expToNext, expPerAdvancedTicket);
@@ -223,6 +391,9 @@
 					const ttdExpPer = document.createElement('td');
 					ttdExpPer.textContent = formatNumber(expPerTicket);
 
+					const ttdTicketEqualsKills = document.createElement('td');
+					ttdTicketEqualsKills.textContent = formatFloat(ticketEqualsKills, 2);
+
 					const ttdNeed = document.createElement('td');
 					ttdNeed.textContent = ticketNeed === null ? 'N/A' : formatNumber(ticketNeed);
 
@@ -232,6 +403,7 @@
 					ticketTr.appendChild(ttdLevel);
 					ticketTr.appendChild(ttdExpToNext);
 					ticketTr.appendChild(ttdExpPer);
+					ticketTr.appendChild(ttdTicketEqualsKills);
 					ticketTr.appendChild(ttdNeed);
 					ticketTr.appendChild(ttdNeedMult);
 					ticketTbody.appendChild(ticketTr);
@@ -254,6 +426,9 @@
 						const atdExpPer = document.createElement('td');
 						atdExpPer.textContent = formatNumber(expPerAdvancedTicket);
 
+						const atdTicketEqualsKills = document.createElement('td');
+						atdTicketEqualsKills.textContent = formatFloat(advancedTicketEqualsKills, 2);
+
 						const atdNeed = document.createElement('td');
 						atdNeed.textContent = advancedTicketNeed === null ? 'N/A' : formatNumber(advancedTicketNeed);
 
@@ -263,6 +438,7 @@
 						advancedTr.appendChild(atdLevel);
 						advancedTr.appendChild(atdExpToNext);
 						advancedTr.appendChild(atdExpPer);
+						advancedTr.appendChild(atdTicketEqualsKills);
 						advancedTr.appendChild(atdNeed);
 						advancedTr.appendChild(atdNeedMult);
 						advancedTicketTbody.appendChild(advancedTr);
