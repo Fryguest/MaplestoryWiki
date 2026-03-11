@@ -1410,7 +1410,64 @@
         "ch_name": "卡西翁",
         "tw_name": "卡爾西溫",
         "level_requirement": 285,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Despairing Guard",
+                "tw_name": "",
+                "level": 285,
+                "hp": 20627681750,
+                "exp": 4062965
+            },
+            {
+                "en_name": "Monstrous Shadow Bird",
+                "tw_name": "",
+                "level": 286,
+                "hp": 20925241640,
+                "exp": 4110304
+            },
+            {
+                "en_name": "Abyssal Guard",
+                "tw_name": "",
+                "level": 286,
+                "hp": 20925241640,
+                "exp": 4110304
+            },
+            {
+                "en_name": "Despairing Hunter",
+                "tw_name": "",
+                "level": 287,
+                "hp": 21224925234,
+                "exp": 4163751
+            },
+            {
+                "en_name": "Shadowy Black Panther",
+                "tw_name": "",
+                "level": 288,
+                "hp": 21539716086,
+                "exp": 4217526
+            },
+            {
+                "en_name": "Abyssal Hunter",
+                "tw_name": "",
+                "level": 288,
+                "hp": 21539716086,
+                "exp": 4217526
+            },
+            {
+                "en_name": "Knight of the Source",
+                "tw_name": "",
+                "level": 289,
+                "hp": 21843743620,
+                "exp": 4265489
+            },
+            {
+                "en_name": "Priest of the Source",
+                "tw_name": "",
+                "level": 289,
+                "hp": 21843743620,
+                "exp": 4265489
+            }
+        ]
     },
     "Tallahart": {
         "en_name": "Grave of the Gods Tallahart",
