@@ -1167,42 +1167,85 @@
         "en_name": "Hotel Arcus",
         "ch_name": "亚克斯旅馆",
         "tw_name": "飯店阿爾克斯",
-        "level_requirement": 260,
-        "monster": []
+        "level_requirement": 265,
+        "monster": [
+            {
+                "en_name": "Sandblade Marauder",
+                "tw_name": "",
+                "level": 265,
+                "hp": 5295023500,
+                "exp": 2056974
+            },
+            {
+                "en_name": "Ironshot Desperado",
+                "tw_name": "",
+                "level": 265,
+                "hp": 5295023500,
+                "exp": 2056974
+            },
+            {
+                "en_name": "Puxillian Rover",
+                "tw_name": "探索的福克斯里恩",
+                "level": 266,
+                "hp": 5380537500,
+                "exp": 2085219
+            },
+            {
+                "en_name": "Puxillian Scrounger",
+                "tw_name": "古物收集家福克斯里恩",
+                "level": 267,
+                "hp": 5470563800,
+                "exp": 2113572
+            },
+            {
+                "en_name": "Conductorbot",
+                "tw_name": "嚴格的站務員",
+                "level": 268,
+                "hp": 5557463600,
+                "exp": 2145596
+            },
+            {
+                "en_name": "Houndbot",
+                "tw_name": "失去主人的看門狗",
+                "level": 269,
+                "hp": 5648943300,
+                "exp": 2174274
+            }
+        ]
     },
     "Odium": {
         "en_name": "Odium",
         "ch_name": "奥迪乌姆",
         "tw_name": "奧迪溫",
-        "level_requirement": 260,
+        "level_requirement": 270,
         "monster": []
     },
     "Shangri-La": {
         "en_name": "Sinners' Paradise Shangri-La",
         "ch_name": "桃源境",
         "tw_name": "桃源境",
-        "level_requirement": 260,
+        "level_requirement": 275,
         "monster": []
     },
     "Arteria": {
         "en_name": "Battleship Arteria",
         "ch_name": "阿尔特里亚",
         "tw_name": "阿爾特利亞",
-        "level_requirement": 260,
+        "level_requirement": 280,
         "monster": []
     },
     "Carcion": {
         "en_name": "Carcion, the Cradle of Life",
         "ch_name": "卡西翁",
         "tw_name": "卡爾西溫",
-        "level_requirement": 260,
+        "level_requirement": 285,
         "monster": []
     },
     "Tallahart": {
         "en_name": "Grave of the Gods Tallahart",
         "ch_name": "塔拉哈特",
         "tw_name": "塔拉哈特",
-        "level_requirement": 260,
+        "level_requirement": 290,
         "monster": []
     }
 }
