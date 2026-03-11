@@ -1360,7 +1360,50 @@
         "ch_name": "阿尔特里亚",
         "tw_name": "阿爾特利亞",
         "level_requirement": 280,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "High Flora Foot Soldier",
+                "tw_name": "",
+                "level": 280,
+                "hp": 14728826112,
+                "exp": 3436027
+            },
+            {
+                "en_name": "High Flora Magician",
+                "tw_name": "",
+                "level": 281,
+                "hp": 14949403560,
+                "exp": 3482914
+            },
+            {
+                "en_name": "High Flora Armored Soldier",
+                "tw_name": "",
+                "level": 282,
+                "hp": 15171614640,
+                "exp": 3524768
+            },
+            {
+                "en_name": "High Flora Longswordsman",
+                "tw_name": "",
+                "level": 283,
+                "hp": 15405075504,
+                "exp": 3572010
+            },
+            {
+                "en_name": "Frozen Flora Foot Soldier",
+                "tw_name": "",
+                "level": 284,
+                "hp": 15630628104,
+                "exp": 3614278
+            },
+            {
+                "en_name": "Frozen Flora Magician",
+                "tw_name": "",
+                "level": 284,
+                "hp": 15630628104,
+                "exp": 3614278
+            }
+        ]
     },
     "Carcion": {
         "en_name": "Carcion, the Cradle of Life",
