@@ -1218,7 +1218,78 @@
         "ch_name": "奥迪乌姆",
         "tw_name": "奧迪溫",
         "level_requirement": 270,
-        "monster": []
+        "monster": [
+            {
+                "en_name": "Enhanced Corallite Guardian",
+                "tw_name": "",
+                "level": 270,
+                "hp": 7463516580,
+                "exp": 2445217
+            },
+            {
+                "en_name": "Enhanced Olivine Guardian",
+                "tw_name": "",
+                "level": 270,
+                "hp": 7463516580,
+                "exp": 2445217
+            },
+            {
+                "en_name": "Enhanced Diamond Guardian",
+                "tw_name": "",
+                "level": 270,
+                "hp": 7463516580,
+                "exp": 2445217
+            },
+            {
+                "en_name": "Angler Bomb Tester",
+                "tw_name": "",
+                "level": 271,
+                "hp": 7584373550,
+                "exp": 2481337
+            },
+            {
+                "en_name": "Angler Melee Tester",
+                "tw_name": "",
+                "level": 271,
+                "hp": 7584373550,
+                "exp": 2481337
+            },
+            {
+                "en_name": "Angler Electro Tester",
+                "tw_name": "",
+                "level": 271,
+                "hp": 7584373550,
+                "exp": 2481337
+            },
+            {
+                "en_name": "Guard Corundum",
+                "tw_name": "",
+                "level": 272,
+                "hp": 7706197200,
+                "exp": 2513634
+            },
+            {
+                "en_name": "Guard Agate",
+                "tw_name": "",
+                "level": 272,
+                "hp": 7706197200,
+                "exp": 2513634
+            },
+            {
+                "en_name": "Disintegrating Test Subject",
+                "tw_name": "",
+                "level": 273,
+                "hp": 7828987530,
+                "exp": 2546149
+            },
+            {
+                "en_name": "Failed Subject",
+                "tw_name": "",
+                "level": 274,
+                "hp": 7952744540,
+                "exp": 2582906
+            }
+        ]
     },
     "Shangri-La": {
         "en_name": "Sinners' Paradise Shangri-La",
