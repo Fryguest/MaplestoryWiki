@@ -39,7 +39,7 @@
         }
 
         .calc-layout {
-            max-width: 920px;
+            max-width: 1500px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr;
@@ -71,6 +71,23 @@
             justify-content: space-between;
             gap: 8px 10px;
             padding: 6px 0;
+        }
+
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-row #characterName {
+            flex: 1 1 auto;
+            min-width: 0;
+            width: auto;
+        }
+
+        .search-row .btn {
+            flex: 0 0 auto;
+            white-space: nowrap;
         }
 
         .form-row label {
@@ -189,6 +206,63 @@
             gap: 8px;
         }
 
+        .equip-tiles {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .equip-tile {
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(178, 223, 219, 0.9);
+            border-radius: 14px;
+            padding: 10px;
+        }
+
+        .equip-tile-header {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .equip-tile-name {
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .equip-tile-sub {
+            font-size: 12px;
+            opacity: 0.75;
+            margin-top: 2px;
+        }
+
+        .equip-stat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 12px;
+            line-height: 1.25;
+        }
+
+        .equip-stat-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .equip-stat-row .k {
+            opacity: 0.75;
+            white-space: nowrap;
+        }
+
+        .equip-stat-row .v {
+            text-align: right;
+            overflow-wrap: anywhere;
+            flex: 1;
+        }
+
         .equip-item {
             display: flex;
             align-items: center;
@@ -200,19 +274,57 @@
             border: none;
         }
 
-        .equip-item.grade-special {
+        .symbol-tiles {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .symbol-tile {
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(178, 223, 219, 0.9);
+            border-radius: 14px;
+            padding: 10px;
+        }
+
+        .symbol-header {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .symbol-icon {
+            width: 33px;
+            height: 30px;
+            display: block;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .symbol-name {
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .equip-item.grade-special,
+        .equip-tile.grade-special {
             border: 2px solid #1e88e5;
         }
 
-        .equip-item.grade-rare {
+        .equip-item.grade-rare,
+        .equip-tile.grade-rare {
             border: 2px solid #8e24aa;
         }
 
-        .equip-item.grade-epic {
+        .equip-item.grade-epic,
+        .equip-tile.grade-epic {
             border: 2px solid #f9a825;
         }
 
-        .equip-item.grade-legendary {
+        .equip-item.grade-legendary,
+        .equip-tile.grade-legendary {
             border: 2px solid #43a047;
         }
 
@@ -281,6 +393,40 @@
             width: 100%;
         }
 
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 0 auto 12px;
+            max-width: 1500px;
+        }
+
+        .tab-btn {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(178, 223, 219, 0.9);
+            color: #000;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background-color: #00796b;
+            border-color: #00796b;
+            color: #fff;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
         @media (max-width: 600px) {
             .form-row {
                 flex-direction: column;
@@ -296,6 +442,10 @@
                 width: 100%;
             }
 
+            .search-row {
+                gap: 8px;
+            }
+
             .calc-layout {
                 grid-template-columns: 1fr;
             }
@@ -305,6 +455,14 @@
             }
 
             .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .equip-tiles {
+                grid-template-columns: 1fr;
+            }
+
+            .symbol-tiles {
                 grid-template-columns: 1fr;
             }
         }
@@ -318,58 +476,80 @@
     <!-- 页面内容区 -->
     <div class="content">
         <h1>属性计算器</h1>
-        <p class="subtitle">通过 Nexon Open API 查询角色基本信息</p>
+        <p class="subtitle">Nexon Open API</p>
+
+        <div style="max-width: 1500px; margin: 0 auto 12px;">
+            <div class="calc-card">
+                <div class="search-row">
+                    <input type="text" id="characterName" placeholder="请输入角色名字" autocomplete="off" />
+                    <button type="button" class="btn" onclick="fetchAndRenderCharacterBasic()">查询角色信息</button>
+                </div>
+                <div id="nxStatus" class="status" aria-live="polite"></div>
+            </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="属性计算器标签页">
+            <button type="button" class="tab-btn active" id="tabBtnOverview" role="tab" aria-selected="true" aria-controls="tabOverview" onclick="setActiveTab('overview')">角色总览</button>
+            <button type="button" class="tab-btn" id="tabBtnEquip" role="tab" aria-selected="false" aria-controls="tabEquip" onclick="setActiveTab('equip')">装备</button>
+            <button type="button" class="tab-btn" id="tabBtnSymbol" role="tab" aria-selected="false" aria-controls="tabSymbol" onclick="setActiveTab('symbol')">符文</button>
+        </div>
 
         <div class="calc-layout" id="calcLayout">
-            <div class="calc-card">
-                <!-- <h2>角色查询（Nexon Open API）</h2> -->
-                <div class="form-row">
-                    <!-- <label for="characterName">角色名字</label> -->
-                    <input type="text" id="characterName" placeholder="请输入角色名字" autocomplete="off" />
-                </div>
-                <button type="button" class="btn btn-wide" onclick="fetchAndRenderCharacterBasic()">查询角色基本信息</button>
-                <div id="nxStatus" class="status" aria-live="polite"></div>
+            <div class="tab-panel active" id="tabOverview" role="tabpanel" aria-labelledby="tabBtnOverview">
+                <div class="calc-card">
+                    <div id="characterInfo" class="character-card" style="display:none;">
+                        <div class="basic-panel">
+                            <img id="characterImage" alt="character image" />
+                            <div class="basic-fields">
+                                <div class="pill"><span class="label">名字</span><span class="value" id="basicName">-</span></div>
+                                <div class="pill"><span class="label">职业</span><span class="value" id="basicClass">-</span></div>
+                                <div class="pill"><span class="label">等级</span><span class="value" id="basicLevel">-</span></div>
+                                <div class="pill"><span class="label">服务器</span><span class="value" id="basicWorld">-</span></div>
+                            </div>
+                        </div>
 
-                <div id="characterInfo" class="character-card" style="display:none;">
-                    <div class="basic-panel">
-                        <img id="characterImage" alt="character image" />
-                        <div class="basic-fields">
-                            <div class="pill"><span class="label">名字</span><span class="value" id="basicName">-</span></div>
-                            <div class="pill"><span class="label">职业</span><span class="value" id="basicClass">-</span></div>
-                            <div class="pill"><span class="label">等级</span><span class="value" id="basicLevel">-</span></div>
-                            <div class="pill"><span class="label">服务器</span><span class="value" id="basicWorld">-</span></div>
+                        <div class="stats-panel">
+                            <div class="stats-grid">
+                                <div class="stat-box"><span class="k">攻击力</span><span class="v" id="statAttack">-</span></div>
+                                <div class="stat-box"><span class="k">最终伤害</span><span class="v" id="statFinalDmg">-</span></div>
+                                <div class="stat-box"><span class="k">Arc</span><span class="v" id="statArc">-</span></div>
+                                <div class="stat-box"><span class="k">Aut</span><span class="v" id="statAut">-</span></div>
+                                <div class="stat-box"><span class="k">STR</span><span class="v" id="statSTR">-</span></div>
+                                <div class="stat-box"><span class="k">INT</span><span class="v" id="statINT">-</span></div>
+                                <div class="stat-box"><span class="k">DEX</span><span class="v" id="statDEX">-</span></div>
+                                <div class="stat-box"><span class="k">LUK</span><span class="v" id="statLUK">-</span></div>
+                                <div class="stat-box"><span class="k">HP</span><span class="v" id="statHP">-</span></div>
+                                <div class="stat-box"><span class="k">MP</span><span class="v" id="statMP">-</span></div>
+                                <div class="stat-box"><span class="k">总伤害</span><span class="v" id="statDmg">-</span></div>
+                                <div class="stat-box"><span class="k">BOSS伤害</span><span class="v" id="statBoss">-</span></div>
+                                <div class="stat-box"><span class="k">无视</span><span class="v" id="statIED">-</span></div>
+                                <div class="stat-box"><span class="k">一般怪物伤害</span><span class="v" id="statNormalMonster">-</span></div>
+                                <div class="stat-box"><span class="k">爆率</span><span class="v" id="statCritRate">-</span></div>
+                                <div class="stat-box"><span class="k">爆伤</span><span class="v" id="statCritDmg">-</span></div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="stats-panel">
-                        <div class="stats-grid">
-                            <div class="stat-box"><span class="k">攻击力</span><span class="v" id="statAttack">-</span></div>
-                            <div class="stat-box"><span class="k">最终伤害</span><span class="v" id="statFinalDmg">-</span></div>
-                            <div class="stat-box"><span class="k">STR</span><span class="v" id="statSTR">-</span></div>
-                            <div class="stat-box"><span class="k">INT</span><span class="v" id="statINT">-</span></div>
-                            <div class="stat-box"><span class="k">DEX</span><span class="v" id="statDEX">-</span></div>
-                            <div class="stat-box"><span class="k">LUK</span><span class="v" id="statLUK">-</span></div>
-                            <div class="stat-box"><span class="k">HP</span><span class="v" id="statHP">-</span></div>
-                            <div class="stat-box"><span class="k">MP</span><span class="v" id="statMP">-</span></div>
-                            <div class="stat-box"><span class="k">总伤害</span><span class="v" id="statDmg">-</span></div>
-                            <div class="stat-box"><span class="k">BOSS伤害</span><span class="v" id="statBoss">-</span></div>
-                            <div class="stat-box"><span class="k">无视</span><span class="v" id="statIED">-</span></div>
-                            <div class="stat-box"><span class="k">一般怪物伤害</span><span class="v" id="statNormalMonster">-</span></div>
-                            <div class="stat-box"><span class="k">爆率</span><span class="v" id="statCritRate">-</span></div>
-                            <div class="stat-box"><span class="k">爆伤</span><span class="v" id="statCritDmg">-</span></div>
-                        </div>
-                    </div>  
                 </div>
             </div>
 
-            <div class="calc-card" id="equipCard" style="display:none;">
-                <h2>装备</h2>
-                <div class="panel-title" id="equipTitle"></div>
-                <div class="equip-grid" id="equipGrid"></div>
+            <div class="tab-panel" id="tabEquip" role="tabpanel" aria-labelledby="tabBtnEquip">
+                <div class="calc-card" id="equipCard" style="display:none;">
+                    <div class="tabs" role="tablist" aria-label="装备预设">
+                        <button type="button" class="tab-btn active" id="equipPresetBtnCurrent" role="tab" aria-selected="true" aria-controls="equipPresetPanel" onclick="setActiveEquipPreset('current')">当前</button>
+                        <button type="button" class="tab-btn" id="equipPresetBtn1" role="tab" aria-selected="false" aria-controls="equipPresetPanel" onclick="setActiveEquipPreset('preset1')">预设1</button>
+                        <button type="button" class="tab-btn" id="equipPresetBtn2" role="tab" aria-selected="false" aria-controls="equipPresetPanel" onclick="setActiveEquipPreset('preset2')">预设2</button>
+                        <button type="button" class="tab-btn" id="equipPresetBtn3" role="tab" aria-selected="false" aria-controls="equipPresetPanel" onclick="setActiveEquipPreset('preset3')">预设3</button>
+                    </div>
 
-                <div class="stats-panel" id="equipDetailPanel" style="display:none;">
-                    <div class="panel-title" id="equipDetailTitle">装备属性</div>
-                    <div class="stats-grid" id="equipDetailGrid"></div>
+                    <div id="equipPresetPanel">
+                        <div class="equip-tiles" id="equipTiles"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="tabSymbol" role="tabpanel" aria-labelledby="tabBtnSymbol">
+                <div class="calc-card" id="symbolCard" style="display:none;">
+                    <div class="symbol-tiles" id="symbolTiles"></div>
                 </div>
             </div>
         </div>
@@ -405,6 +585,19 @@
         const NX_API_HOST = "https://open.api.nexon.com";
         const NX_API_KEY_HEADER = "x-nxopen-api-key";
 
+        // NOTE: 这只是临时“混淆”，并非真正的安全措施；key 仍可在浏览器端被还原。
+        const NX_API_KEY_B64_PARTS = [
+            "dGVzdF9lMjNmMjk3NDg4NzM3MzRkZGJhYjYwNzdlN2VjNzc0NjJjMzFjMWFlOTEyZmZlZjE3ZTRjY2Rj",
+            "Yzk2NGQyYmM5ZWZlOGQwNGU2ZDIzM2JkMzVjZjJmYWJkZWI5M2ZiMGQ=",
+        ];
+
+        function getNxApiKey() {
+            const b64 = NX_API_KEY_B64_PARTS.join("");
+            if (typeof atob === "function") return atob(b64);
+            if (typeof window !== "undefined" && typeof window.atob === "function") return window.atob(b64);
+            throw new Error("当前环境不支持 atob()，无法解码 API Key");
+        }
+
         function setNxStatus(message, isError = false) {
             const el = document.getElementById("nxStatus");
             el.textContent = message || "";
@@ -419,17 +612,288 @@
             const card = document.getElementById("equipCard");
             if (!card) return;
             card.style.display = visible ? "block" : "none";
+        }
 
-            const layout = document.getElementById("calcLayout");
-            if (layout) {
-                layout.classList.toggle("with-equip", Boolean(visible));
+        let lastEquipData = null;
+        let activeEquipPreset = "current";
+
+        function getEquipItemsByPreset(eq, preset) {
+            if (!eq) return [];
+            if (preset === "preset1") return Array.isArray(eq?.item_equipment_preset_1) ? eq.item_equipment_preset_1 : [];
+            if (preset === "preset2") return Array.isArray(eq?.item_equipment_preset_2) ? eq.item_equipment_preset_2 : [];
+            if (preset === "preset3") return Array.isArray(eq?.item_equipment_preset_3) ? eq.item_equipment_preset_3 : [];
+            return Array.isArray(eq?.item_equipment) ? eq.item_equipment : [];
+        }
+
+        function updateEquipPresetButtons() {
+            const btnCurrent = document.getElementById("equipPresetBtnCurrent");
+            const btn1 = document.getElementById("equipPresetBtn1");
+            const btn2 = document.getElementById("equipPresetBtn2");
+            const btn3 = document.getElementById("equipPresetBtn3");
+
+            const configs = [
+                { preset: "current", el: btnCurrent },
+                { preset: "preset1", el: btn1 },
+                { preset: "preset2", el: btn2 },
+                { preset: "preset3", el: btn3 },
+            ];
+
+            configs.forEach(c => {
+                if (!c.el) return;
+                const isActive = activeEquipPreset === c.preset;
+                c.el.classList.toggle("active", isActive);
+                c.el.setAttribute("aria-selected", isActive ? "true" : "false");
+            });
+        }
+
+        function setActiveEquipPreset(preset) {
+            activeEquipPreset = preset || "current";
+            updateEquipPresetButtons();
+            if (lastEquipData) {
+                renderEquipmentTiles(getEquipItemsByPreset(lastEquipData, activeEquipPreset));
             }
+        }
+
+        function setActiveTab(tab) {
+            const overviewBtn = document.getElementById("tabBtnOverview");
+            const equipBtn = document.getElementById("tabBtnEquip");
+            const symbolBtn = document.getElementById("tabBtnSymbol");
+            const overviewPanel = document.getElementById("tabOverview");
+            const equipPanel = document.getElementById("tabEquip");
+            const symbolPanel = document.getElementById("tabSymbol");
+
+            const active = tab || "overview";
+            const isOverview = active === "overview";
+            const isEquip = active === "equip";
+            const isSymbol = active === "symbol";
+
+            if (overviewBtn) {
+                overviewBtn.classList.toggle("active", isOverview);
+                overviewBtn.setAttribute("aria-selected", isOverview ? "true" : "false");
+            }
+            if (equipBtn) {
+                equipBtn.classList.toggle("active", isEquip);
+                equipBtn.setAttribute("aria-selected", isEquip ? "true" : "false");
+            }
+            if (symbolBtn) {
+                symbolBtn.classList.toggle("active", isSymbol);
+                symbolBtn.setAttribute("aria-selected", isSymbol ? "true" : "false");
+            }
+
+            if (overviewPanel) overviewPanel.classList.toggle("active", isOverview);
+            if (equipPanel) equipPanel.classList.toggle("active", isEquip);
+            if (symbolPanel) symbolPanel.classList.toggle("active", isSymbol);
+        }
+
+        function setSymbolCardVisible(visible) {
+            const card = document.getElementById("symbolCard");
+            if (!card) return;
+            card.style.display = visible ? "block" : "none";
+        }
+
+        function getSymbolForceLabel(symbolName) {
+            const name = (symbolName ?? "").toString();
+            if (name.includes("祕法")) return "Arc";
+            if (name.includes("真實") || name.includes("真实")) return "Aut";
+            return "符文力";
+        }
+
+        function renderSymbolTotals(sym) {
+            const list = Array.isArray(sym?.symbol) ? sym.symbol : [];
+
+            let arc = 0;
+            let aut = 0;
+
+            list.forEach(s => {
+                const name = (s?.symbol_name ?? "").toString();
+                const force = parseStatNumber(s?.symbol_force);
+                const val = Number.isNaN(force) ? 0 : force;
+
+                if (name.includes("祕法") || name.toLowerCase().includes("arcane")) {
+                    arc += val;
+                } else if (name.includes("真實") || name.includes("真实") || name.toLowerCase().includes("authentic")) {
+                    aut += val;
+                }
+            });
+
+            setText("statArc", arc);
+            setText("statAut", aut);
+        }
+
+        function renderSymbols(sym) {
+            const tiles = document.getElementById("symbolTiles");
+            if (!tiles) return;
+
+            const list = Array.isArray(sym?.symbol) ? sym.symbol : [];
+            tiles.innerHTML = "";
+
+            if (list.length === 0) {
+                setSymbolCardVisible(false);
+                return;
+            }
+
+            list.forEach(s => {
+                const tile = document.createElement("div");
+                tile.className = "symbol-tile";
+
+                const header = document.createElement("div");
+                header.className = "symbol-header";
+
+                const img = document.createElement("img");
+                img.className = "symbol-icon";
+                img.alt = (s?.symbol_name ?? "符文").toString();
+                if (s?.symbol_icon) img.src = s.symbol_icon;
+                header.appendChild(img);
+
+                const meta = document.createElement("div");
+                const nameEl = document.createElement("div");
+                nameEl.className = "symbol-name";
+                nameEl.textContent = (s?.symbol_name ?? "符文").toString();
+                meta.appendChild(nameEl);
+                header.appendChild(meta);
+
+                tile.appendChild(header);
+
+                const stats = document.createElement("div");
+                stats.className = "equip-stat-list";
+
+                if (s?.symbol_level !== undefined && s?.symbol_level !== null) {
+                    appendEquipStatLine(stats, "等级", s.symbol_level);
+                }
+                if (s?.symbol_force) {
+                    appendEquipStatLine(stats, getSymbolForceLabel(s?.symbol_name), s.symbol_force);
+                }
+
+                const statDefs = [
+                    { label: "STR", key: "symbol_str" },
+                    { label: "DEX", key: "symbol_dex" },
+                    { label: "INT", key: "symbol_int" },
+                    { label: "LUK", key: "symbol_luk" },
+                    { label: "HP", key: "symbol_hp" },
+                ];
+
+                statDefs.forEach(def => {
+                    const val = (s?.[def.key] ?? "").toString();
+                    const n = parseStatNumber(val);
+                    if (!Number.isNaN(n) && n !== 0) {
+                        appendEquipStatLine(stats, def.label, val);
+                    }
+                });
+
+                const drop = (s?.symbol_drop_rate ?? "").toString().trim();
+                if (drop && drop !== "0%") appendEquipStatLine(stats, "掉落率", drop);
+
+                const meso = (s?.symbol_meso_rate ?? "").toString().trim();
+                if (meso && meso !== "0%") appendEquipStatLine(stats, "金币获取", meso);
+
+                const exp = (s?.symbol_exp_rate ?? "").toString().trim();
+                if (exp && exp !== "0%") appendEquipStatLine(stats, "经验获取", exp);
+
+                tile.appendChild(stats);
+                tiles.appendChild(tile);
+            });
+
+            setSymbolCardVisible(true);
         }
 
         function setEquipDetailVisible(visible) {
             const panel = document.getElementById("equipDetailPanel");
             if (!panel) return;
             panel.style.display = visible ? "block" : "none";
+        }
+
+        function appendEquipStatLine(listEl, key, value) {
+            if (!listEl) return;
+            const row = document.createElement("div");
+            row.className = "equip-stat-row";
+
+            const k = document.createElement("span");
+            k.className = "k";
+            k.textContent = key;
+
+            const v = document.createElement("span");
+            v.className = "v";
+            if (value instanceof Node) {
+                v.textContent = "";
+                v.appendChild(value);
+            } else {
+                v.textContent = (value === undefined || value === null || String(value).trim().length === 0) ? "-" : String(value);
+            }
+
+            row.appendChild(k);
+            row.appendChild(v);
+            listEl.appendChild(row);
+        }
+
+        function fillEquipmentStatsGrid(gridEl, item) {
+            if (!gridEl) return;
+
+            const baseOpt = item?.item_base_option;
+            const starOpt = item?.item_starforce_option;
+            const etcOpt = item?.item_etc_option;
+            const addOpt = item?.item_add_option;
+            const totalOpt = item?.item_total_option;
+
+            const statDefs = [
+                { label: "STR", key: "str", percent: false },
+                { label: "DEX", key: "dex", percent: false },
+                { label: "INT", key: "int", percent: false },
+                { label: "LUK", key: "luk", percent: false },
+                { label: "HP", key: "max_hp", percent: false },
+                { label: "MP", key: "max_mp", percent: false },
+                { label: "攻击力", key: "attack_power", percent: false },
+                { label: "魔法攻击力", key: "magic_power", percent: false },
+                { label: "伤害", key: "damage", percent: true },
+                { label: "BOSS伤害", key: "boss_damage", percent: true },
+                { label: "无视防御", key: "ignore_monster_armor", percent: true },
+                { label: "全属性", key: "all_stat", percent: true },
+                { label: "HP%", key: "max_hp_rate", percent: true },
+                { label: "MP%", key: "max_mp_rate", percent: true },
+            ];
+
+            statDefs.forEach(def => {
+                const base = getOptionNumber(baseOpt, def.key);
+                const starforce = getOptionNumber(starOpt, def.key);
+                const scroll = getOptionNumber(etcOpt, def.key);
+                const add = getOptionNumber(addOpt, def.key);
+                const { total, node } = buildEquipBreakdownValue({ base, starforce, scroll, add, percent: def.percent });
+                if (total !== 0) {
+                    appendEquipStatLine(gridEl, def.label, node);
+                    return;
+                }
+
+                // 某些装备（如 伊妮絲的寶玉）属性可能只出现在 item_total_option
+                const totalOnly = getOptionNumber(totalOpt, def.key);
+                if (totalOnly !== 0) {
+                    const { node: totalNode } = buildEquipBreakdownValue({ base: totalOnly, starforce: 0, scroll: 0, add: 0, percent: def.percent });
+                    appendEquipStatLine(gridEl, def.label, totalNode);
+                }
+            });
+
+            // 潜能
+            const potGrade = (item?.potential_option_grade ?? "").toString().trim();
+            const pot = [item?.potential_option_1, item?.potential_option_2, item?.potential_option_3]
+                .map(x => (x ?? "").toString().trim())
+                .filter(x => x.length > 0);
+            if (potGrade || pot.length > 0) {
+                if (pot[0]) appendEquipStatLine(gridEl, "潜能1", pot[0]);
+                if (pot[1]) appendEquipStatLine(gridEl, "潜能2", pot[1]);
+                if (pot[2]) appendEquipStatLine(gridEl, "潜能3", pot[2]);
+            }
+
+            const addPotGrade = (item?.additional_potential_option_grade ?? "").toString().trim();
+            const addPot = [item?.additional_potential_option_1, item?.additional_potential_option_2, item?.additional_potential_option_3]
+                .map(x => (x ?? "").toString().trim())
+                .filter(x => x.length > 0);
+            if (addPotGrade || addPot.length > 0) {
+                if (addPot[0]) appendEquipStatLine(gridEl, "附加潜能1", addPot[0]);
+                if (addPot[1]) appendEquipStatLine(gridEl, "附加潜能2", addPot[1]);
+                if (addPot[2]) appendEquipStatLine(gridEl, "附加潜能3", addPot[2]);
+            }
+
+            // 灵魂
+            if (item?.soul_name) appendEquipStatLine(gridEl, "灵魂", item.soul_name);
+            if (item?.soul_option) appendEquipStatLine(gridEl, "灵魂选项", item.soul_option);
         }
 
         function appendStatBox(gridEl, key, value) {
@@ -498,6 +962,11 @@
             totalText.textContent = formatSigned(total, { percent });
             root.appendChild(totalText);
 
+            // 只有 base 时，不展示括号分解
+            if (starforce === 0 && scroll === 0 && add === 0) {
+                return { total, node: root };
+            }
+
             root.appendChild(document.createTextNode(" "));
 
             const wrap = document.createElement("span");
@@ -544,70 +1013,7 @@
             titleEl.textContent = name ? `${name}${slot ? `（${slot}）` : ""}` : "装备属性";
 
             gridEl.innerHTML = "";
-
-            // 基本信息
-            if (item?.starforce) appendStatBox(gridEl, "星力", item.starforce);
-            if (item?.scroll_upgrade) appendStatBox(gridEl, "卷轴强化", item.scroll_upgrade);
-            // 总属性（常用）
-            const baseOpt = item?.item_base_option;
-            const starOpt = item?.item_starforce_option;
-            const etcOpt = item?.item_etc_option;
-            const addOpt = item?.item_add_option;
-
-            const statDefs = [
-                { label: "STR", key: "str", percent: false },
-                { label: "DEX", key: "dex", percent: false },
-                { label: "INT", key: "int", percent: false },
-                { label: "LUK", key: "luk", percent: false },
-                { label: "HP", key: "max_hp", percent: false },
-                { label: "MP", key: "max_mp", percent: false },
-                { label: "攻击力", key: "attack_power", percent: false },
-                { label: "魔法攻击力", key: "magic_power", percent: false },
-                { label: "伤害", key: "damage", percent: true },
-                { label: "BOSS伤害", key: "boss_damage", percent: true },
-                { label: "无视防御", key: "ignore_monster_armor", percent: true },
-                { label: "全属性", key: "all_stat", percent: true },
-                { label: "HP%", key: "max_hp_rate", percent: true },
-                { label: "MP%", key: "max_mp_rate", percent: true },
-            ];
-
-            statDefs.forEach(def => {
-                const base = getOptionNumber(baseOpt, def.key);
-                const starforce = getOptionNumber(starOpt, def.key);
-                const scroll = getOptionNumber(etcOpt, def.key);
-                const add = getOptionNumber(addOpt, def.key);
-                const { total, node } = buildEquipBreakdownValue({ base, starforce, scroll, add, percent: def.percent });
-                if (total !== 0) {
-                    appendStatBox(gridEl, def.label, node);
-                }
-            });
-
-            // 潜能
-            const potGrade = (item?.potential_option_grade ?? "").toString().trim();
-            const pot = [item?.potential_option_1, item?.potential_option_2, item?.potential_option_3]
-                .map(x => (x ?? "").toString().trim())
-                .filter(x => x.length > 0);
-            if (potGrade || pot.length > 0) {
-                appendStatBox(gridEl, "潜能等级", potGrade || "-");
-                if (pot[0]) appendStatBox(gridEl, "潜能1", pot[0]);
-                if (pot[1]) appendStatBox(gridEl, "潜能2", pot[1]);
-                if (pot[2]) appendStatBox(gridEl, "潜能3", pot[2]);
-            }
-
-            const addPotGrade = (item?.additional_potential_option_grade ?? "").toString().trim();
-            const addPot = [item?.additional_potential_option_1, item?.additional_potential_option_2, item?.additional_potential_option_3]
-                .map(x => (x ?? "").toString().trim())
-                .filter(x => x.length > 0);
-            if (addPotGrade || addPot.length > 0) {
-                appendStatBox(gridEl, "附加潜能等级", addPotGrade || "-");
-                if (addPot[0]) appendStatBox(gridEl, "附加潜能1", addPot[0]);
-                if (addPot[1]) appendStatBox(gridEl, "附加潜能2", addPot[1]);
-                if (addPot[2]) appendStatBox(gridEl, "附加潜能3", addPot[2]);
-            }
-
-            // 灵魂
-            if (item?.soul_name) appendStatBox(gridEl, "灵魂", item.soul_name);
-            if (item?.soul_option) appendStatBox(gridEl, "灵魂选项", item.soul_option);
+            fillEquipmentStatsGrid(gridEl, item);
 
             setEquipDetailVisible(true);
         }
@@ -654,6 +1060,12 @@
             const s = String(value).replaceAll(",", "");
             const match = s.match(/-?\d+(?:\.\d+)?/);
             return match ? Number(match[0]) : Number.NaN;
+        }
+
+        function parsePositiveInt(value) {
+            const n = parseStatNumber(value);
+            if (Number.isNaN(n) || n <= 0) return 0;
+            return Math.floor(n);
         }
 
         function getEquipGradeClass(potentialGrade) {
@@ -711,86 +1123,82 @@
             setText("statNormalMonster", findStatValue(index, ["一般怪物傷害"]));
         }
 
-        function renderEquipment(eq) {
-            const panel = document.getElementById("equipCard");
-            const grid = document.getElementById("equipGrid");
-            const title = document.getElementById("equipTitle");
-            if (!panel || !grid || !title) return;
+        function renderEquipmentTiles(items) {
+            const tiles = document.getElementById("equipTiles");
+            if (!tiles) return;
+            const list = Array.isArray(items) ? items : [];
 
-            // 只处理返回 JSON 中 item_equipment 下的装备
-            const items = Array.isArray(eq?.item_equipment) ? eq.item_equipment : [];
+            tiles.innerHTML = "";
 
-            // 仅显示指定部位
-            const allowedSlots = new Set([
-                "上衣",
-                "勳章",
-                "口袋道具",
-                "墜飾",
-                "墜飾2",
-                "帽子",
-                "徽章",
-                "戒指1",
-                "戒指2",
-                "戒指3",
-                "戒指4",
-                "手套",
-                "披風",
-                "機器人",
-                "機器心臟",
-                "武器",
-                "眼飾",
-                "耳環",
-                "肩膀裝飾",
-                "胸章",
-                "腰帶",
-                "臉飾",
-                "輔助武器",
-                "鞋子",
-                "褲/裙"
-            ]);
-
-            const filteredItems = items.filter(item => {
-                const slot = (item?.item_equipment_slot ?? "").toString().trim();
-                if (!allowedSlots.has(slot)) return false;
-
-                const name = (item?.item_name ?? "").toString().trim();
-                if (name === "伊妮絲的寶玉") return false;
-
-                return true;
-            });
-            grid.innerHTML = "";
-            setEquipDetailVisible(false);
-
-            if (filteredItems.length === 0) {
-                setEquipCardVisible(false);
-                return;
-            }
-
-            title.textContent = `装备（共 ${filteredItems.length}）`;
-
-            filteredItems.forEach(item => {
+            list.forEach(item => {
                 const name = item?.item_name || "";
                 const icon = item?.item_icon || "";
                 const gradeClass = getEquipGradeClass(item?.potential_option_grade);
 
-                const row = document.createElement("div");
-                row.className = "equip-item";
-                if (gradeClass) row.classList.add(gradeClass);
+                // const slot = (item?.item_equipment_slot ?? "").toString().trim();
+
+                const tile = document.createElement("div");
+                tile.className = "equip-tile";
+                if (gradeClass) tile.classList.add(gradeClass);
+
+                const header = document.createElement("div");
+                header.className = "equip-tile-header";
 
                 const img = document.createElement("img");
                 img.className = "equip-icon";
                 img.alt = name || "item";
                 if (icon) img.src = icon;
-                row.appendChild(img);
+                header.appendChild(img);
 
-                row.addEventListener("click", () => {
-                    renderEquipmentDetail(item);
-                });
+                const meta = document.createElement("div");
+                const nameEl = document.createElement("div");
+                nameEl.className = "equip-tile-name";
 
-                grid.appendChild(row);
+                const scrollUp = parsePositiveInt(item?.scroll_upgrade);
+                const starforce = parsePositiveInt(item?.starforce);
+                const enhanceText = `${scrollUp > 0 ? `+${scrollUp}` : ""}${starforce > 0 ? `(${starforce}星)` : ""}`;
+
+                const baseName = name ? `${name}${enhanceText}` : (enhanceText ? enhanceText : "装备");
+                nameEl.textContent = baseName;
+                meta.appendChild(nameEl);
+
+                header.appendChild(meta);
+                tile.appendChild(header);
+
+                const statsGrid = document.createElement("div");
+                statsGrid.className = "equip-stat-list";
+                fillEquipmentStatsGrid(statsGrid, item);
+                tile.appendChild(statsGrid);
+
+                tiles.appendChild(tile);
             });
+        }
+
+        function renderEquipment(eq) {
+            const panel = document.getElementById("equipCard");
+            if (!panel) return;
+
+            lastEquipData = eq;
+
+            const hasAnyItems = (
+                getEquipItemsByPreset(eq, "current").length > 0 ||
+                getEquipItemsByPreset(eq, "preset1").length > 0 ||
+                getEquipItemsByPreset(eq, "preset2").length > 0 ||
+                getEquipItemsByPreset(eq, "preset3").length > 0
+            );
+
+            if (!hasAnyItems) {
+                setEquipCardVisible(false);
+                return;
+            }
 
             setEquipCardVisible(true);
+
+            // 默认展示“当前”
+            activeEquipPreset = "current";
+            updateEquipPresetButtons();
+            renderEquipmentTiles(getEquipItemsByPreset(eq, activeEquipPreset));
+
         }
 
         async function nxFetchJson(path, apiKey, params = {}) {
@@ -832,10 +1240,14 @@
 
         async function fetchAndRenderCharacterBasic() {
             // const apiKey = (document.getElementById("nxApiKey").value || "").trim();
+            const apiKey = getNxApiKey();
             const name = (document.getElementById("characterName").value || "").trim();
 
             setCharacterInfoVisible(false);
             setEquipCardVisible(false);
+            setSymbolCardVisible(false);
+            setText("statArc", "-");
+            setText("statAut", "-");
 
             if (!apiKey) {
                 setNxStatus("请先输入 API Key", true);
@@ -872,9 +1284,20 @@
                     ocid,
                 });
 
+                let sym = null;
+                try {
+                    sym = await nxFetchJson("/maplestorytw/v1/character/symbol-equipment", apiKey, {
+                        ocid,
+                    });
+                } catch (e) {
+                    console.warn("符文查询失败", e);
+                }
+
                 renderBasic(basic);
                 renderStat(stat);
                 renderEquipment(eq);
+                renderSymbols(sym);
+                renderSymbolTotals(sym);
                 setCharacterInfoVisible(true);
                 setNxStatus("完成");
             } catch (err) {
@@ -885,6 +1308,7 @@
 
         window.onload = () => {
             loadCharacterNameFromLocalStorage();
+            setActiveTab("overview");
         };
     </script>
 </body>
