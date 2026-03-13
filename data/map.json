@@ -347,14 +347,14 @@
             },
             {
                 "en_name": "Potent Monkeyrog",
-                "tw_name": "",
+                "tw_name": "强大猴洛古",
                 "level": 220,
                 "hp": 187966240,
                 "exp": 309470
             },
             {
                 "en_name": "Potent Bunshroom",
-                "tw_name": "",
+                "tw_name": "强大胖胖菇",
                 "level": 220,
                 "hp": 187966240,
                 "exp": 309470
@@ -375,14 +375,14 @@
             },
             {
                 "en_name": "Potent Lytone",
-                "tw_name": "",
+                "tw_name": "强大萊頓",
                 "level": 220,
                 "hp": 187966240,
                 "exp": 309470
             },
             {
                 "en_name": "Potent Stonepy",
-                "tw_name": "",
+                "tw_name": "强大史頓畢",
                 "level": 220,
                 "hp": 187966240,
                 "exp": 309470
@@ -403,14 +403,14 @@
             },
             {
                 "en_name": "Potent Kumpider",
-                "tw_name": "",
+                "tw_name": "强大庫派德",
                 "level": 220,
                 "hp": 187966240,
                 "exp": 309470
             },
             {
                 "en_name": "Potent Squirrelnon",
-                "tw_name": "",
+                "tw_name": "强大達朗紐",
                 "level": 220,
                 "hp": 187966240,
                 "exp": 309470
@@ -793,49 +793,49 @@
         "monster": [
             {
                 "en_name": "Veritate",
-                "tw_name": "",
+                "tw_name": "貝里塔特",
                 "level": 245,
                 "hp": 439566000,
                 "exp": 518511
             },
             {
                 "en_name": "Volar",
-                "tw_name": "",
+                "tw_name": "波拉爾",
                 "level": 246,
                 "hp": 447700000,
                 "exp": 527106
             },
             {
                 "en_name": "Oceanleli",
-                "tw_name": "",
+                "tw_name": "巴達雷伊",
                 "level": 247,
                 "hp": 456280000,
                 "exp": 535749
             },
             {
                 "en_name": "Hyades",
-                "tw_name": "",
+                "tw_name": "海亞蒂絲",
                 "level": 248,
                 "hp": 464940000,
                 "exp": 544459
             },
             {
                 "en_name": "Denebola",
-                "tw_name": "",
+                "tw_name": "德奈波拉",
                 "level": 249,
                 "hp": 473680000,
                 "exp": 553217
             },
             {
                 "en_name": "Lilli Borea",
-                "tw_name": "",
+                "tw_name": "莉莉普雷亞",
                 "level": 250,
                 "hp": 530750000,
                 "exp": 584807
             },
             {
                 "en_name": "Angelus",
-                "tw_name": "",
+                "tw_name": "安杰魯斯",
                 "level": 251,
                 "hp": 540540000,
                 "exp": 594040
@@ -1171,14 +1171,14 @@
         "monster": [
             {
                 "en_name": "Sandblade Marauder",
-                "tw_name": "",
+                "tw_name": "沙刃暴掠軍",
                 "level": 265,
                 "hp": 5295023500,
                 "exp": 2056974
             },
             {
                 "en_name": "Ironshot Desperado",
-                "tw_name": "",
+                "tw_name": "鋼鐵子彈殺手",
                 "level": 265,
                 "hp": 5295023500,
                 "exp": 2056974
@@ -1221,70 +1221,70 @@
         "monster": [
             {
                 "en_name": "Enhanced Corallite Guardian",
-                "tw_name": "",
+                "tw_name": "强化型珊瑚石守衛",
                 "level": 270,
                 "hp": 7463516580,
                 "exp": 2445217
             },
             {
                 "en_name": "Enhanced Olivine Guardian",
-                "tw_name": "",
+                "tw_name": "强化型橄榄石守衛",
                 "level": 270,
                 "hp": 7463516580,
                 "exp": 2445217
             },
             {
                 "en_name": "Enhanced Diamond Guardian",
-                "tw_name": "",
+                "tw_name": "强化型金剛石守衛",
                 "level": 270,
                 "hp": 7463516580,
                 "exp": 2445217
             },
             {
                 "en_name": "Angler Bomb Tester",
-                "tw_name": "",
+                "tw_name": "安格洛炮擊型試驗機",
                 "level": 271,
                 "hp": 7584373550,
                 "exp": 2481337
             },
             {
                 "en_name": "Angler Melee Tester",
-                "tw_name": "",
+                "tw_name": "安格洛近距型試驗機",
                 "level": 271,
                 "hp": 7584373550,
                 "exp": 2481337
             },
             {
                 "en_name": "Angler Electro Tester",
-                "tw_name": "",
+                "tw_name": "安格洛電子戰試驗機",
                 "level": 271,
                 "hp": 7584373550,
                 "exp": 2481337
             },
             {
                 "en_name": "Guard Corundum",
-                "tw_name": "",
+                "tw_name": "剛玉警衛兵",
                 "level": 272,
                 "hp": 7706197200,
                 "exp": 2513634
             },
             {
                 "en_name": "Guard Agate",
-                "tw_name": "",
+                "tw_name": "瑪瑙警衛兵",
                 "level": 272,
                 "hp": 7706197200,
                 "exp": 2513634
             },
             {
                 "en_name": "Disintegrating Test Subject",
-                "tw_name": "",
+                "tw_name": "坍塌的實驗體",
                 "level": 273,
                 "hp": 7828987530,
                 "exp": 2546149
             },
             {
                 "en_name": "Failed Subject",
-                "tw_name": "",
+                "tw_name": "失敗的實驗體",
                 "level": 274,
                 "hp": 7952744540,
                 "exp": 2582906
@@ -1299,56 +1299,56 @@
         "monster": [
             {
                 "en_name": "Withered Spring Researcher",
-                "tw_name": "",
+                "tw_name": "枯萎的春天研究者",
                 "level": 275,
                 "hp": 10500341040,
                 "exp": 2903024
             },
             {
                 "en_name": "Ink-Shaded Butterfly",
-                "tw_name": "",
+                "tw_name": "墨影蝶",
                 "level": 275,
                 "hp": 10500341040,
                 "exp": 2903024
             },
             {
                 "en_name": "Gentle Summer Researcher",
-                "tw_name": "",
+                "tw_name": "黯淡的夏天研究者",
                 "level": 276,
                 "hp": 10663732800,
                 "exp": 2939616
             },
             {
                 "en_name": "Ink-Shaded Red-Crowned Crane",
-                "tw_name": "",
+                "tw_name": "墨影丹頂鶴",
                 "level": 276,
                 "hp": 10663732800,
                 "exp": 2939616
             },
             {
                 "en_name": "Drowsy Autumn Researcher",
-                "tw_name": "",
+                "tw_name": "失色的秋天研究者",
                 "level": 277,
                 "hp": 10828381200,
                 "exp": 2981010
             },
             {
                 "en_name": "Inkblot Sable",
-                "tw_name": "",
+                "tw_name": "墨水痕雪貂",
                 "level": 277,
                 "hp": 10828381200,
                 "exp": 2981010
             },
             {
                 "en_name": "Harsh Winter Researcher",
-                "tw_name": "",
+                "tw_name": "殘酷的冬天研究者",
                 "level": 278,
                 "hp": 10994286240,
                 "exp": 3017988
             },
             {
                 "en_name": "Ink-Winged Owl",
-                "tw_name": "",
+                "tw_name": "墨翅貓頭鷹",
                 "level": 279,
                 "hp": 11161447920,
                 "exp": 3059716
@@ -1363,42 +1363,42 @@
         "monster": [
             {
                 "en_name": "High Flora Foot Soldier",
-                "tw_name": "",
+                "tw_name": "亥雷普步兵",
                 "level": 280,
                 "hp": 14728826112,
                 "exp": 3436027
             },
             {
                 "en_name": "High Flora Magician",
-                "tw_name": "",
+                "tw_name": "亥雷普法師",
                 "level": 281,
                 "hp": 14949403560,
                 "exp": 3482914
             },
             {
                 "en_name": "High Flora Armored Soldier",
-                "tw_name": "",
+                "tw_name": "亥雷普裝甲兵",
                 "level": 282,
                 "hp": 15171614640,
                 "exp": 3524768
             },
             {
                 "en_name": "High Flora Longswordsman",
-                "tw_name": "",
+                "tw_name": "亥雷普長劍兵",
                 "level": 283,
                 "hp": 15405075504,
                 "exp": 3572010
             },
             {
                 "en_name": "Frozen Flora Foot Soldier",
-                "tw_name": "",
+                "tw_name": "冰凍的雷普步兵",
                 "level": 284,
                 "hp": 15630628104,
                 "exp": 3614278
             },
             {
                 "en_name": "Frozen Flora Magician",
-                "tw_name": "",
+                "tw_name": "冰凍的雷普法師",
                 "level": 284,
                 "hp": 15630628104,
                 "exp": 3614278
@@ -1413,56 +1413,56 @@
         "monster": [
             {
                 "en_name": "Despairing Guard",
-                "tw_name": "",
+                "tw_name": "絕望的守衛",
                 "level": 285,
                 "hp": 20627681750,
                 "exp": 4062965
             },
             {
                 "en_name": "Monstrous Shadow Bird",
-                "tw_name": "",
+                "tw_name": "黑暗侵襲的怪鳥",
                 "level": 286,
                 "hp": 20925241640,
                 "exp": 4110304
             },
             {
                 "en_name": "Abyssal Guard",
-                "tw_name": "",
+                "tw_name": "深淵的看守",
                 "level": 286,
                 "hp": 20925241640,
                 "exp": 4110304
             },
             {
                 "en_name": "Despairing Hunter",
-                "tw_name": "",
+                "tw_name": "絕望的獵人",
                 "level": 287,
                 "hp": 21224925234,
                 "exp": 4163751
             },
             {
                 "en_name": "Shadowy Black Panther",
-                "tw_name": "",
+                "tw_name": "黑暗侵襲的獵豹",
                 "level": 288,
                 "hp": 21539716086,
                 "exp": 4217526
             },
             {
                 "en_name": "Abyssal Hunter",
-                "tw_name": "",
+                "tw_name": "深淵的獵人",
                 "level": 288,
                 "hp": 21539716086,
                 "exp": 4217526
             },
             {
                 "en_name": "Knight of the Source",
-                "tw_name": "",
+                "tw_name": "接近根源的騎士",
                 "level": 289,
                 "hp": 21843743620,
                 "exp": 4265489
             },
             {
                 "en_name": "Priest of the Source",
-                "tw_name": "",
+                "tw_name": "接近根源的祭司",
                 "level": 289,
                 "hp": 21843743620,
                 "exp": 4265489
@@ -1477,49 +1477,49 @@
         "monster": [
             {
                 "en_name": "Ash-Devouring Soul",
-                "tw_name": "",
+                "tw_name": "吞食灰燼的邪念",
                 "level": 290,
                 "hp": 28811166384,
                 "exp": 4793318
             },
             {
                 "en_name": "Silence-Swallowing Soul",
-                "tw_name": "",
+                "tw_name": "吞噬沉默的邪念",
                 "level": 291,
                 "hp": 29229292400,
                 "exp": 4847012
             },
             {
                 "en_name": "Soul Slayer",
-                "tw_name": "",
+                "tw_name": "靈魂屠殺者",
                 "level": 291,
                 "hp": 29229292400,
                 "exp": 4847012
             },
             {
                 "en_name": "Judge of Storms",
-                "tw_name": "",
+                "tw_name": "暴風的審判者",
                 "level": 292,
                 "hp": 29633050040,
                 "exp": 4907812
             },
             {
                 "en_name": "Executor of Eternity",
-                "tw_name": "",
+                "tw_name": "永恆的執行者",
                 "level": 293,
                 "hp": 30057073992,
                 "exp": 4968977
             },
             {
                 "en_name": "Night Guide",
-                "tw_name": "",
+                "tw_name": "夜的引導著",
                 "level": 294,
                 "hp": 30484109656,
                 "exp": 5023491
             },
             {
                 "en_name": "Phantasmal Guide",
-                "tw_name": "",
+                "tw_name": "幻影的引導著",
                 "level": 294,
                 "hp": 30484109656,
                 "exp": 5023491
