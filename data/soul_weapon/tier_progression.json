@@ -1,0 +1,142 @@
+{
+  "source": "https://truth.bahamut.com.tw/s01/202607/forum/7650/a6c60a24f95448d8d3bbca4df621d267.JPG",
+  "tierUpgradeRule": "達到等級需求後，單人擊敗清單中任意1個BOSS即可完成升階任務。",
+  "tierUpgradeRequirements": [
+    {
+      "fromTier": 1,
+      "toTier": 2,
+      "requiredLevel": 10,
+      "eligibleBosses": [
+        {"boss": "露希妲", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "威爾", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "戴斯克", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "頓凱爾", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "史烏", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "戴米安", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "真·希拉", "difficulty": "普通", "difficultyKey": "normal"}
+      ]
+    },
+    {
+      "fromTier": 2,
+      "toTier": 3,
+      "requiredLevel": 20,
+      "eligibleBosses": [
+        {"boss": "露希妲", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "威爾", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "守護天使綠水靈", "difficulty": "混沌", "difficultyKey": "chaos"},
+        {"boss": "戴斯克", "difficulty": "混沌", "difficultyKey": "chaos"},
+        {"boss": "頓凱爾", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "真·希拉", "difficulty": "困難", "difficultyKey": "hard"}
+      ]
+    },
+    {
+      "fromTier": 3,
+      "toTier": 4,
+      "requiredLevel": 30,
+      "eligibleBosses": [
+        {"boss": "受選的賽蓮", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "瑪麗西亞", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "監視者卡洛斯", "difficulty": "容易", "difficultyKey": "easy"},
+        {"boss": "最初的敵對者", "difficulty": "容易", "difficultyKey": "easy"}
+      ]
+    },
+    {
+      "fromTier": 4,
+      "toTier": 5,
+      "requiredLevel": 40,
+      "eligibleBosses": [
+        {"boss": "受選的賽蓮", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "咖凌", "difficulty": "容易", "difficultyKey": "easy"},
+        {"boss": "監視者卡洛斯", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "最初的敵對者", "difficulty": "普通", "difficultyKey": "normal"}
+      ]
+    },
+    {
+      "fromTier": 5,
+      "toTier": 6,
+      "requiredLevel": 50,
+      "eligibleBosses": [
+        {"boss": "史烏", "difficulty": "終極", "difficultyKey": "extreme"},
+        {"boss": "燦爛的凶星", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "咖凌", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "監視者卡洛斯", "difficulty": "混沌", "difficultyKey": "chaos"},
+        {"boss": "林波", "difficulty": "普通", "difficultyKey": "normal"}
+      ]
+    },
+    {
+      "fromTier": 6,
+      "toTier": 7,
+      "requiredLevel": 60,
+      "eligibleBosses": [
+        {"boss": "受選的賽蓮", "difficulty": "終極", "difficultyKey": "extreme"},
+        {"boss": "巴德利斯", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "咖凌", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "最初的敵對者", "difficulty": "困難", "difficultyKey": "hard"}
+      ]
+    },
+    {
+      "fromTier": 7,
+      "toTier": 8,
+      "requiredLevel": 70,
+      "eligibleBosses": [
+        {"boss": "尤比太", "difficulty": "普通", "difficultyKey": "normal"},
+        {"boss": "林波", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "燦爛的凶星", "difficulty": "困難", "difficultyKey": "hard"}
+      ]
+    },
+    {
+      "fromTier": 8,
+      "toTier": 9,
+      "requiredLevel": 80,
+      "eligibleBosses": [
+        {"boss": "巴德利斯", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "監視者卡洛斯", "difficulty": "終極", "difficultyKey": "extreme"},
+        {"boss": "最初的敵對者", "difficulty": "終極", "difficultyKey": "extreme"},
+        {"boss": "咖凌", "difficulty": "終極", "difficultyKey": "extreme"}
+      ]
+    },
+    {
+      "fromTier": 9,
+      "toTier": 10,
+      "requiredLevel": 90,
+      "eligibleBosses": [
+        {"boss": "尤比太", "difficulty": "困難", "difficultyKey": "hard"},
+        {"boss": "瑪麗西亞", "difficulty": "終極", "difficultyKey": "extreme"}
+      ]
+    }
+  ],
+  "resonanceEffect": {
+    "stat": "物攻/魔攻",
+    "unit": "flat",
+    "isCompleteLevelTable": false,
+    "note": "每個等級增加的數值均有變化，表格僅列出部分等級。",
+    "checkpoints": {
+      "10": 30,
+      "20": 40,
+      "30": 50,
+      "40": 60,
+      "50": 70,
+      "60": 80,
+      "70": 100,
+      "80": 120,
+      "90": 140,
+      "100": 160
+    }
+  },
+  "spiritWill": {
+    "stat": "攻擊力",
+    "unit": "percent",
+    "valuesByTier": {
+      "1": 5,
+      "2": 7,
+      "3": 10,
+      "4": 20,
+      "5": 27,
+      "6": 35,
+      "7": 70,
+      "8": 80,
+      "9": 100,
+      "10": 110
+    }
+  }
+}

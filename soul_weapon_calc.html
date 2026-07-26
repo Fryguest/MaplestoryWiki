@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./static/css/bootstrap.min.css">
+  <link rel="icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>灵魂武器进度计算器</title>
+  <style>
+    .remain-center {
+      padding-left: 240px;
+    }
+
+    .remain-center .inner {
+      margin: 0 auto;
+      width: min(1100px, calc(100vw - 240px));
+      min-width: 320px;
+      padding: 0 12px;
+    }
+
+    .result-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar-container"></div>
+
+  <div class="container my-4">
+    <div class="remain-center">
+      <div class="inner">
+        <h1 class="mb-4">灵魂武器进度计算器</h1>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header fw-bold">进度设置</div>
+          <div class="card-body">
+            <form id="calculatorForm">
+              <div class="row g-3 align-items-end">
+                <div class="col-12 col-md-3">
+                  <label for="currentLevel" class="form-label">当前等级</label>
+                  <input id="currentLevel" class="form-control" type="number" min="1" max="100" step="1" value="1">
+                </div>
+                <div class="col-12 col-md-3">
+                  <label for="targetLevel" class="form-label">目标等级</label>
+                  <input id="targetLevel" class="form-control" type="number" min="1" max="100" step="1" value="100">
+                </div>
+                <div class="col-12 col-md-3">
+                  <label for="currentShards" class="form-label">当前剩余碎片</label>
+                  <input id="currentShards" class="form-control" type="number" min="0" step="1" value="0">
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="weeklyBoss" class="form-label">每周攻略的最强 BOSS</label>
+                  <select id="weeklyBoss" class="form-select" disabled>
+                    <option value="">数据加载中...</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <button id="calculateBtn" class="btn btn-primary" type="submit" disabled>计算进度</button>
+                </div>
+              </div>
+            </form>
+
+            <div id="errorMessage" class="alert alert-danger mt-3 mb-0 d-none" role="alert"></div>
+            <div class="form-text mt-3">结果仅计算灵魂碎片需求，不考虑升阶任务限制。</div>
+          </div>
+        </div>
+
+        <div id="resultCard" class="card shadow-sm d-none">
+          <div class="card-header fw-bold">计算结果</div>
+          <div class="card-body">
+            <div id="resultSummary" class="alert alert-success"></div>
+            <div class="row g-3 text-center">
+              <div class="col-6 col-lg">
+                <div class="small text-muted">升级总需求</div>
+                <div id="totalRequired" class="result-value">0</div>
+              </div>
+              <div class="col-6 col-lg">
+                <div class="small text-muted">当前持有</div>
+                <div id="availableShards" class="result-value">0</div>
+              </div>
+              <div class="col-6 col-lg">
+                <div class="small text-muted">尚缺碎片</div>
+                <div id="remainingRequired" class="result-value">0</div>
+              </div>
+              <div class="col-6 col-lg">
+                <div class="small text-muted">每周获得</div>
+                <div id="weeklyIncome" class="result-value">0</div>
+              </div>
+              <div class="col-12 col-lg">
+                <div class="small text-muted">预计周数</div>
+                <div id="requiredWeeks" class="result-value">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let shardsToReachLevel = null;
+    let bossRewards = [];
+
+    function getBasePath() {
+      const path = window.location.pathname;
+      const match = path.match(/^\/([^/]+)\//);
+      return match ? `/${match[1]}` : '';
+    }
+
+    const basePath = getBasePath();
+
+    async function fetchJson(path) {
+      const response = await fetch(`${basePath}${path}`);
+      if (!response.ok) {
+        throw new Error(`加载 ${path} 失败：HTTP ${response.status}`);
+      }
+      return response.json();
+    }
+
+    function showError(message) {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = message;
+      errorMessage.classList.remove('d-none');
+    }
+
+    function clearError() {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = '';
+      errorMessage.classList.add('d-none');
+    }
+
+    function populateBossOptions() {
+      const weeklyBoss = document.getElementById('weeklyBoss');
+      weeklyBoss.innerHTML = '';
+
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = '请选择 BOSS';
+      weeklyBoss.appendChild(placeholder);
+
+      bossRewards.forEach((reward, index) => {
+        const option = document.createElement('option');
+        option.value = String(index);
+        option.textContent = `${reward.boss}（${reward.difficulty}）— ${reward.shards.toLocaleString('zh-CN')} 碎片/周`;
+        weeklyBoss.appendChild(option);
+      });
+
+      weeklyBoss.disabled = false;
+      document.getElementById('calculateBtn').disabled = false;
+    }
+
+    function validateData(levelData, bossData) {
+      if (!levelData || typeof levelData.shardsToReachLevel !== 'object') {
+        throw new Error('等级需求数据格式无效');
+      }
+
+      for (let level = 2; level <= 100; level += 1) {
+        const cost = levelData.shardsToReachLevel[String(level)];
+        if (!Number.isInteger(cost) || cost <= 0) {
+          throw new Error(`Lv.${level} 的碎片需求数据无效`);
+        }
+      }
+
+      if (!bossData || !Array.isArray(bossData.rewards) || bossData.rewards.length === 0) {
+        throw new Error('BOSS 奖励数据格式无效');
+      }
+
+      bossData.rewards.forEach(reward => {
+        if (!reward.boss || !reward.difficulty || !Number.isInteger(reward.shards) || reward.shards <= 0) {
+          throw new Error('BOSS 奖励数据包含无效记录');
+        }
+      });
+    }
+
+    async function loadCalculatorData() {
+      try {
+        const [levelData, bossData] = await Promise.all([
+          fetchJson('/data/soul_weapon/level_requirements.json'),
+          fetchJson('/data/soul_weapon/boss_rewards.json')
+        ]);
+        validateData(levelData, bossData);
+        shardsToReachLevel = levelData.shardsToReachLevel;
+        bossRewards = bossData.rewards;
+        populateBossOptions();
+      } catch (error) {
+        console.error('加载灵魂武器数据失败:', error);
+        showError(`数据加载失败：${error.message}`);
+      }
+    }
+
+    function readIntegerInput(id, label) {
+      const rawValue = document.getElementById(id).value.trim();
+      if (!/^\d+$/.test(rawValue)) {
+        throw new Error(`${label}必须是整数`);
+      }
+      const value = Number(rawValue);
+      if (!Number.isSafeInteger(value)) {
+        throw new Error(`${label}超出有效范围`);
+      }
+      return value;
+    }
+
+    function calculateProgress(event) {
+      event.preventDefault();
+      clearError();
+
+      try {
+        if (!shardsToReachLevel || bossRewards.length === 0) {
+          throw new Error('数据尚未加载完成');
+        }
+
+        const currentLevel = readIntegerInput('currentLevel', '当前等级');
+        const targetLevel = readIntegerInput('targetLevel', '目标等级');
+        const currentShards = readIntegerInput('currentShards', '当前剩余碎片');
+
+        if (currentLevel < 1 || currentLevel > 100) {
+          throw new Error('当前等级必须在 1 到 100 之间');
+        }
+        if (targetLevel < 1 || targetLevel > 100) {
+          throw new Error('目标等级必须在 1 到 100 之间');
+        }
+        if (targetLevel < currentLevel) {
+          throw new Error('目标等级不能低于当前等级');
+        }
+
+        const bossIndexValue = document.getElementById('weeklyBoss').value;
+        if (!/^\d+$/.test(bossIndexValue)) {
+          throw new Error('请选择每周攻略的 BOSS');
+        }
+        const bossIndex = Number(bossIndexValue);
+        const selectedBoss = bossRewards[bossIndex];
+        if (!selectedBoss) {
+          throw new Error('选择的 BOSS 无效');
+        }
+
+        let totalRequired = 0;
+        for (let level = currentLevel + 1; level <= targetLevel; level += 1) {
+          totalRequired += shardsToReachLevel[String(level)];
+        }
+
+        const remainingRequired = Math.max(totalRequired - currentShards, 0);
+        const requiredWeeks = remainingRequired === 0
+          ? 0
+          : Math.ceil(remainingRequired / selectedBoss.shards);
+
+        document.getElementById('totalRequired').textContent = totalRequired.toLocaleString('zh-CN');
+        document.getElementById('availableShards').textContent = currentShards.toLocaleString('zh-CN');
+        document.getElementById('remainingRequired').textContent = remainingRequired.toLocaleString('zh-CN');
+        document.getElementById('weeklyIncome').textContent = selectedBoss.shards.toLocaleString('zh-CN');
+        document.getElementById('requiredWeeks').textContent = requiredWeeks.toLocaleString('zh-CN');
+
+        const resultSummary = document.getElementById('resultSummary');
+        if (targetLevel === currentLevel) {
+          resultSummary.textContent = '目标等级与当前等级相同，无需升级。';
+        } else if (remainingRequired === 0) {
+          resultSummary.textContent = '当前持有的碎片已经足够达到目标等级。';
+        } else {
+          resultSummary.textContent = `每周攻略${selectedBoss.boss}（${selectedBoss.difficulty}），预计需要 ${requiredWeeks.toLocaleString('zh-CN')} 周达到 Lv.${targetLevel}。`;
+        }
+        document.getElementById('resultCard').classList.remove('d-none');
+      } catch (error) {
+        document.getElementById('resultCard').classList.add('d-none');
+        showError(error.message);
+      }
+    }
+
+    document.getElementById('calculatorForm').addEventListener('submit', calculateProgress);
+    loadCalculatorData();
+
+    fetch(`${basePath}/sidebar.html`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+      })
+      .catch(error => {
+        console.error('加载侧边栏失败:', error);
+      });
+
+    function toggleSubMenu(id) {
+      const submenu = document.getElementById(id);
+      if (!submenu) {
+        return;
+      }
+      submenu.style.display =
+        submenu.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+
+</html>
