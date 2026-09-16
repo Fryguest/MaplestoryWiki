@@ -189,6 +189,20 @@
         </div>
         <div class="form-group">
             <div class="input-group">
+                <label class="skillname-label">起源3技能</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remainskill3frags"></label>
+            </div>
+            <div class="input-group">
+                <input id="skill3Level" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectskill3Level" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
                 <label class="skillname-label" id="masterLabel1">精通核心1</label>
             </div>
             <div class="input-group">
@@ -333,6 +347,20 @@
         </div>
         <div class="form-group">
             <div class="input-group">
+                <label class="skillname-label">通用3</label>
+            </div>
+            <div class="input-group">
+                <label class="needfrag-label" id="remaincommon3frags"></label>
+            </div>
+            <div class="input-group">
+                <input id="common3Level" class="level-input" type="number" min="0" max="30" step="1" required>
+            </div>
+            <div class="input-group">
+                <input id="objectcommon3Level" class="object-input" type="number" min="0" max="30" step="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
                 <label for="remainFragments">剩余碎片</label>
             </div>
             <div class="input-group">
@@ -386,7 +414,8 @@
             "commonLevel", "common2Level", "objectskillLevel", "objectskill2Level", "objectmasterLevel1", "objectmasterLevel2",
             "objectmasterLevel3", "objectmasterLevel4", "objectenhancementLevel1",
             "objectenhancementLevel2", "objectenhancementLevel3", "objectenhancementLevel4",
-            "objectcommonLevel", "objectcommon2Level", "remainFragments", "currentsoul"
+            "objectcommonLevel", "objectcommon2Level", "remainFragments", "currentsoul",
+            "skill3Level", "objectskill3Level", "common3Level", "objectcommon3Level"
         ];
 
         function saveToStorage() {
@@ -407,6 +436,10 @@
 
         function calculate() {
 
+            var skill3LevelArr = [140, 21, 26, 30, 34, 38, 43, 47, 51, 142, 62, 69, 77, 83, 91, 98, 105, 112, 120, 252, 128, 136, 145, 152, 161, 168, 177, 184, 193, 357];
+            var skill3LevelSoulArr = [7, 1, 1, 1, 1, 2, 2, 2, 2, 8, 2, 2, 3, 3, 3, 3, 3, 3, 3, 12, 4, 4, 4, 4, 4, 4, 5, 5, 5, 14];
+            var common3LevelArr = [90, 25, 30, 35, 40, 45, 50, 55, 60, 180, 73, 81, 90, 98, 107, 115, 124, 132, 141, 315, 151, 160, 170, 179, 189, 198, 208, 217, 227, 450];
+            var common3LevelSoulArr = [4, 1, 1, 1, 2, 2, 2, 3, 3, 9, 3, 3, 3, 3, 4, 4, 4, 4, 4, 14, 4, 5, 5, 5, 5, 5, 5, 5, 6, 18];
             var skillLevelArr = [100, 30, 35, 40, 45, 50, 55, 60, 65, 200, 80, 90, 100, 110, 120, 130, 140, 150, 160, 350, 170, 180, 190, 200, 210, 220, 230, 240, 250, 500, 0];
             var masterLevelArr = [50, 15, 18, 20, 23, 25, 28, 30, 33, 100, 40, 45, 50, 55, 60, 65, 70, 75, 80, 175, 85, 90, 95, 100, 105, 110, 115, 120, 125, 250, 0];
             var enhancementLevelArr = [75, 23, 27, 30, 34, 38, 42, 45, 49, 150, 60, 68, 75, 83, 90, 98, 105, 113, 120, 263, 128, 135, 143, 150, 158, 165, 173, 180, 188, 375, 0];
@@ -456,7 +489,11 @@
 
             var currentLevel = [skillLevel, skill2Level, masterLevel1, masterLevel2, masterLevel3, masterLevel4, enhancementLevel1, enhancementLevel2, enhancementLevel3, enhancementLevel4, commonLevel, common2Level, remainFragments];
             var objectLevel = [objectskillLevel, objectskill2Level, objectmasterLevel1, objectmasterLevel2, objectmasterLevel3, objectmasterLevel4, objectenhancementLevel1, objectenhancementLevel2, objectenhancementLevel3, objectenhancementLevel4, objectcommonLevel, objectcommon2Level]
-            for (let i = 0; i < 12; i++) {
+            currentLevel[12] = parseInt(document.getElementById('skill3Level').value) || 0;
+            currentLevel[13] = parseInt(document.getElementById('common3Level').value) || 0;
+            objectLevel[12] = parseInt(document.getElementById('objectskill3Level').value) || 0;
+            objectLevel[13] = parseInt(document.getElementById('objectcommon3Level').value) || 0;
+            for (let i = 0; i < 14; i++) {
                 if (currentLevel[i] > objectLevel[i]) {
                     objectLevel[i] = currentLevel[i];
                 }
@@ -486,10 +523,15 @@
             var oe4 = enhancementLevelArr.slice(0, objectLevel[9]).reduce((a, b) => a + b, 0);
             var oc1 = commonLevelArr.slice(0, objectLevel[10]).reduce((a, b) => a + b, 0);
             var oc2 = commonLevelArr.slice(0, objectLevel[11]).reduce((a, b) => a + b, 0);
-            var currentConsumed = s1 + s2 + m1 + m2 + m3 + m4 + e1 + e2 + e3 + e4 + c1 + c2 + remainFragments;
-            var objectTotalFrags = os1 + os2 + om1 + om2 + om3 + om4 + oe1 + oe2 + oe3 + oe4 + oc1 + oc2;
+            var s3 = skill3LevelArr.slice(0, currentLevel[12]).reduce((a, b) => a + b, 0);
+            var c3 = common3LevelArr.slice(0, currentLevel[13]).reduce((a, b) => a + b, 0);
+            var os3 = skill3LevelArr.slice(0, objectLevel[12]).reduce((a, b) => a + b, 0);
+            var oc3 = common3LevelArr.slice(0, objectLevel[13]).reduce((a, b) => a + b, 0);
+            var currentConsumed = s1 + s2 + m1 + m2 + m3 + m4 + e1 + e2 + e3 + e4 + c1 + c2 + s3 + c3 + remainFragments;
+            var objectTotalFrags = os1 + os2 + om1 + om2 + om3 + om4 + oe1 + oe2 + oe3 + oe4 + oc1 + oc2 + os3 + oc3;
             var needFrag = objectTotalFrags - currentConsumed;
             var objectNeedFrags = [os1 - s1, os2 - s2, om1 - m1, om2 - m2, om3 - m3, om4 - m4, oe1 - e1, oe2 - e2, oe3 - e3, oe4 - e4, oc1 - c1, oc2 - c2];
+            objectNeedFrags.push(os3 - s3, oc3 - c3);
             var objectNeedFrag = objectNeedFrags.reduce((a, b) => a + b, 0);
             var s1s = skillLevelSoulArr.slice(0, currentLevel[0]).reduce((a, b) => a + b, 0);
             var s2s = skillLevelSoulArr.slice(0, currentLevel[1]).reduce((a, b) => a + b, 0);
@@ -515,10 +557,15 @@
             var oe4s = enhancementLevelSoulArr.slice(0, objectLevel[9]).reduce((a, b) => a + b, 0);
             var oc1s = commonLevelSoulArr.slice(0, objectLevel[10]).reduce((a, b) => a + b, 0);
             var oc2s = commonLevelSoulArr.slice(0, objectLevel[11]).reduce((a, b) => a + b, 0);
-            var consumedSoul = s1s + s2s + m1s + m2s + m3s + m4s + e1s + e2s + e3s + e4s + c1s + c2s + soul;
-            var objectTotalSoul = os1s + os2s + om1s + om2s + om3s + om4s + oe1s + oe2s + oe3s + oe4s + oc1s + oc2s;
+            var s3s = skill3LevelSoulArr.slice(0, currentLevel[12]).reduce((a, b) => a + b, 0);
+            var c3s = common3LevelSoulArr.slice(0, currentLevel[13]).reduce((a, b) => a + b, 0);
+            var os3s = skill3LevelSoulArr.slice(0, objectLevel[12]).reduce((a, b) => a + b, 0);
+            var oc3s = common3LevelSoulArr.slice(0, objectLevel[13]).reduce((a, b) => a + b, 0);
+            var consumedSoul = s1s + s2s + m1s + m2s + m3s + m4s + e1s + e2s + e3s + e4s + c1s + c2s + s3s + c3s + soul;
+            var objectTotalSoul = os1s + os2s + om1s + om2s + om3s + om4s + oe1s + oe2s + oe3s + oe4s + oc1s + oc2s + os3s + oc3s;
             var needSoul = objectTotalSoul - consumedSoul;
             var objectNeedSouls = [os1s - s1s, os2s - s2s, om1s - m1s, om2s - m2s, om3s - m3s, om4s - m4s, oe1s - e1s, oe2s - e2s, oe3s - e3s, oe4s - e4s, oc1s - c1s, oc2s - c2s];
+            objectNeedSouls.push(os3s - s3s, oc3s - c3s);
             var objectNeedSoul = objectNeedSouls.reduce((a, b) => a + b, 0);
 
             // 計算結果防呆
@@ -534,6 +581,8 @@
             }
 
             // 更新結果
+            document.getElementById('remainskill3frags').innerText = '已消耗:' + s3s + '/' + s3 + ' 还需:' + objectNeedSouls[12] + '/' + objectNeedFrags[12];
+            document.getElementById('remaincommon3frags').innerText = '已消耗:' + c3s + '/' + c3 + ' 还需:' + objectNeedSouls[13] + '/' + objectNeedFrags[13];
             document.getElementById('remainskillfrags').innerText = '已消耗:' + s1s + '/' + s1 + ' 还需:' + objectNeedSouls[0] + '/' + objectNeedFrags[0];
             document.getElementById('remainskill2frags').innerText = '已消耗:' + s2s + '/' + s2 + ' 还需:' + objectNeedSouls[1] + '/' + objectNeedFrags[1];
             document.getElementById('remainmasterfrags1').innerText = '已消耗:' + m1s + '/' + m1 + ' 还需:' + objectNeedSouls[2] + '/' + objectNeedFrags[2];
