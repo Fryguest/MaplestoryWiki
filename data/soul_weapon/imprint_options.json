@@ -1,0 +1,265 @@
+{
+  "source": "https://truth.bahamut.com.tw/s01/202607/forum/7650/b47c5eb0ee3e0907186f61497399414f.JPG",
+  "variantNote": "圖片未提供同名屬性兩行的正式分類名稱，variant僅表示同名行在圖片中的順序。",
+  "unavailableValue": null,
+  "resetCosts": {
+    "1": 20,
+    "2": 100,
+    "3": 200,
+    "4": 400,
+    "5": 700,
+    "6": 1200,
+    "7": 2000,
+    "8": 3000,
+    "9": 6000,
+    "10": 10000
+  },
+  "options": [
+    {
+      "property": "物理攻擊力",
+      "variant": 1,
+      "tiers": {
+        "1": {"value": 5, "unit": "flat"}, "2": {"value": 7, "unit": "flat"},
+        "3": {"value": 10, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 5, "unit": "percent"},
+        "7": {"value": 8, "unit": "percent"}, "8": {"value": 9, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 12, "unit": "percent"}
+      }
+    },
+    {
+      "property": "物理攻擊力",
+      "variant": 2,
+      "tiers": {
+        "1": {"value": 3, "unit": "flat"}, "2": {"value": 5, "unit": "flat"},
+        "3": {"value": 7, "unit": "flat"}, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 10, "unit": "percent"}, "10": {"value": 11, "unit": "percent"}
+      }
+    },
+    {
+      "property": "魔法攻擊力",
+      "variant": 1,
+      "tiers": {
+        "1": {"value": 5, "unit": "flat"}, "2": {"value": 7, "unit": "flat"},
+        "3": {"value": 10, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 5, "unit": "percent"},
+        "7": {"value": 8, "unit": "percent"}, "8": {"value": 9, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 12, "unit": "percent"}
+      }
+    },
+    {
+      "property": "魔法攻擊力",
+      "variant": 2,
+      "tiers": {
+        "1": {"value": 3, "unit": "flat"}, "2": {"value": 5, "unit": "flat"},
+        "3": {"value": 7, "unit": "flat"}, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 10, "unit": "percent"}, "10": {"value": 11, "unit": "percent"}
+      }
+    },
+    {
+      "property": "Boss怪物傷害",
+      "variant": null,
+      "tiers": {
+        "1": null, "2": null, "3": null, "4": {"value": 3, "unit": "percent"},
+        "5": {"value": 5, "unit": "percent"}, "6": {"value": 10, "unit": "percent"},
+        "7": {"value": 15, "unit": "percent"}, "8": {"value": 20, "unit": "percent"},
+        "9": {"value": 25, "unit": "percent"}, "10": {"value": 30, "unit": "percent"}
+      }
+    },
+    {
+      "property": "傷害",
+      "variant": 1,
+      "tiers": {
+        "1": null, "2": null, "3": null, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 5, "unit": "percent"},
+        "7": {"value": 8, "unit": "percent"}, "8": {"value": 9, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 12, "unit": "percent"}
+      }
+    },
+    {
+      "property": "傷害",
+      "variant": 2,
+      "tiers": {
+        "1": null, "2": null, "3": null, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 10, "unit": "percent"}, "10": {"value": 11, "unit": "percent"}
+      }
+    },
+    {
+      "property": "無視怪物防禦率",
+      "variant": 1,
+      "tiers": {
+        "1": null, "2": null, "3": null, "4": {"value": 7, "unit": "percent"},
+        "5": {"value": 10, "unit": "percent"}, "6": {"value": 13, "unit": "percent"},
+        "7": {"value": 20, "unit": "percent"}, "8": {"value": 25, "unit": "percent"},
+        "9": {"value": 35, "unit": "percent"}, "10": {"value": 40, "unit": "percent"}
+      }
+    },
+    {
+      "property": "無視怪物防禦率",
+      "variant": 2,
+      "tiers": {
+        "1": null, "2": null, "3": null, "4": {"value": 5, "unit": "percent"},
+        "5": {"value": 7, "unit": "percent"}, "6": {"value": 10, "unit": "percent"},
+        "7": {"value": 15, "unit": "percent"}, "8": {"value": 20, "unit": "percent"},
+        "9": {"value": 30, "unit": "percent"}, "10": {"value": 35, "unit": "percent"}
+      }
+    },
+    {
+      "property": "爆擊機率",
+      "variant": 1,
+      "tiers": {
+        "1": null, "2": null, "3": null, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 4, "unit": "percent"},
+        "7": {"value": 7, "unit": "percent"}, "8": {"value": 10, "unit": "percent"},
+        "9": {"value": 13, "unit": "percent"}, "10": {"value": 15, "unit": "percent"}
+      }
+    },
+    {
+      "property": "爆擊機率",
+      "variant": 2,
+      "tiers": {
+        "1": null, "2": null, "3": null, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 5, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 14, "unit": "percent"}
+      }
+    },
+    {
+      "property": "全屬性",
+      "variant": 1,
+      "tiers": {
+        "1": null, "2": {"value": 2, "unit": "flat"}, "3": {"value": 4, "unit": "flat"},
+        "4": {"value": 7, "unit": "flat"}, "5": {"value": 10, "unit": "flat"},
+        "6": {"value": 2, "unit": "percent"}, "7": {"value": 4, "unit": "percent"},
+        "8": {"value": 7, "unit": "percent"}, "9": {"value": 10, "unit": "percent"},
+        "10": {"value": 12, "unit": "percent"}
+      }
+    },
+    {
+      "property": "全屬性",
+      "variant": 2,
+      "tiers": {
+        "1": null, "2": {"value": 1, "unit": "flat"}, "3": {"value": 3, "unit": "flat"},
+        "4": {"value": 5, "unit": "flat"}, "5": {"value": 8, "unit": "flat"},
+        "6": {"value": 1, "unit": "percent"}, "7": {"value": 3, "unit": "percent"},
+        "8": {"value": 5, "unit": "percent"}, "9": {"value": 8, "unit": "percent"},
+        "10": {"value": 11, "unit": "percent"}
+      }
+    },
+    {
+      "property": "STR",
+      "variant": 1,
+      "tiers": {
+        "1": {"value": 5, "unit": "flat"}, "2": {"value": 7, "unit": "flat"},
+        "3": {"value": 10, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 5, "unit": "percent"},
+        "7": {"value": 8, "unit": "percent"}, "8": {"value": 10, "unit": "percent"},
+        "9": {"value": 13, "unit": "percent"}, "10": {"value": 15, "unit": "percent"}
+      }
+    },
+    {
+      "property": "STR",
+      "variant": 2,
+      "tiers": {
+        "1": {"value": 3, "unit": "flat"}, "2": {"value": 5, "unit": "flat"},
+        "3": {"value": 7, "unit": "flat"}, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 14, "unit": "percent"}
+      }
+    },
+    {
+      "property": "DEX",
+      "variant": 1,
+      "tiers": {
+        "1": {"value": 5, "unit": "flat"}, "2": {"value": 7, "unit": "flat"},
+        "3": {"value": 10, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 5, "unit": "percent"},
+        "7": {"value": 8, "unit": "percent"}, "8": {"value": 10, "unit": "percent"},
+        "9": {"value": 13, "unit": "percent"}, "10": {"value": 15, "unit": "percent"}
+      }
+    },
+    {
+      "property": "DEX",
+      "variant": 2,
+      "tiers": {
+        "1": {"value": 3, "unit": "flat"}, "2": {"value": 5, "unit": "flat"},
+        "3": {"value": 7, "unit": "flat"}, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 14, "unit": "percent"}
+      }
+    },
+    {
+      "property": "INT",
+      "variant": 1,
+      "tiers": {
+        "1": {"value": 5, "unit": "flat"}, "2": {"value": 7, "unit": "flat"},
+        "3": {"value": 10, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 5, "unit": "percent"},
+        "7": {"value": 8, "unit": "percent"}, "8": {"value": 10, "unit": "percent"},
+        "9": {"value": 13, "unit": "percent"}, "10": {"value": 15, "unit": "percent"}
+      }
+    },
+    {
+      "property": "INT",
+      "variant": 2,
+      "tiers": {
+        "1": {"value": 3, "unit": "flat"}, "2": {"value": 5, "unit": "flat"},
+        "3": {"value": 7, "unit": "flat"}, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 14, "unit": "percent"}
+      }
+    },
+    {
+      "property": "LUK",
+      "variant": 1,
+      "tiers": {
+        "1": {"value": 5, "unit": "flat"}, "2": {"value": 7, "unit": "flat"},
+        "3": {"value": 10, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 5, "unit": "percent"},
+        "7": {"value": 8, "unit": "percent"}, "8": {"value": 10, "unit": "percent"},
+        "9": {"value": 13, "unit": "percent"}, "10": {"value": 15, "unit": "percent"}
+      }
+    },
+    {
+      "property": "LUK",
+      "variant": 2,
+      "tiers": {
+        "1": {"value": 3, "unit": "flat"}, "2": {"value": 5, "unit": "flat"},
+        "3": {"value": 7, "unit": "flat"}, "4": {"value": 1, "unit": "percent"},
+        "5": {"value": 2, "unit": "percent"}, "6": {"value": 3, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 14, "unit": "percent"}
+      }
+    },
+    {
+      "property": "MaxHP",
+      "variant": null,
+      "tiers": {
+        "1": {"value": 200, "unit": "flat"}, "2": {"value": 300, "unit": "flat"},
+        "3": {"value": 400, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 4, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 13, "unit": "percent"}
+      }
+    },
+    {
+      "property": "MaxMP",
+      "variant": null,
+      "tiers": {
+        "1": {"value": 200, "unit": "flat"}, "2": {"value": 300, "unit": "flat"},
+        "3": {"value": 400, "unit": "flat"}, "4": {"value": 2, "unit": "percent"},
+        "5": {"value": 3, "unit": "percent"}, "6": {"value": 4, "unit": "percent"},
+        "7": {"value": 6, "unit": "percent"}, "8": {"value": 8, "unit": "percent"},
+        "9": {"value": 11, "unit": "percent"}, "10": {"value": 13, "unit": "percent"}
+      }
+    }
+  ]
+}

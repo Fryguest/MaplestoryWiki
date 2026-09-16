@@ -1,0 +1,58 @@
+{
+  "source": "https://truth.bahamut.com.tw/s01/202607/forum/7650/97a65028e4763d86dc478da692fc9c24.JPG",
+  "systemName": "靈魂武器",
+  "releaseDate": "7/30",
+  "eligibility": {
+    "minimumWeaponLevel": 150,
+    "mustBeUnexchangeable": true,
+    "description": "Lv150以上且不可交換狀態的武器才可啟用靈魂武器系統。"
+  },
+  "weaponLevel": {
+    "minimum": 1,
+    "maximum": 100,
+    "effect": "影響共鳴效果。"
+  },
+  "weaponTier": {
+    "minimum": 1,
+    "maximum": 10,
+    "effects": [
+      "影響靈魂的鬥志。",
+      "影響靈魂的烙印效果。"
+    ],
+    "upgradeRequirement": "需達到指定靈魂武器等級＋單獨攻略特定BOSS，才能提升靈魂武器階級。"
+  },
+  "effects": {
+    "spiritWill": {
+      "name": "靈魂的鬥志",
+      "type": "active",
+      "description": "增加攻擊力%的主動技能。",
+      "cooldownSeconds": 120,
+      "durationSeconds": 40,
+      "availableLocations": [
+        "公會地下水道",
+        "拳擊機",
+        "龍之島"
+      ]
+    },
+    "spiritImprint": {
+      "name": "靈魂的烙印",
+      "type": "passive",
+      "description": "增加特定能力值的被動效果。",
+      "tierUpgradeRule": "提升階級時將保留既有的靈魂的烙印屬性；需要在提升後的階級重新設定，才能獲得新階級的數值。"
+    },
+    "resonance": {
+      "name": "共鳴效果",
+      "type": "passive",
+      "description": "增加攻擊力的被動效果。"
+    }
+  },
+  "spiritShards": {
+    "acquisition": "透過單獨攻略BOSS獲得。",
+    "uses": [
+      "提升武器等級",
+      "重設烙印能力"
+    ],
+    "weeklyRewardRule": "根據當週以單人攻略的最強BOSS（包含練習模式），可獲得固定數量的靈魂碎片。",
+    "recordResetTime": "每週四0:00"
+  }
+}
