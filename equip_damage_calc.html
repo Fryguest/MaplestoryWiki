@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>装备收益计算器</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 24px; background: #eef8fa; color: #183535; font-family: Arial, sans-serif; }
+        main { max-width: 1200px; margin: auto; }
+        h1 { font-size: 24px; }
+        h2 { font-size: 18px; margin-top: 0; }
+        section, article { padding: 20px; margin-bottom: 16px; background: white; border-radius: 12px; }
+        .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 12px; }
+        label { display: grid; gap: 6px; font-size: 13px; }
+        input, select, button { padding: 9px; border: 1px solid #bddbd7; border-radius: 6px; font: inherit; min-width: 0; }
+        input, select { width: 100%; }
+        button { background: #00796b; color: white; cursor: pointer; }
+        button:disabled { opacity: .5; cursor: wait; }
+        #name { width: 240px; }
+        #status { color: #b00020; }
+        .equip-head { justify-content: space-between; margin-bottom: 12px; }
+        .equip-head select { width: 120px; }
+        summary { cursor: pointer; margin: 12px 0; }
+        .equip-compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+        .equip-side { min-width: 0; padding: 16px; background: #f5faf9; border-radius: 10px; }
+        .equip-side h3 { margin: 0 0 12px; font-size: 15px; }
+        .equip-identity { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .equip-icon-box { width: 56px; height: 56px; flex: 0 0 56px; display: grid; place-items: center; background: #e7f1ef; border-radius: 8px; }
+        .equip-icon { width: 40px; height: 40px; object-fit: contain; }
+        .equip-identity input { flex: 1; }
+        .equip-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
+        .equip-value { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+        .equip-potentials { font-size: 13px; line-height: 1.7; white-space: pre-line; }
+        .candidate .grid { margin-top: 12px; }
+        .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .results strong { display: block; font-size: 24px; margin-top: 8px; overflow-wrap: anywhere; }
+        [hidden] { display: none !important; }
+        @media (max-width: 600px) { body { padding: 12px; } .results { grid-template-columns: 1fr; } }
+        @media (max-width: 760px) { .equip-compare { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<main>
+    <h1>装备收益计算器</h1>
+    <section>
+        <div class="row">
+            <input id="name" placeholder="角色名字" aria-label="角色名字">
+            <button id="query" type="button">导入当前装备</button>
+            <span id="character"></span>
+        </div>
+        <p id="status" role="status"></p>
+    </section>
+    <form id="calculator">
+        <section>
+            <h2>当前属性与木桩</h2>
+            <div class="grid">
+                <label>职业<input id="jobInfo" type="text" readonly></label>
+                <label>主属性<input id="mainStatDisplay" type="text" readonly></label>
+                <label>副属性<input id="subStatDisplay" type="text" readonly></label>
+                <label>攻击类型<input id="attackTypeDisplay" type="text" readonly></label>
+            </div>
+            <div id="baseline" class="grid" style="margin-top:12px"></div>
+        </section>
+        <section>
+            <h2>装备替换</h2>
+            <div id="equipment"></div>
+        </section>
+        <section>
+            <button id="calculate" type="submit" disabled>计算换装收益</button>
+            <p id="error" role="alert"></p>
+            <div id="result" class="results" hidden>
+                <div>当前伤害<strong id="oldDamage"></strong></div>
+                <div>预计伤害<strong id="newDamage"></strong></div>
+                <div>提升比例<strong id="gain"></strong></div>
+            </div>
+        </section>
+    </form>
+</main>
+<script>
+    const $ = id => document.getElementById(id);
+    const attributes = ["str", "dex", "int", "luk"];
+    let equipmentFields = [];
+
+    function getEquipmentFields(job) {
+        const attackLabel = job.attack_type === "magic_power" ? "魔法攻击力" : "攻击力";
+        return [
+            ...[...job.main_attr, ...job.sub_attr].flatMap(key => [
+                [key, key.toUpperCase()],
+                [key + "_pct", key.toUpperCase() + "%"]
+            ]),
+            ["all_stat", "全属性"],
+            ["all_pct", "全属性%"],
+            [job.attack_type, attackLabel],
+            [job.attack_type + "_pct", attackLabel + "%"],
+            ["damage", "伤害%"],
+            ["boss", "BOSS伤害%"],
+            ["crit_damage", "暴击伤害%"],
+            ["ied", "无视防御力%"]
+        ];
+    }
+    const baselineFields = [
+        ["damage", "伤害%"], ["boss", "BOSS伤害%"],
+        ["crit_damage", "暴击伤害%"],
+        ["ied", "无视防御%"], ["defense", "木桩防御率%"], ["measured", "实测总伤害"]
+    ];
+    let rows = [];
+    let currentJob = null;
+    let jobList = null;
+
+    function normalizeJobName(value) {
+        return String(value || "").normalize("NFKC").replace(/[\s、，,]/g, "");
+    }
+
+    async function loadJobList() {
+        if (jobList) return jobList;
+        const response = await fetch("data/job_list.json");
+        if (!response.ok) throw Error("职业数据读取失败");
+        const data = await response.json();
+        if (!Array.isArray(data)) throw Error("职业数据格式错误");
+        jobList = data;
+        return jobList;
+    }
+
+    function applyJob(className, jobs) {
+        $("jobInfo").value = className || "";
+        const job = jobs.find(item =>
+            normalizeJobName(item.tw_name) === normalizeJobName(className)
+        );
+        if (!job) throw Error(`未匹配职业：${className || "未知"}`);
+        $("mainStatDisplay").value = job.main_attr.map(key => key.toUpperCase()).join(" / ");
+        $("subStatDisplay").value = job.sub_attr.map(key => key.toUpperCase()).join(" / ") || "无";
+        $("attackTypeDisplay").value = job.attack_type === "magic_power" ? "魔法攻击" : "物理攻击";
+        if (["傑諾", "惡魔復仇者"].includes(job.tw_name)) {
+            throw Error(`暂不支持${job.tw_name}的伤害计算`);
+        }
+        if (
+            !Array.isArray(job.main_attr) || job.main_attr.length !== 1 ||
+            !Array.isArray(job.sub_attr) || !job.sub_attr.length ||
+            ![...job.main_attr, ...job.sub_attr].every(key => attributes.includes(key)) ||
+            new Set([...job.main_attr, ...job.sub_attr]).size !== job.main_attr.length + job.sub_attr.length ||
+            !["attack_power", "magic_power"].includes(job.attack_type)
+        ) throw Error("职业属性配置不支持");
+        currentJob = job;
+        equipmentFields = getEquipmentFields(job);
+        const statFields = [...job.main_attr, ...job.sub_attr].flatMap(key => {
+            const label = `${job.main_attr.includes(key) ? "主" : "副"}属性${key.toUpperCase()}`;
+            return [
+                [key, `面板${label}`],
+                [key + "_pct", `${label}%`],
+                [key + "_fixed", `不受%加成的${key.toUpperCase()}`]
+            ];
+        });
+        const attackLabel = job.attack_type === "magic_power" ? "魔法攻击力" : "攻击力";
+        $("baseline").replaceChildren();
+        baseline = makeFields($("baseline"), [
+            ...statFields,
+            ["attack", `基础${attackLabel}`],
+            ["attack_pct", `${attackLabel}%`],
+            ...baselineFields
+        ]);
+    }
+    function makeFields(container, defs, values = {}) {
+        const inputs = {};
+        for (const [key, text] of defs) {
+            const label = document.createElement("label");
+            label.textContent = text;
+            const input = document.createElement("input");
+            input.type = "number";
+            input.step = "any";
+            input.min = "0";
+            input.required = true;
+            input.value = values[key] ?? 0;
+            if (key === "ied") input.max = "100";
+            label.append(input);
+            container.append(label);
+            inputs[key] = input;
+        }
+        return inputs;
+    }
+    let baseline = {};
+    function values(inputs) {
+        return Object.fromEntries(Object.entries(inputs).map(([key, input]) => {
+            const n = Number(input.value);
+            if (!input.value.trim() || !Number.isFinite(n) || n < 0) throw Error("请填写有效的非负数值");
+            return [key, n];
+        }));
+    }
+    function number(v) {
+        const n = Number(String(v ?? 0).replaceAll(",", "").replace("%", ""));
+        return Number.isFinite(n) ? n : 0;
+    }
+    function equipmentValues(item) {
+        const out = Object.fromEntries(equipmentFields.map(([k]) => [k, 0]));
+        const selectedStats = [...currentJob.main_attr, ...currentJob.sub_attr];
+        const unparsed = [];
+        const add = (key, value) => {
+            if (!Object.hasOwn(out, key)) return;
+            if (key === "ied") {
+                out.ied = 100 * (1 - (1 - out.ied / 100) * (1 - value / 100));
+            } else {
+                out[key] += value;
+            }
+        };
+        const addAll = (value, percent) => {
+            add(percent ? "all_pct" : "all_stat", value);
+        };
+        const total = item.item_total_option || {};
+        for (const key of selectedStats) add(key, number(total[key]));
+        add(currentJob.attack_type, number(total[currentJob.attack_type]));
+        addAll(number(total.all_stat), true);
+        add("damage", number(total.damage));
+        add("boss", number(total.boss_damage));
+        add("ied", number(total.ignore_monster_armor));
+
+        const optionKeys = {
+            "攻擊力": "attack_power",
+            "攻击力": "attack_power",
+            "物理攻擊力": "attack_power",
+            "物理攻击力": "attack_power",
+            "魔法攻擊力": "magic_power",
+            "魔法攻击力": "magic_power",
+            "傷害": "damage",
+            "伤害": "damage",
+            "總傷害": "damage",
+            "总伤害": "damage",
+            "BOSS傷害": "boss",
+            "BOSS伤害": "boss",
+            "BOSS怪物傷害": "boss",
+            "BOSS怪物伤害": "boss",
+            "攻擊BOSS怪物時傷害": "boss",
+            "攻击BOSS怪物时伤害": "boss",
+            "爆擊傷害": "crit_damage",
+            "暴擊傷害": "crit_damage",
+            "暴击伤害": "crit_damage",
+            "爆击伤害": "crit_damage",
+            "無視防禦": "ied",
+            "無視防禦率": "ied",
+            "無視怪物防禦率": "ied",
+            "怪物無視防禦率": "ied",
+            "无视防御": "ied",
+            "无视防御率": "ied",
+            "无视怪物防御率": "ied"
+        };
+        const ignoredLabels = new Set([
+            "道具掉落率", "楓幣獲得量", "枫币获得量",
+            "移動速度", "移动速度", "跳躍力", "跳跃力",
+            "防禦力", "防御力", "MAXHP", "MAXMP",
+            "爆擊率", "暴擊率", "暴击率", "爆击率",
+            "一般怪物傷害", "一般怪物伤害"
+        ]);
+        const options = [
+            item.potential_option_1, item.potential_option_2, item.potential_option_3,
+            item.additional_potential_option_1, item.additional_potential_option_2,
+            item.additional_potential_option_3
+        ];
+        for (const option of options) {
+            const raw = String(option || "").trim();
+            if (!raw) continue;
+            const text = raw.normalize("NFKC").replace(/\s/g, "").toUpperCase();
+
+            // 按约定固定折算为32倍，不依赖角色等级。
+            const level = text.match(/^(?:以角色等級為準|以角色等级为准)?每9[級级](STR|DEX|INT|LUK)(?::\+?|\+)(\d+(?:\.\d+)?)$/);
+            if (level) {
+                add(level[1].toLowerCase(), Number(level[2]) * 32);
+                continue;
+            }
+
+            const match = text.match(/^(.+?)(?::\+?|\+)(\d+(?:\.\d+)?)(%)?$/);
+            if (!match) {
+                unparsed.push(raw);
+                continue;
+            }
+            const label = match[1];
+            const value = Number(match[2]);
+            const percent = Boolean(match[3]);
+            if (ignoredLabels.has(label)) continue;
+
+            const stat = label.toLowerCase();
+            if (attributes.includes(stat)) {
+                add(stat + (percent ? "_pct" : ""), value);
+                continue;
+            }
+            if (["全屬性", "全部屬性", "全属性", "全部属性"].includes(label)) {
+                addAll(value, percent);
+                continue;
+            }
+            const key = optionKeys[label];
+            if (!key) {
+                unparsed.push(raw);
+                continue;
+            }
+            if (["attack_power", "magic_power"].includes(key)) {
+                add(key + (percent ? "_pct" : ""), value);
+            } else if (percent && (key !== "ied" || value <= 100)) {
+                add(key, value);
+            } else {
+                unparsed.push(raw);
+            }
+        }
+        out.ied = Number(out.ied.toFixed(2));
+        return { stats: out, unparsed };
+    }
+    function makeEquipmentIcon() {
+        const box = document.createElement("div");
+        box.className = "equip-icon-box";
+        const img = document.createElement("img");
+        img.className = "equip-icon";
+        img.alt = "";
+        img.hidden = true;
+        img.referrerPolicy = "no-referrer";
+        img.onerror = () => { img.hidden = true; };
+        box.append(img);
+        return {
+            box,
+            update(value) {
+                img.hidden = true;
+                img.removeAttribute("src");
+                const text = String(value || "").trim();
+                if (!text) return;
+                try {
+                    const url = new URL(text);
+                    if (!["https:", "http:"].includes(url.protocol)) return;
+                    img.hidden = false;
+                    img.src = url.href;
+                } catch {}
+            }
+        };
+    }
+    function updateEquipmentFields() {
+        if (!currentJob) return;
+        const selectedStats = [...currentJob.main_attr, ...currentJob.sub_attr];
+        const attack = currentJob.attack_type;
+        for (const row of rows) {
+            for (const inputs of [row.original, row.replacement]) {
+                for (const [key, input] of Object.entries(inputs)) {
+                    const base = key.replace(/_pct$/, "");
+                    let visible = true;
+                    if (attributes.includes(base)) visible = selectedStats.includes(base);
+                    if (["attack_power", "magic_power"].includes(base)) visible = base === attack;
+                    input.parentElement.hidden = !visible;
+                    input.disabled = !visible || (inputs === row.replacement && row.mode.value !== "replace");
+                }
+            }
+        }
+    }
+    function renderEquipment(items) {
+        $("equipment").replaceChildren();
+        rows = items.filter(item => !["拼圖", "寶石"].includes(item.item_equipment_part)).map(item => {
+            const card = document.createElement("article");
+            const head = document.createElement("div");
+            head.className = "row equip-head";
+            const title = document.createElement("strong");
+            title.textContent = item.item_equipment_slot || "装备";
+            const mode = document.createElement("select");
+            mode.setAttribute("aria-label", `${title.textContent}操作`);
+            for (const [value, text] of [["keep", "保留"], ["remove", "脱掉"], ["replace", "替换"]]) mode.add(new Option(text, value));
+            head.append(title, mode);
+            const compare = document.createElement("div");
+            compare.className = "equip-compare";
+            const left = document.createElement("div");
+            left.className = "equip-side";
+            const leftTitle = document.createElement("h3");
+            leftTitle.textContent = "当前装备";
+            const identity = document.createElement("div");
+            identity.className = "equip-identity";
+            const currentIcon = makeEquipmentIcon();
+            currentIcon.update(item.item_icon);
+            const currentName = document.createElement("strong");
+            currentName.textContent = item.item_name || "未命名装备";
+            identity.append(currentIcon.box, currentName);
+            const statView = document.createElement("div");
+            statView.className = "equip-values";
+            const details = document.createElement("details");
+            const summary = document.createElement("summary");
+            summary.textContent = "校正当前装备属性";
+            const originalGrid = document.createElement("div");
+            originalGrid.className = "grid";
+            const normalized = equipmentValues(item);
+            const original = makeFields(originalGrid, equipmentFields, normalized.stats);
+            const refreshStats = () => {
+                statView.replaceChildren();
+                for (const [key, label] of equipmentFields) {
+                    const value = number(original[key].value);
+                    if (!value) continue;
+                    const line = document.createElement("div");
+                    line.className = "equip-value";
+                    const caption = document.createElement("span");
+                    caption.textContent = label;
+                    const amount = document.createElement("strong");
+                    const percent = key.endsWith("_pct") ||
+                        ["damage", "boss", "crit_damage", "ied"].includes(key);
+                    amount.textContent = `${value.toLocaleString("zh-CN", {
+                        maximumFractionDigits: 4
+                    })}${percent ? "%" : ""}`;
+                    line.append(caption, amount);
+                    statView.append(line);
+                }
+            };
+            refreshStats();
+            originalGrid.addEventListener("input", refreshStats);
+            details.append(summary, originalGrid);
+            if (normalized.unparsed.length) {
+                const unresolved = document.createElement("p");
+                unresolved.className = "equip-potentials";
+                unresolved.textContent = "未自动计入：\n" + normalized.unparsed.join("\n");
+                details.append(unresolved);
+            }
+            left.append(leftTitle, identity, statView, details);
+            const right = document.createElement("div");
+            right.className = "equip-side";
+            const rightTitle = document.createElement("h3");
+            rightTitle.textContent = "新装备";
+            const state = document.createElement("p");
+            state.textContent = "保留当前装备";
+            const candidate = document.createElement("div");
+            candidate.className = "candidate";
+            candidate.hidden = true;
+            const name = document.createElement("input");
+            name.placeholder = "候选装备名称";
+            name.setAttribute("aria-label", "候选装备名称");
+            const newIdentity = document.createElement("div");
+            newIdentity.className = "equip-identity";
+            const newIcon = makeEquipmentIcon();
+            newIdentity.append(newIcon.box, name);
+            const candidateGrid = document.createElement("div");
+            candidateGrid.className = "grid";
+            const replacement = makeFields(candidateGrid, equipmentFields);
+            candidate.append(newIdentity, candidateGrid);
+            const updateMode = () => {
+                const replacing = mode.value === "replace";
+                candidate.hidden = !replacing;
+                state.hidden = replacing;
+                state.textContent = mode.value === "remove" ? "不穿戴装备" : "保留当前装备";
+                for (const input of candidate.querySelectorAll("input")) input.disabled = !replacing;
+                $("result").hidden = true;
+            };
+            mode.onchange = () => {
+                updateMode();
+                updateEquipmentFields();
+            };
+            updateMode();
+            right.append(rightTitle, state, candidate);
+            compare.append(left, right);
+            card.append(head, compare);
+            $("equipment").append(card);
+            return { mode, original, replacement };
+        });
+        updateEquipmentFields();
+    }
+    async function getKey() {
+        const response = await fetch("new_attr_calc.html");
+        if (!response.ok) throw Error("无法读取 API Key");
+        const source = await response.text();
+        const block = source.match(/const NX_API_KEY_B64_PARTS\s*=\s*\[([\s\S]*?)\]/);
+        const parts = block?.[1].match(/"([^"]*)"/g);
+        if (!parts) throw Error("未找到 API Key");
+        return atob(parts.map(part => JSON.parse(part)).join(""));
+    }
+    $("query").onclick = async () => {
+        $("status").textContent = "";
+        if (!$("name").value.trim()) { $("status").textContent = "请输入角色名字"; return; }
+        $("query").disabled = true;
+        $("result").hidden = true;
+        $("calculate").disabled = true;
+        currentJob = null;
+        rows = [];
+        baseline = {};
+        $("equipment").replaceChildren();
+        $("baseline").replaceChildren();
+        $("character").textContent = "";
+        $("jobInfo").value = "";
+        $("mainStatDisplay").value = "";
+        $("subStatDisplay").value = "";
+        $("attackTypeDisplay").value = "";
+        $("error").textContent = "";
+        const characterName = $("name").value.trim();
+        try {
+            const jobs = await loadJobList();
+            const key = await getKey();
+            const request = async (path, params) => {
+                const url = new URL("https://open.api.nexon.com/maplestorytw/v1/" + path);
+                url.search = new URLSearchParams(params);
+                const response = await fetch(url, { headers: { "x-nxopen-api-key": key } });
+                const data = await response.json();
+                if (!response.ok) throw Error(data.error?.message || `查询失败：${response.status}`);
+                return data;
+            };
+            const id = await request("id", { character_name: characterName });
+            if (!id.ocid) throw Error("未找到角色");
+            const eq = await request("character/item-equipment", { ocid: id.ocid });
+            if (!Array.isArray(eq.item_equipment) || !eq.item_equipment.length) throw Error("没有当前装备数据");
+            $("character").textContent = characterName;
+            applyJob(eq.character_class, jobs);
+            renderEquipment(eq.item_equipment);
+            $("calculate").disabled = false;
+        } catch (error) {
+            currentJob = null;
+            $("status").textContent = error.message;
+        }
+        finally { $("query").disabled = false; }
+    };
+    $("calculator").oninput = () => { $("result").hidden = true; };
+    $("calculator").onsubmit = event => {
+        event.preventDefault();
+        $("error").textContent = "";
+        $("result").hidden = true;
+        try {
+            if (!currentJob) throw Error("请先导入支持的职业");
+            if (!rows.length) throw Error("请先导入装备");
+            const b = values(baseline), next = { ...b };
+            console.log("[装备收益] 基准输入", { ...b });
+            const delta = Object.fromEntries(equipmentFields.map(([k]) => [k, 0]));
+            let remainingDefense = 1 - b.ied / 100;
+            for (const row of rows) {
+                if (row.mode.value === "keep") continue;
+                const old = values(row.original);
+                const replacement = row.mode.value === "replace" ? values(row.replacement) : {};
+                console.log("[装备收益] 装备变更", {
+                    操作: row.mode.value,
+                    原装备: { ...old },
+                    新装备: { ...replacement }
+                });
+                for (const key of Object.keys(delta)) delta[key] += (replacement[key] || 0) - old[key];
+                if (old.ied >= 100) throw Error("无法从100%装备无视反推换装结果");
+                remainingDefense *= (1 - (replacement.ied || 0) / 100) / (1 - old.ied / 100);
+            }
+            for (const key of [...currentJob.main_attr, ...currentJob.sub_attr]) {
+                console.log("[装备收益] 属性输入", {
+                    属性: key.toUpperCase(),
+                    面板值: b[key],
+                    属性百分比: b[key + "_pct"],
+                    不受百分比加成: b[key + "_fixed"]
+                });
+                if (b[key + "_fixed"] > b[key]) throw Error("固定属性不能超过面板属性");
+                const base = (b[key] - b[key + "_fixed"]) / (1 + b[key + "_pct"] / 100);
+                const pct = b[key + "_pct"] + delta[key + "_pct"] + delta.all_pct;
+                const flat = base + delta[key] + delta.all_stat;
+                console.log("[装备收益] 属性重算", {
+                    属性: key.toUpperCase(),
+                    反推基础属性: base,
+                    装备属性差值: delta[key],
+                    全属性差值: delta.all_stat,
+                    装备属性百分比差值: delta[key + "_pct"],
+                    全属性百分比差值: delta.all_pct,
+                    换装后基础属性: flat,
+                    换装后属性百分比: pct,
+                    换装后面板属性: flat * (1 + pct / 100) + b[key + "_fixed"]
+                });
+                if (flat < 0) throw Error(`换装后基础${key.toUpperCase()}被算成负数：${Number(flat.toFixed(4))}`);
+                if (pct < 0) throw Error(`换装后${key.toUpperCase()}%被算成负数：${Number(pct.toFixed(4))}%`);
+                next[key] = flat * (1 + pct / 100) + b[key + "_fixed"];
+            }
+            const attackKey = currentJob.attack_type;
+            const attackBase = b.attack / (1 + b.attack_pct / 100) + delta[attackKey];
+            const attackPct = b.attack_pct + delta[attackKey + "_pct"];
+            console.log("[装备收益] 攻击力重算", {
+                攻击类型: attackKey,
+                输入攻击力: b.attack,
+                输入攻击力百分比: b.attack_pct,
+                装备攻击力差值: delta[attackKey],
+                装备攻击力百分比差值: delta[attackKey + "_pct"],
+                换装后基础攻击力: attackBase,
+                换装后攻击力百分比: attackPct
+            });
+            const attackLabel = attackKey === "magic_power" ? "魔法攻击力" : "攻击力";
+            if (attackBase < 0) throw Error(`换装后基础${attackLabel}被算成负数：${Number(attackBase.toFixed(4))}`);
+            if (attackPct < 0) throw Error(`换装后${attackLabel}%被算成负数：${Number(attackPct.toFixed(4))}%`);
+            next.attack = attackBase * (1 + attackPct / 100);
+            for (const k of ["damage", "boss", "crit_damage"]) {
+                next[k] += delta[k];
+                if (next[k] < 0) {
+                    const label = { damage: "伤害", boss: "BOSS伤害", crit_damage: "暴击伤害" }[k];
+                    throw Error(`换装后${label}被算成负数：${Number(next[k].toFixed(4))}%`);
+                }
+            }
+            next.ied = (1 - remainingDefense) * 100;
+            if (next.ied < -0.000001) throw Error(`换装后无视防御力被算成负数：${Number(next.ied.toFixed(4))}%`);
+            if (next.ied > 100) throw Error(`换装后无视防御力超过100%：${Number(next.ied.toFixed(4))}%`);
+            const statFactor = s => 4 * s[currentJob.main_attr[0]]
+                + currentJob.sub_attr.reduce((sum, key) => sum + s[key], 0);
+            const score = s => statFactor(s) * s.attack
+                * (1 + (s.damage + s.boss) / 100)
+                * (1.35 + s.crit_damage / 100)
+                * Math.max(0, 1 - s.defense / 100 * (1 - s.ied / 100));
+            const before = score(b), ratio = score(next) / before;
+            if (!(before > 0) || !(b.measured > 0) || !Number.isFinite(ratio)) throw Error("请检查基准属性、木桩防御率和伤害");
+            const format = n => n.toLocaleString("zh-CN", { maximumFractionDigits: 0 });
+            $("oldDamage").textContent = format(b.measured);
+            $("newDamage").textContent = format(b.measured * ratio);
+            $("gain").textContent = `${ratio >= 1 ? "+" : ""}${((ratio - 1) * 100).toFixed(2)}%`;
+            $("result").hidden = false;
+        } catch (error) {
+            console.error("[装备收益] 计算失败", error);
+            $("error").textContent = error.message;
+        }
+    };
+</script>
+</body>
+</html>
