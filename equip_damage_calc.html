@@ -36,6 +36,11 @@
         .candidate .grid { margin-top: 12px; }
         .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         .results strong { display: block; font-size: 24px; margin-top: 8px; overflow-wrap: anywhere; }
+        .panel-results { grid-column: 1 / -1; overflow-x: auto; }
+        .panel-results table { width: 100%; min-width: 420px; border-collapse: collapse; }
+        .panel-results th, .panel-results td { padding: 8px; border-bottom: 1px solid #bddbd7; }
+        .panel-results th { text-align: left; }
+        .panel-results td { text-align: right; }
         [hidden] { display: none !important; }
         @media (max-width: 600px) { body { padding: 12px; } .results { grid-template-columns: 1fr; } }
         @media (max-width: 760px) { .equip-compare { grid-template-columns: 1fr; } }
@@ -74,6 +79,20 @@
                 <div>当前伤害<strong id="oldDamage"></strong></div>
                 <div>预计伤害<strong id="newDamage"></strong></div>
                 <div>提升比例<strong id="gain"></strong></div>
+                <div class="panel-results">
+                    <h3>换装前后面板</h3>
+                    <table>
+                        <thead><tr><th scope="col">属性</th><th scope="col">当前面板</th><th scope="col">换装后面板</th></tr></thead>
+                        <tbody id="panelRows"></tbody>
+                    </table>
+                </div>
+                <div class="panel-results">
+                    <h3>触发的套装</h3>
+                    <div class="equip-compare">
+                        <div class="equip-side"><h4>换装前</h4><ul id="beforeSets"></ul></div>
+                        <div class="equip-side"><h4>换装后</h4><ul id="afterSets"></ul></div>
+                    </div>
+                </div>
             </div>
         </section>
     </form>
@@ -108,6 +127,10 @@
     let rows = [];
     let currentJob = null;
     let jobList = null;
+    let setList = null;
+    const cacheKey = "equip_damage_calc_state_v2";
+    let importedItems = null;
+    let importedClass = "";
 
     function normalizeJobName(value) {
         return String(value || "").normalize("NFKC").replace(/[\s、，,]/g, "");
@@ -121,6 +144,15 @@
         if (!Array.isArray(data)) throw Error("职业数据格式错误");
         jobList = data;
         return jobList;
+    }
+    async function loadSetList() {
+        if (setList) return setList;
+        const response = await fetch("data/equipment/equipment_sets.json");
+        if (!response.ok) throw Error("套装数据读取失败");
+        const data = await response.json();
+        if (!Array.isArray(data)) throw Error("套装数据格式错误");
+        setList = data;
+        return setList;
     }
 
     function applyJob(className, jobs) {
@@ -147,7 +179,7 @@
         const statFields = [...job.main_attr, ...job.sub_attr].flatMap(key => {
             const label = `${job.main_attr.includes(key) ? "主" : "副"}属性${key.toUpperCase()}`;
             return [
-                [key, `面板${label}`],
+                [key, `基础${label}`],
                 [key + "_pct", `${label}%`],
                 [key + "_fixed", `不受%加成的${key.toUpperCase()}`]
             ];
@@ -445,9 +477,158 @@
             compare.append(left, right);
             card.append(head, compare);
             $("equipment").append(card);
-            return { mode, original, replacement };
+            return {
+                mode, original, replacement, name, refreshStats,
+                originalName: item.item_name || "",
+                slot: item.item_equipment_slot || "",
+                part: item.item_equipment_part || ""
+            };
         });
         updateEquipmentFields();
+    }
+    function matchesSetItem(item, member) {
+        if (!item?.name) return false;
+        const slot = item.slot.replace(/\d+$/, "");
+        const slotMatches = member.slot === slot || member.slot === item.part ||
+            (member.slot === "套服" && slot === "上衣") ||
+            (member.slot === "褲/裙" &&
+                ["褲子", "裙子", "下衣"].includes(item.part));
+        if (!slotMatches) return false;
+        return member.placeholder
+            ? member.contains?.some(word => item.name.includes(word)) === true
+            : item.name === member.name;
+    }
+    function evaluateSets(itemForRow) {
+        return setList.map(set => {
+            const count = set.items.filter(member =>
+                rows.some(row => matchesSetItem(itemForRow(row), member))
+            ).length;
+            const tiers = Object.entries(set.effects).filter(
+                ([threshold]) => Number(threshold) <= count
+            );
+            return { set, count, tiers };
+        });
+    }
+    function renderSetList(id, sets) {
+        const list = $(id);
+        list.replaceChildren();
+        for (const { set, count, tiers } of sets) {
+            if (!tiers.length) continue;
+            const entry = document.createElement("li");
+            entry.textContent = `${set.set_name}（${count}件；触发${tiers.map(
+                ([threshold]) => threshold
+            ).join("、")}件效果）`;
+            list.append(entry);
+        }
+        if (!list.childElementCount) list.textContent = "无";
+    }
+    function applySetTier(stats, sign, delta, remainingDefense) {
+        for (const [key, value] of Object.entries(stats)) {
+            if (key === "ied") {
+                if (sign < 0 && value >= 100) {
+                    throw Error("无法从100%套装无视反推换装结果");
+                }
+                remainingDefense *= sign > 0
+                    ? 1 - value / 100 : 1 / (1 - value / 100);
+            } else if (Object.hasOwn(delta, key)) {
+                delta[key] += sign * value;
+            }
+        }
+        return remainingDefense;
+    }
+    function fieldValues(inputs) {
+        return Object.fromEntries(
+            Object.entries(inputs).map(([key, input]) => [key, input.value])
+        );
+    }
+    function renderPanel(items) {
+        $("panelRows").replaceChildren();
+        for (const [label, before, after] of items) {
+            const row = document.createElement("tr");
+            const heading = document.createElement("th");
+            heading.scope = "row";
+            heading.textContent = label;
+            const oldValue = document.createElement("td");
+            oldValue.textContent = before;
+            const newValue = document.createElement("td");
+            newValue.textContent = after;
+            row.append(heading, oldValue, newValue);
+            $("panelRows").append(row);
+        }
+    }
+    function restoreFields(inputs, saved) {
+        if (!saved || typeof saved !== "object") return;
+        for (const [key, input] of Object.entries(inputs)) {
+            if (typeof saved[key] === "string") input.value = saved[key];
+        }
+    }
+    function saveState() {
+        const state = {
+            name: $("name").value,
+            character: $("character").textContent,
+            className: importedClass,
+            items: importedItems,
+            baseline: fieldValues(baseline),
+            rows: rows.map(row => ({
+                mode: row.mode.value,
+                name: row.name.value,
+                original: fieldValues(row.original),
+                replacement: fieldValues(row.replacement)
+            })),
+            result: $("result").hidden ? null : {
+                oldDamage: $("oldDamage").textContent,
+                newDamage: $("newDamage").textContent,
+                gain: $("gain").textContent
+            }
+        };
+        try {
+            localStorage.setItem(cacheKey, JSON.stringify(state));
+        } catch (error) {
+            console.warn("装备收益缓存保存失败", error);
+            $("status").textContent = "本地缓存保存失败，刷新后可能丢失内容";
+        }
+    }
+    async function restoreState() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(cacheKey) || "null");
+            if (!saved || typeof saved !== "object") return;
+            if (typeof saved.name === "string") $("name").value = saved.name;
+            if (typeof saved.className !== "string" ||
+                !Array.isArray(saved.items) || !saved.items.length) return;
+            const jobs = await loadJobList();
+            await loadSetList();
+            applyJob(saved.className, jobs);
+            renderEquipment(saved.items);
+            importedClass = saved.className;
+            importedItems = saved.items;
+            $("character").textContent = typeof saved.character === "string" ? saved.character : "";
+            restoreFields(baseline, saved.baseline);
+            if (Array.isArray(saved.rows)) {
+                rows.forEach((row, index) => {
+                    const entry = saved.rows[index];
+                    if (!entry || typeof entry !== "object") return;
+                    if (["keep", "remove", "replace"].includes(entry.mode)) row.mode.value = entry.mode;
+                    row.mode.onchange();
+                    if (typeof entry.name === "string") row.name.value = entry.name;
+                    restoreFields(row.original, entry.original);
+                    restoreFields(row.replacement, entry.replacement);
+                    row.refreshStats();
+                });
+            }
+            $("calculate").disabled = false;
+            if (saved.result && typeof saved.result === "object" &&
+                ["oldDamage", "newDamage", "gain"].every(
+                    key => typeof saved.result[key] === "string"
+                )) {
+                for (const key of ["oldDamage", "newDamage", "gain"]) {
+                    $(key).textContent = saved.result[key];
+                }
+                $("result").hidden = false;
+            }
+        } catch (error) {
+            console.warn("装备收益缓存恢复失败", error);
+            $("status").textContent = "缓存恢复失败，请重新导入装备";
+        }
     }
     async function getKey() {
         const response = await fetch("new_attr_calc.html");
@@ -462,13 +643,12 @@
         $("status").textContent = "";
         if (!$("name").value.trim()) { $("status").textContent = "请输入角色名字"; return; }
         $("query").disabled = true;
+        const oldJob = currentJob;
         $("result").hidden = true;
         $("calculate").disabled = true;
         currentJob = null;
         rows = [];
-        baseline = {};
         $("equipment").replaceChildren();
-        $("baseline").replaceChildren();
         $("character").textContent = "";
         $("jobInfo").value = "";
         $("mainStatDisplay").value = "";
@@ -478,6 +658,7 @@
         const characterName = $("name").value.trim();
         try {
             const jobs = await loadJobList();
+            await loadSetList();
             const key = await getKey();
             const request = async (path, params) => {
                 const url = new URL("https://open.api.nexon.com/maplestorytw/v1/" + path);
@@ -491,17 +672,27 @@
             if (!id.ocid) throw Error("未找到角色");
             const eq = await request("character/item-equipment", { ocid: id.ocid });
             if (!Array.isArray(eq.item_equipment) || !eq.item_equipment.length) throw Error("没有当前装备数据");
-            $("character").textContent = characterName;
+            const oldBaseline = fieldValues(baseline);
             applyJob(eq.character_class, jobs);
             renderEquipment(eq.item_equipment);
+            if (oldJob === currentJob) restoreFields(baseline, oldBaseline);
+            $("character").textContent = characterName;
+            importedClass = eq.character_class;
+            importedItems = eq.item_equipment;
             $("calculate").disabled = false;
+            $("error").textContent = "";
+            saveState();
         } catch (error) {
-            currentJob = null;
             $("status").textContent = error.message;
         }
         finally { $("query").disabled = false; }
     };
-    $("calculator").oninput = () => { $("result").hidden = true; };
+    $("name").oninput = saveState;
+    $("calculator").oninput = () => {
+        $("result").hidden = true;
+        saveState();
+    };
+    $("calculator").onchange = saveState;
     $("calculator").onsubmit = event => {
         event.preventDefault();
         $("error").textContent = "";
@@ -509,12 +700,15 @@
         try {
             if (!currentJob) throw Error("请先导入支持的职业");
             if (!rows.length) throw Error("请先导入装备");
-            const b = values(baseline), next = { ...b };
+            const b = values(baseline), current = { ...b }, next = { ...b };
             console.log("[装备收益] 基准输入", { ...b });
             const delta = Object.fromEntries(equipmentFields.map(([k]) => [k, 0]));
             let remainingDefense = 1 - b.ied / 100;
             for (const row of rows) {
                 if (row.mode.value === "keep") continue;
+                if (row.mode.value === "replace" && !row.name.value.trim()) {
+                    throw Error("请输入候选装备名称以计算套装效果");
+                }
                 const old = values(row.original);
                 const replacement = row.mode.value === "replace" ? values(row.replacement) : {};
                 console.log("[装备收益] 装备变更", {
@@ -526,20 +720,46 @@
                 if (old.ied >= 100) throw Error("无法从100%装备无视反推换装结果");
                 remainingDefense *= (1 - (replacement.ied || 0) / 100) / (1 - old.ied / 100);
             }
+            const beforeSets = evaluateSets(row => ({
+                name: row.originalName, slot: row.slot, part: row.part
+            }));
+            const afterSets = evaluateSets(row => {
+                if (row.mode.value === "remove") return null;
+                return {
+                    name: row.mode.value === "replace" ? row.name.value.trim() : row.originalName,
+                    slot: row.slot,
+                    part: row.part
+                };
+            });
+            beforeSets.forEach((beforeSet, index) => {
+                const afterSet = afterSets[index];
+                const beforeTiers = new Set(beforeSet.tiers.map(([tier]) => tier));
+                const afterTiers = new Set(afterSet.tiers.map(([tier]) => tier));
+                for (const [tier, effect] of beforeSet.tiers) {
+                    if (!afterTiers.has(tier)) {
+                        remainingDefense = applySetTier(effect.stats, -1, delta, remainingDefense);
+                    }
+                }
+                for (const [tier, effect] of afterSet.tiers) {
+                    if (!beforeTiers.has(tier)) {
+                        remainingDefense = applySetTier(effect.stats, 1, delta, remainingDefense);
+                    }
+                }
+            });
             for (const key of [...currentJob.main_attr, ...currentJob.sub_attr]) {
                 console.log("[装备收益] 属性输入", {
                     属性: key.toUpperCase(),
-                    面板值: b[key],
+                    基础值: b[key],
                     属性百分比: b[key + "_pct"],
                     不受百分比加成: b[key + "_fixed"]
                 });
-                if (b[key + "_fixed"] > b[key]) throw Error("固定属性不能超过面板属性");
-                const base = (b[key] - b[key + "_fixed"]) / (1 + b[key + "_pct"] / 100);
+                const base = b[key];
+                current[key] = base * (1 + b[key + "_pct"] / 100) + b[key + "_fixed"];
                 const pct = b[key + "_pct"] + delta[key + "_pct"] + delta.all_pct;
                 const flat = base + delta[key] + delta.all_stat;
                 console.log("[装备收益] 属性重算", {
                     属性: key.toUpperCase(),
-                    反推基础属性: base,
+                    输入基础属性: base,
                     装备属性差值: delta[key],
                     全属性差值: delta.all_stat,
                     装备属性百分比差值: delta[key + "_pct"],
@@ -553,11 +773,12 @@
                 next[key] = flat * (1 + pct / 100) + b[key + "_fixed"];
             }
             const attackKey = currentJob.attack_type;
-            const attackBase = b.attack / (1 + b.attack_pct / 100) + delta[attackKey];
+            current.attack = b.attack * (1 + b.attack_pct / 100);
+            const attackBase = b.attack + delta[attackKey];
             const attackPct = b.attack_pct + delta[attackKey + "_pct"];
             console.log("[装备收益] 攻击力重算", {
                 攻击类型: attackKey,
-                输入攻击力: b.attack,
+                输入基础攻击力: b.attack,
                 输入攻击力百分比: b.attack_pct,
                 装备攻击力差值: delta[attackKey],
                 装备攻击力百分比差值: delta[attackKey + "_pct"],
@@ -584,18 +805,45 @@
                 * (1 + (s.damage + s.boss) / 100)
                 * (1.35 + s.crit_damage / 100)
                 * Math.max(0, 1 - s.defense / 100 * (1 - s.ied / 100));
-            const before = score(b), ratio = score(next) / before;
+            const before = score(current), ratio = score(next) / before;
             if (!(before > 0) || !(b.measured > 0) || !Number.isFinite(ratio)) throw Error("请检查基准属性、木桩防御率和伤害");
             const format = n => n.toLocaleString("zh-CN", { maximumFractionDigits: 0 });
             $("oldDamage").textContent = format(b.measured);
             $("newDamage").textContent = format(b.measured * ratio);
             $("gain").textContent = `${ratio >= 1 ? "+" : ""}${((ratio - 1) * 100).toFixed(2)}%`;
+            const panelFields = [
+                ...[...currentJob.main_attr, ...currentJob.sub_attr].map(key =>
+                    [key.toUpperCase(), current[key], next[key]]
+                ),
+                [attackLabel, current.attack, next.attack],
+                ...[["damage", "伤害%"], ["boss", "BOSS伤害%"],
+                    ["crit_damage", "暴击伤害%"], ["ied", "无视防御%"]]
+                    .map(([key, label]) => [label, current[key], next[key]])
+            ];
+            const formatPanel = value => value.toLocaleString("zh-CN", {
+                maximumFractionDigits: 4
+            });
+            renderPanel(panelFields.map(([label, before, after]) => [
+                label,
+                `${formatPanel(before)}${label.endsWith("%") ? "%" : ""}`,
+                `${formatPanel(after)}${label.endsWith("%") ? "%" : ""}`
+            ]));
+            renderSetList("beforeSets", beforeSets);
+            renderSetList("afterSets", afterSets);
             $("result").hidden = false;
         } catch (error) {
             console.error("[装备收益] 计算失败", error);
             $("error").textContent = error.message;
+        } finally {
+            saveState();
         }
     };
+    restoreState().then(() => {
+        if (!$("result").hidden) {
+            $("result").hidden = true;
+            $("calculator").requestSubmit();
+        }
+    });
 </script>
 </body>
 </html>

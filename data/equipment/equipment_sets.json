@@ -1,0 +1,263 @@
+[
+  {
+    "set_name": "首領飾品組",
+    "items": [
+      {"name": "凝聚力量的結晶石", "slot": "臉飾"},
+      {"name": "水中信紙眼飾", "slot": "眼飾"},
+      {"name": "黑豆標記", "slot": "眼飾"},
+      {"name": "拉圖斯標誌", "slot": "眼飾"},
+      {"name": "地獄火耳環", "slot": "耳環"},
+      {"name": "戴雅希杜斯耳環", "slot": "耳環"},
+      {"name": "銀花戒指", "slot": "戒指"},
+      {"name": "高貴的伊菲亞的戒指", "slot": "戒指"},
+      {"name": "守護者天使戒指", "slot": "戒指"},
+      {"name": "闇黑龍王項鍊", "slot": "墜飾"},
+      {"name": "混沌闇黑龍王的項鍊", "slot": "墜飾"},
+      {"name": "梅克奈特墜飾", "slot": "墜飾"},
+      {"name": "支配者墜飾", "slot": "墜飾"},
+      {"name": "金花草腰帶", "slot": "腰帶"},
+      {"name": "憤怒的殘暴炎魔的腰帶", "slot": "腰帶"},
+      {"name": "皇家暗黑合金護肩", "slot": "肩膀裝飾"},
+      {"name": "粉紅聖杯", "slot": "口袋道具"},
+      {"name": "永生之石", "slot": "口袋道具"},
+      {"name": "水晶溫杜斯胸章", "slot": "胸章"}
+    ],
+    "effects": {
+      "3": {
+        "raw": ["全屬性 +10", "最大 HP/最大 MP +5%", "攻擊力/魔力 +5"],
+        "stats": {"all_stat": 10, "hp_pct": 5, "mp_pct": 5, "attack_power": 5, "magic_power": 5}
+      },
+      "5": {
+        "raw": ["全屬性 +10", "最大 HP/最大 MP +5%", "攻擊力/魔力 +5"],
+        "stats": {"all_stat": 10, "hp_pct": 5, "mp_pct": 5, "attack_power": 5, "magic_power": 5}
+      },
+      "7": {
+        "raw": ["全屬性 +10", "攻擊力/魔力 +10", "防禦力 +80", "無視怪物防禦率 +10%"],
+        "stats": {"all_stat": 10, "attack_power": 10, "magic_power": 10, "defense_flat": 80, "ied": 10}
+      },
+      "9": {
+        "raw": ["全屬性 +15", "攻擊力/魔力 +10", "防禦力 +100", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 15, "attack_power": 10, "magic_power": 10, "defense_flat": 100, "boss": 10}
+      }
+    }
+  },
+  {
+    "set_name": "永恆套裝(劍士)",
+    "items": [
+      {"name": "永恆劍士手套", "slot": "手套"},
+      {"name": "永恆劍士頭盔", "slot": "帽子"},
+      {"name": "永恆劍士鎧甲", "slot": "上衣"},
+      {"name": "永恆劍士褲", "slot": "褲/裙"},
+      {"name": "永恆劍士肩膀", "slot": "肩膀裝飾"},
+      {"name": "永恆劍士鞋", "slot": "鞋子"},
+      {"name": "永恆劍士斗篷", "slot": "披風"},
+      {"name": "可選擇創世或命運武器其一", "slot": "武器", "placeholder": true, "contains": ["創世", "命運"]}
+    ],
+    "effects": {
+      "2": {
+        "raw": ["最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 10}
+      },
+      "3": {
+        "raw": ["全屬性 +50", "攻擊力/魔力 +40", "防禦力 +600", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 50, "attack_power": 40, "magic_power": 40, "defense_flat": 600, "boss": 10}
+      },
+      "4": {
+        "raw": ["最大 HP/最大 MP +15%", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"hp_pct": 15, "mp_pct": 15, "attack_power": 40, "magic_power": 40, "boss": 10}
+      },
+      "5": {
+        "raw": ["攻擊力/魔力 +40", "無視怪物防禦率 +20%"],
+        "stats": {"attack_power": 40, "magic_power": 40, "ied": 20}
+      },
+      "6": {
+        "raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"],
+        "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}
+      },
+      "7": {
+        "raw": ["全屬性 +50", "最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"],
+        "stats": {"all_stat": 50, "hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 15}
+      },
+      "8": {
+        "raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"],
+        "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}
+      }
+    }
+  },
+  {
+    "set_name": "神祕冥界套裝(戰士)",
+    "items": [
+      {"name": "神祕冥界武器中選一", "slot": "武器", "placeholder": true, "contains": ["神祕冥界"]},
+      {"name": "神祕冥界幽靈騎士帽", "slot": "帽子"},
+      {"name": "神祕冥界幽靈騎士套裝", "slot": "套服"},
+      {"name": "神祕冥界幽靈騎士鞋子", "slot": "鞋子"},
+      {"name": "神祕冥界幽靈騎士手套", "slot": "手套"},
+      {"name": "神祕冥界幽靈騎士斗篷", "slot": "披風"},
+      {"name": "神祕冥界幽靈騎士護肩", "slot": "肩膀裝飾"}
+    ],
+    "effects": {
+      "2": {
+        "raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}
+      },
+      "3": {
+        "raw": ["攻擊力/魔力 +30", "防禦力 +400", "無視怪物防禦率 +10%"],
+        "stats": {"attack_power": 30, "magic_power": 30, "defense_flat": 400, "ied": 10}
+      },
+      "4": {
+        "raw": ["全屬性 +50", "攻擊力/魔力 +35", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 50, "attack_power": 35, "magic_power": 35, "boss": 10}
+      },
+      "5": {
+        "raw": ["最大 HP/最大 MP +2000", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"hp": 2000, "mp": 2000, "attack_power": 40, "magic_power": 40, "boss": 10}
+      },
+      "6": {
+        "raw": ["最大 HP/最大 MP +30%", "攻擊力/魔力 +30"],
+        "stats": {"hp_pct": 30, "mp_pct": 30, "attack_power": 30, "magic_power": 30}
+      },
+      "7": {
+        "raw": ["攻擊力/魔力 +30", "無視怪物防禦率 +10%"],
+        "stats": {"attack_power": 30, "magic_power": 30, "ied": 10}
+      }
+    }
+  },
+  {
+    "set_name": "航海師套裝(戰士)",
+    "items": [
+      {"name": "航海師劍士鞋", "slot": "鞋子"},
+      {"name": "航海師劍士斗篷", "slot": "披風"},
+      {"name": "航海師劍士護肩", "slot": "肩膀裝飾"},
+      {"name": "航海師劍士頭盔", "slot": "帽子"},
+      {"name": "航海師劍士套裝", "slot": "套服"},
+      {"name": "航海師劍士手套", "slot": "手套"},
+      {"name": "選擇一件航海師武器", "slot": "武器", "placeholder": true, "contains": ["航海師"]}
+    ],
+    "effects": {
+      "2": {
+        "raw": ["最大 HP/最大 MP +1500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"hp": 1500, "mp": 1500, "attack_power": 20, "magic_power": 20, "boss": 10}
+      },
+      "3": {
+        "raw": ["全屬性 +30", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 30, "attack_power": 20, "magic_power": 20, "boss": 10}
+      },
+      "4": {
+        "raw": ["攻擊力/魔力 +25", "防禦力 +200", "無視怪物防禦率 +10%"],
+        "stats": {"attack_power": 25, "magic_power": 25, "defense_flat": 200, "ied": 10}
+      },
+      "5": {
+        "raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}
+      },
+      "6": {
+        "raw": ["最大 HP/最大 MP +20%", "攻擊力/魔力 +20"],
+        "stats": {"hp_pct": 20, "mp_pct": 20, "attack_power": 20, "magic_power": 20}
+      },
+      "7": {
+        "raw": ["攻擊力/魔力 +20", "無視怪物防禦率 +10%"],
+        "stats": {"attack_power": 20, "magic_power": 20, "ied": 10}
+      }
+    }
+  },
+  {
+    "set_name": "露塔必思套裝(劍士)",
+    "items": [
+      {"name": "高貴的戰士頭盔", "slot": "帽子"},
+      {"name": "鷹眼戰士盔甲", "slot": "上衣"},
+      {"name": "黃蜘蛛戰士褲", "slot": "褲/裙"},
+      {"name": "選擇一件夫尼爾武器", "slot": "武器", "placeholder": true, "contains": ["夫尼爾"]}
+    ],
+    "effects": {
+      "2": {
+        "raw": ["STR +20", "DEX +20", "最大 HP/最大 MP +1000"],
+        "stats": {"str": 20, "dex": 20, "hp": 1000, "mp": 1000}
+      },
+      "3": {
+        "raw": ["最大 HP/最大 MP +10%", "攻擊力 +50"],
+        "stats": {"hp_pct": 10, "mp_pct": 10, "attack_power": 50}
+      },
+      "4": {
+        "raw": ["攻擊Boss怪物時傷害 +30%"],
+        "stats": {"boss": 30}
+      }
+    }
+  },
+  {
+    "set_name": "漆黑BOSS套裝",
+    "items": [
+      {"name": "附有魔力的眼罩", "slot": "眼飾"},
+      {"name": "苦痛的根源", "slot": "墜飾"},
+      {"name": "巨大的恐怖", "slot": "戒指"},
+      {"name": "在米特拉的憤怒中選1", "slot": "徽章", "placeholder": true, "contains": ["米特拉的憤怒"]},
+      {"name": "口紅控制器標誌", "slot": "臉飾"},
+      {"name": "黑心", "slot": "機器心臟"},
+      {"name": "全面控制核心", "slot": "機器心臟"},
+      {"name": "夢幻的腰帶", "slot": "腰帶"},
+      {"name": "創世的胸章", "slot": "胸章"},
+      {"name": "指揮官力量耳環", "slot": "耳環"},
+      {"name": "被詛咒的魔導書中選1", "slot": "口袋道具", "placeholder": true, "contains": ["被詛咒的魔導書"]}
+    ],
+    "effects": {
+      "2": {
+        "raw": ["全屬性 +10", "最大HP +250", "攻擊力/魔力 +10", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 10, "hp": 250, "attack_power": 10, "magic_power": 10, "boss": 10}
+      },
+      "3": {
+        "raw": ["全屬性 +10", "最大HP +250", "攻擊力/魔力 +10", "防禦力 +250", "無視怪物防禦率 +10%"],
+        "stats": {"all_stat": 10, "hp": 250, "attack_power": 10, "magic_power": 10, "defense_flat": 250, "ied": 10}
+      },
+      "4": {
+        "raw": ["全屬性 +15", "最大HP +375", "攻擊力/魔力 +15", "爆擊傷害 +5%"],
+        "stats": {"all_stat": 15, "hp": 375, "attack_power": 15, "magic_power": 15, "crit_damage": 5}
+      },
+      "5": {
+        "raw": ["全屬性 +15", "最大HP +375", "攻擊力/魔力 +15", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 15, "hp": 375, "attack_power": 15, "magic_power": 15, "boss": 10}
+      },
+      "6": {
+        "raw": ["全屬性 +15", "最大HP +375", "攻擊力/魔力 +15", "無視怪物防禦率 +10%"],
+        "stats": {"all_stat": 15, "hp": 375, "attack_power": 15, "magic_power": 15, "ied": 10}
+      },
+      "7": {
+        "raw": ["全屬性 +15", "最大HP +375", "攻擊力/魔力 +15", "爆擊傷害 +5%"],
+        "stats": {"all_stat": 15, "hp": 375, "attack_power": 15, "magic_power": 15, "crit_damage": 5}
+      },
+      "8": {
+        "raw": ["全屬性 +15", "最大HP +375", "攻擊力/魔力 +15", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 15, "hp": 375, "attack_power": 15, "magic_power": 15, "boss": 10}
+      },
+      "9": {
+        "raw": ["全屬性 +15", "最大HP +375", "攻擊力/魔力 +15", "爆擊傷害 +5%"],
+        "stats": {"all_stat": 15, "hp": 375, "attack_power": 15, "magic_power": 15, "crit_damage": 5}
+      },
+      "10": {
+        "raw": ["全屬性 +20", "最大HP +500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"],
+        "stats": {"all_stat": 20, "hp": 500, "attack_power": 20, "magic_power": 20, "boss": 10}
+      }
+    }
+  },
+  {
+    "set_name": "頂級培羅德套裝",
+    "items": [
+      {"name": "頂級培羅德耳環", "slot": "耳環"},
+      {"name": "頂級培羅德烙印墜飾", "slot": "墜飾"},
+      {"name": "頂級培羅德烙印腰帶", "slot": "腰帶"},
+      {"name": "頂級培羅德戒指", "slot": "戒指"}
+    ],
+    "effects": {
+      "2": {
+        "raw": ["全屬性 +20", "最大 HP/最大 MP +1500"],
+        "stats": {"all_stat": 20, "hp": 1500, "mp": 1500}
+      },
+      "3": {
+        "raw": ["最大 HP/最大 MP +13%", "攻擊力/魔力 +35"],
+        "stats": {"hp_pct": 13, "mp_pct": 13, "attack_power": 35, "magic_power": 35}
+      },
+      "4": {
+        "raw": ["攻擊Boss怪物時傷害 +30%", "無視怪物防禦率 +30%"],
+        "stats": {"boss": 30, "ied": 30}
+      }
+    }
+  }
+]
