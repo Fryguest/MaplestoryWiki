@@ -2,7 +2,8 @@
 <html lang="zh-cn">
 
 <head>
-  <link rel="stylesheet" href="style.css">
+  <base href="../../">
+  <link rel="stylesheet" href="static/css/style.css">
   <link rel="stylesheet" href="./static/css/bootstrap.min.css">
   <link rel="icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/MaplestoryWiki/favicon.ico" type="image/x-icon">
@@ -148,7 +149,7 @@
     // --- 获取基础路径（适配GitHub Pages） ---
     function getBasePath() {
       const path = window.location.pathname;
-      const match = path.match(/^\/([^\/]+)\//);
+      const match = path.match(/^\/([^\/]+)\/pages\//);
       return match ? `/${match[1]}` : '';
     }
 

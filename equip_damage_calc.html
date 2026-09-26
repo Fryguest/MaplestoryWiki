@@ -34,6 +34,8 @@
         .equip-value { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
         .equip-potentials { font-size: 13px; line-height: 1.7; white-space: pre-line; }
         .candidate .grid { margin-top: 12px; }
+        .familiar-options { padding-left: 20px; font-size: 13px; line-height: 1.7; }
+        .familiar-option-input { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 8px; margin-top: 8px; }
         .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         .results strong { display: block; font-size: 24px; margin-top: 8px; overflow-wrap: anywhere; }
         .panel-results { grid-column: 1 / -1; overflow-x: auto; }
@@ -69,10 +71,6 @@
             <div id="baseline" class="grid" style="margin-top:12px"></div>
         </section>
         <section>
-            <h2>装备替换</h2>
-            <div id="equipment"></div>
-        </section>
-        <section>
             <button id="calculate" type="submit" disabled>计算换装收益</button>
             <p id="error" role="alert"></p>
             <div id="result" class="results" hidden>
@@ -94,6 +92,15 @@
                     </div>
                 </div>
             </div>
+        </section>
+        <section>
+            <h2>装备替换</h2>
+            <div id="equipment"></div>
+        </section>
+        <section>
+            <h2>萌兽替换</h2>
+            <div id="familiars"></div>
+            <button id="addFamiliar" type="button" disabled>新增候选萌兽</button>
         </section>
     </form>
 </main>
@@ -122,15 +129,19 @@
     const baselineFields = [
         ["damage", "伤害%"], ["boss", "BOSS伤害%"],
         ["crit_damage", "暴击伤害%"],
+        ["final_damage", "最终伤害%"],
         ["ied", "无视防御%"], ["defense", "木桩防御率%"], ["measured", "实测总伤害"]
     ];
     let rows = [];
+    let outfit = null;
     let currentJob = null;
     let jobList = null;
     let setList = null;
     const cacheKey = "equip_damage_calc_state_v2";
     let importedItems = null;
     let importedClass = "";
+    let importedFamiliars = null;
+    let familiarRows = [];
 
     function normalizeJobName(value) {
         return String(value || "").normalize("NFKC").replace(/[\s、，,]/g, "");
@@ -222,6 +233,194 @@
     function number(v) {
         const n = Number(String(v ?? 0).replaceAll(",", "").replace("%", ""));
         return Number.isFinite(n) ? n : 0;
+    }
+    function parseFamiliarOptions(options) {
+        if (!Array.isArray(options)) throw Error("萌兽词条数据格式错误");
+        const aliases = {
+            STR: "str", DEX: "dex", INT: "int", LUK: "luk",
+            "全屬性": "all_stat", "全部屬性": "all_stat",
+            "攻擊力": "attack_power", "物理攻擊力": "attack_power",
+            "魔法攻擊力": "magic_power",
+            "傷害": "damage",
+            "BOSS怪物傷害": "boss", "BOSS傷害": "boss",
+            "爆擊傷害": "crit_damage", "暴擊傷害": "crit_damage",
+            "無視怪物防禦率": "ied", "無視防禦率": "ied",
+            "最終傷害": "final_damage"
+        };
+        const percentOnly = new Set([
+            "damage", "boss", "crit_damage", "ied", "final_damage"
+        ]);
+        return options.map(option => {
+            const rawName = String(option?.option_name ?? "");
+            const rawValue = String(option?.option_value ?? "");
+            const name = rawName.normalize("NFKC").replace(/\s+/g, "");
+            const percent = name.endsWith("(%)");
+            const label = percent ? name.slice(0, -3) : name;
+            const passive = label === "依照被動技能來增加";
+            const baseKey = passive ? "passive_skill_level"
+                : aliases[label.toUpperCase()] ?? aliases[label] ?? null;
+            let key = baseKey && (passive || percent || !percentOnly.has(baseKey))
+                ? baseKey : null;
+            if (key === "all_stat" && percent) {
+                key = "all_pct";
+            } else if (percent && (
+                ["str", "dex", "int", "luk", "attack_power", "magic_power"].includes(key)
+            )) {
+                key += "_pct";
+            }
+            const text = rawValue.trim();
+            const numeric = /^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(text);
+            const value = numeric ? Number(text) : null;
+            if (key && (!numeric || !Number.isFinite(value))) {
+                throw Error(`萌兽词条数值无效：${rawName} ${rawValue}`);
+            }
+            return {
+                no: option?.option_no ?? null,
+                rawName,
+                rawValue,
+                key: key ?? "unknown",
+                unit: key ? (passive ? "level" : percent ? "percent" : "flat") : null,
+                value
+            };
+        });
+    }
+    function familiarIsActive(familiar, slots) {
+        if (familiar.summoned_flag === "true") return true;
+        if (familiar.summoned_flag !== "false") return false;
+        return slots.some(slot =>
+            slot.slot_id === familiar.slot_id && slot.active_flag === "true"
+        );
+    }
+    function familiarOptionInputs(container) {
+        return Array.from({ length: 3 }, (_, index) => {
+            const line = document.createElement("div");
+            line.className = "familiar-option-input";
+            const name = document.createElement("input");
+            name.placeholder = `词条${index + 1}名称（如：最終傷害 (%)）`;
+            name.setAttribute("aria-label", `词条${index + 1}名称`);
+            const value = document.createElement("input");
+            value.type = "number";
+            value.step = "any";
+            value.min = "0";
+            value.placeholder = "数值";
+            value.setAttribute("aria-label", `词条${index + 1}数值`);
+            line.append(name, value);
+            container.append(line);
+            return { name, value };
+        });
+    }
+    function candidateFamiliarOptions(row) {
+        return row.options.flatMap(({ name, value }, index) => {
+            const option_name = name.value.trim();
+            const option_value = value.value.trim();
+            if (!option_name && !option_value) return [];
+            if (!option_name || !option_value) {
+                throw Error(`请完整填写候选萌兽词条${index + 1}`);
+            }
+            return [{ option_no: index + 1, option_name, option_value }];
+        });
+    }
+    function addFamiliarRow(familiar = null) {
+        const card = document.createElement("article");
+        const head = document.createElement("div");
+        head.className = "row equip-head";
+        const title = document.createElement("strong");
+        title.textContent = familiar?.familiar_name || "新增萌兽";
+        const mode = document.createElement("select");
+        mode.setAttribute("aria-label", `${title.textContent}操作`);
+        for (const [value, label] of familiar
+            ? [["keep", "保留"], ["remove", "移除"], ["replace", "替换"]]
+            : [["replace", "新增"]]) {
+            mode.add(new Option(label, value));
+        }
+        head.append(title, mode);
+        if (!familiar) {
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.textContent = "删除候选";
+            remove.onclick = () => {
+                familiarRows = familiarRows.filter(row => row.mode !== mode);
+                card.remove();
+                $("result").hidden = true;
+                saveState();
+            };
+            head.append(remove);
+        }
+        const compare = document.createElement("div");
+        compare.className = "equip-compare";
+        const left = document.createElement("div");
+        left.className = "equip-side";
+        const leftTitle = document.createElement("h3");
+        leftTitle.textContent = "当前萌兽";
+        const original = document.createElement("p");
+        original.textContent = familiar
+            ? `${familiar.familiar_name || "未命名萌兽"}（${familiar.familiar_nickname || "无昵称"}；${familiar.summoned_flag === "true" ? "已召唤" : `链路 ${familiar.slot_id}`}）`
+            : "无";
+        left.append(leftTitle, original);
+        if (familiar) {
+            const list = document.createElement("ul");
+            list.className = "familiar-options";
+            for (const option of familiar.option) {
+                const entry = document.createElement("li");
+                entry.textContent = `${option.option_name}：${option.option_value}`;
+                list.append(entry);
+            }
+            left.append(list);
+        }
+        const right = document.createElement("div");
+        right.className = "equip-side";
+        const rightTitle = document.createElement("h3");
+        rightTitle.textContent = "候选萌兽词条";
+        const state = document.createElement("p");
+        const candidate = document.createElement("div");
+        candidate.className = "candidate";
+        const options = familiarOptionInputs(candidate);
+        const updateMode = () => {
+            candidate.hidden = mode.value !== "replace";
+            state.hidden = mode.value === "replace";
+            state.textContent = mode.value === "remove" ? "不使用此萌兽" : "保留当前萌兽";
+            for (const input of candidate.querySelectorAll("input")) {
+                input.disabled = mode.value !== "replace";
+            }
+            $("result").hidden = true;
+        };
+        mode.onchange = updateMode;
+        updateMode();
+        right.append(rightTitle, state, candidate);
+        compare.append(left, right);
+        card.append(head, compare);
+        $("familiars").append(card);
+        const row = { familiar, mode, options };
+        familiarRows.push(row);
+        return row;
+    }
+    function renderFamiliars(data) {
+        if (!Array.isArray(data?.familiar_info) ||
+            !Array.isArray(data.familiar_link_slot)) {
+            throw Error("萌兽数据格式错误");
+        }
+        importedFamiliars = data;
+        familiarRows = [];
+        $("familiars").replaceChildren();
+        for (const familiar of data.familiar_info) {
+            if (familiarIsActive(familiar, data.familiar_link_slot)) {
+                addFamiliarRow(familiar);
+            } else {
+                const card = document.createElement("article");
+                const title = document.createElement("strong");
+                title.textContent = `${familiar.familiar_name || "未命名萌兽"}（未生效）`;
+                const list = document.createElement("ul");
+                list.className = "familiar-options";
+                for (const option of familiar.option) {
+                    const entry = document.createElement("li");
+                    entry.textContent = `${option.option_name}：${option.option_value}`;
+                    list.append(entry);
+                }
+                card.append(title, list);
+                $("familiars").append(card);
+            }
+        }
+        $("addFamiliar").disabled = false;
     }
     function equipmentValues(item) {
         const out = Object.fromEntries(equipmentFields.map(([k]) => [k, 0]));
@@ -360,25 +559,39 @@
             }
         };
     }
+    function makeCandidateIdentity(placeholder) {
+        const identity = document.createElement("div");
+        identity.className = "equip-identity";
+        const icon = makeEquipmentIcon();
+        const name = document.createElement("input");
+        name.placeholder = placeholder;
+        name.setAttribute("aria-label", placeholder);
+        identity.append(icon.box, name);
+        return { identity, name };
+    }
     function updateEquipmentFields() {
         if (!currentJob) return;
         const selectedStats = [...currentJob.main_attr, ...currentJob.sub_attr];
         const attack = currentJob.attack_type;
         for (const row of rows) {
-            for (const inputs of [row.original, row.replacement]) {
+            for (const inputs of [row.original, row.replacement, row.extra?.fields].filter(Boolean)) {
                 for (const [key, input] of Object.entries(inputs)) {
                     const base = key.replace(/_pct$/, "");
                     let visible = true;
                     if (attributes.includes(base)) visible = selectedStats.includes(base);
                     if (["attack_power", "magic_power"].includes(base)) visible = base === attack;
                     input.parentElement.hidden = !visible;
-                    input.disabled = !visible || (inputs === row.replacement && row.mode.value !== "replace");
+                    input.disabled = !visible ||
+                        (inputs === row.replacement &&
+                            !["replace", "replace_pair", "replace_overall"].includes(row.mode.value)) ||
+                        (inputs === row.extra?.fields && row.mode.value !== "replace_pair");
                 }
             }
         }
     }
     function renderEquipment(items) {
         $("equipment").replaceChildren();
+        outfit = null;
         rows = items.filter(item => !["拼圖", "寶石"].includes(item.item_equipment_part)).map(item => {
             const card = document.createElement("article");
             const head = document.createElement("div");
@@ -388,9 +601,25 @@
             const mode = document.createElement("select");
             mode.setAttribute("aria-label", `${title.textContent}操作`);
             for (const [value, text] of [["keep", "保留"], ["remove", "脱掉"], ["replace", "替换"]]) mode.add(new Option(text, value));
+            const isOverall = item.item_equipment_slot === "上衣" &&
+                item.item_equipment_part === "套服";
+            const isTop = item.item_equipment_slot === "上衣" &&
+                item.item_equipment_part === "上衣";
+            if (isOverall) mode.add(new Option("替换成上下衣", "replace_pair"));
+            if (isTop) mode.add(new Option("替换成套服", "replace_overall"));
             head.append(title, mode);
             const compare = document.createElement("div");
             compare.className = "equip-compare";
+            const toggle = document.createElement("button");
+            toggle.type = "button";
+            toggle.textContent = "收起";
+            toggle.setAttribute("aria-expanded", "true");
+            toggle.onclick = () => {
+                compare.hidden = !compare.hidden;
+                toggle.textContent = compare.hidden ? "展开" : "收起";
+                toggle.setAttribute("aria-expanded", String(!compare.hidden));
+            };
+            head.append(toggle);
             const left = document.createElement("div");
             left.className = "equip-side";
             const leftTitle = document.createElement("h3");
@@ -449,23 +678,38 @@
             const candidate = document.createElement("div");
             candidate.className = "candidate";
             candidate.hidden = true;
-            const name = document.createElement("input");
-            name.placeholder = "候选装备名称";
-            name.setAttribute("aria-label", "候选装备名称");
-            const newIdentity = document.createElement("div");
-            newIdentity.className = "equip-identity";
-            const newIcon = makeEquipmentIcon();
-            newIdentity.append(newIcon.box, name);
+            const { identity: newIdentity, name } =
+                makeCandidateIdentity("候选装备名称");
             const candidateGrid = document.createElement("div");
             candidateGrid.className = "grid";
             const replacement = makeFields(candidateGrid, equipmentFields);
             candidate.append(newIdentity, candidateGrid);
+            let extra = null;
+            let extraContainer = null;
+            if (isOverall) {
+                extraContainer = document.createElement("div");
+                const { identity: extraIdentity, name: extraName } =
+                    makeCandidateIdentity("候选裤/裙名称");
+                extraName.required = true;
+                const extraGrid = document.createElement("div");
+                extraGrid.className = "grid";
+                const extraFields = makeFields(extraGrid, equipmentFields);
+                extraContainer.append(extraIdentity, extraGrid);
+                candidate.append(extraContainer);
+                extra = { name: extraName, fields: extraFields };
+            }
             const updateMode = () => {
-                const replacing = mode.value === "replace";
+                const replacing = ["replace", "replace_pair", "replace_overall"].includes(mode.value);
                 candidate.hidden = !replacing;
                 state.hidden = replacing;
                 state.textContent = mode.value === "remove" ? "不穿戴装备" : "保留当前装备";
                 for (const input of candidate.querySelectorAll("input")) input.disabled = !replacing;
+                if (extra) {
+                    extraContainer.hidden = mode.value !== "replace_pair";
+                    for (const input of extraContainer.querySelectorAll("input")) {
+                        input.disabled = mode.value !== "replace_pair";
+                    }
+                }
                 $("result").hidden = true;
             };
             mode.onchange = () => {
@@ -478,12 +722,30 @@
             card.append(head, compare);
             $("equipment").append(card);
             return {
-                mode, original, replacement, name, refreshStats,
+                mode, original, replacement, name, refreshStats, extra,
                 originalName: item.item_name || "",
                 slot: item.item_equipment_slot || "",
                 part: item.item_equipment_part || ""
             };
         });
+        const top = rows.find(row => row.slot === "上衣" && row.part === "上衣");
+        const bottom = rows.find(row => row.slot === "褲/裙");
+        if (top && bottom) {
+            outfit = { top, bottom, bottomMode: null };
+            const originalChange = top.mode.onchange;
+            top.mode.onchange = () => {
+                if (top.mode.value === "replace_overall") {
+                    if (outfit.bottomMode === null) outfit.bottomMode = bottom.mode.value;
+                    bottom.mode.value = "remove";
+                } else if (outfit.bottomMode !== null) {
+                    bottom.mode.value = outfit.bottomMode;
+                    outfit.bottomMode = null;
+                }
+                bottom.mode.disabled = top.mode.value === "replace_overall";
+                bottom.mode.onchange();
+                originalChange();
+            };
+        }
         updateEquipmentFields();
     }
     function matchesSetItem(item, member) {
@@ -498,10 +760,11 @@
             ? member.contains?.some(word => item.name.includes(word)) === true
             : item.name === member.name;
     }
-    function evaluateSets(itemForRow) {
+    function evaluateSets(itemForRow, extraItems = []) {
+        const equipped = rows.map(itemForRow).filter(Boolean).concat(extraItems);
         return setList.map(set => {
             const count = set.items.filter(member =>
-                rows.some(row => matchesSetItem(itemForRow(row), member))
+                equipped.some(item => matchesSetItem(item, member))
             ).length;
             const tiers = Object.entries(set.effects).filter(
                 ([threshold]) => Number(threshold) <= count
@@ -568,12 +831,27 @@
             character: $("character").textContent,
             className: importedClass,
             items: importedItems,
+            familiars: importedFamiliars,
             baseline: fieldValues(baseline),
             rows: rows.map(row => ({
                 mode: row.mode.value,
                 name: row.name.value,
                 original: fieldValues(row.original),
-                replacement: fieldValues(row.replacement)
+                replacement: fieldValues(row.replacement),
+                extra: row.extra ? {
+                    name: row.extra.name.value,
+                    fields: fieldValues(row.extra.fields)
+                } : null
+            })),
+            outfit: outfit ? {
+                bottomMode: outfit.bottomMode
+            } : null,
+            familiarRows: familiarRows.map(row => ({
+                mode: row.mode.value,
+                options: row.options.map(({ name, value }) => ({
+                    name: name.value,
+                    value: value.value
+                }))
             })),
             result: $("result").hidden ? null : {
                 oldDamage: $("oldDamage").textContent,
@@ -599,6 +877,33 @@
             await loadSetList();
             applyJob(saved.className, jobs);
             renderEquipment(saved.items);
+            if (saved.familiars) {
+                renderFamiliars(saved.familiars);
+                if (Array.isArray(saved.familiarRows)) {
+                    const added = Math.max(0, saved.familiarRows.length - familiarRows.length);
+                    for (let i = 0; i < added; i++) addFamiliarRow();
+                    familiarRows.forEach((row, index) => {
+                        const entry = saved.familiarRows[index];
+                        if (!entry || typeof entry !== "object") return;
+                        if (row.familiar &&
+                            ["keep", "remove", "replace"].includes(entry.mode)) {
+                            row.mode.value = entry.mode;
+                        }
+                        row.mode.onchange();
+                        if (Array.isArray(entry.options)) {
+                            row.options.forEach((option, optionIndex) => {
+                                const savedOption = entry.options[optionIndex];
+                                if (typeof savedOption?.name === "string") {
+                                    option.name.value = savedOption.name;
+                                }
+                                if (typeof savedOption?.value === "string") {
+                                    option.value.value = savedOption.value;
+                                }
+                            });
+                        }
+                    });
+                }
+            }
             importedClass = saved.className;
             importedItems = saved.items;
             $("character").textContent = typeof saved.character === "string" ? saved.character : "";
@@ -612,8 +917,17 @@
                     if (typeof entry.name === "string") row.name.value = entry.name;
                     restoreFields(row.original, entry.original);
                     restoreFields(row.replacement, entry.replacement);
+                    if (row.extra && entry.extra) {
+                        if (typeof entry.extra.name === "string") {
+                            row.extra.name.value = entry.extra.name;
+                        }
+                        restoreFields(row.extra.fields, entry.extra.fields);
+                    }
                     row.refreshStats();
                 });
+            }
+            if (outfit && typeof saved.outfit?.bottomMode === "string") {
+                outfit.bottomMode = saved.outfit.bottomMode;
             }
             $("calculate").disabled = false;
             if (saved.result && typeof saved.result === "object" &&
@@ -648,7 +962,11 @@
         $("calculate").disabled = true;
         currentJob = null;
         rows = [];
+        familiarRows = [];
+        importedFamiliars = null;
         $("equipment").replaceChildren();
+        $("familiars").replaceChildren();
+        $("addFamiliar").disabled = true;
         $("character").textContent = "";
         $("jobInfo").value = "";
         $("mainStatDisplay").value = "";
@@ -672,9 +990,11 @@
             if (!id.ocid) throw Error("未找到角色");
             const eq = await request("character/item-equipment", { ocid: id.ocid });
             if (!Array.isArray(eq.item_equipment) || !eq.item_equipment.length) throw Error("没有当前装备数据");
+            const familiars = await request("character/familiar", { ocid: id.ocid });
             const oldBaseline = fieldValues(baseline);
             applyJob(eq.character_class, jobs);
             renderEquipment(eq.item_equipment);
+            renderFamiliars(familiars);
             if (oldJob === currentJob) restoreFields(baseline, oldBaseline);
             $("character").textContent = characterName;
             importedClass = eq.character_class;
@@ -688,6 +1008,11 @@
         finally { $("query").disabled = false; }
     };
     $("name").oninput = saveState;
+    $("addFamiliar").onclick = () => {
+        addFamiliarRow();
+        $("result").hidden = true;
+        saveState();
+    };
     $("calculator").oninput = () => {
         $("result").hidden = true;
         saveState();
@@ -706,11 +1031,12 @@
             let remainingDefense = 1 - b.ied / 100;
             for (const row of rows) {
                 if (row.mode.value === "keep") continue;
-                if (row.mode.value === "replace" && !row.name.value.trim()) {
+                const replacing = ["replace", "replace_pair", "replace_overall"].includes(row.mode.value);
+                if (replacing && !row.name.value.trim()) {
                     throw Error("请输入候选装备名称以计算套装效果");
                 }
                 const old = values(row.original);
-                const replacement = row.mode.value === "replace" ? values(row.replacement) : {};
+                const replacement = replacing ? values(row.replacement) : {};
                 console.log("[装备收益] 装备变更", {
                     操作: row.mode.value,
                     原装备: { ...old },
@@ -719,18 +1045,68 @@
                 for (const key of Object.keys(delta)) delta[key] += (replacement[key] || 0) - old[key];
                 if (old.ied >= 100) throw Error("无法从100%装备无视反推换装结果");
                 remainingDefense *= (1 - (replacement.ied || 0) / 100) / (1 - old.ied / 100);
+                if (row.mode.value === "replace_pair") {
+                    const extraName = row.extra.name.value.trim();
+                    if (!extraName) throw Error("请输入新裤/裙名称");
+                    const added = values(row.extra.fields);
+                    for (const key of Object.keys(delta)) delta[key] += added[key];
+                    remainingDefense *= 1 - added.ied / 100;
+                }
             }
+            let familiarFinalBefore = 0;
+            let familiarFinalAfter = 0;
+            for (const row of familiarRows) {
+                const oldOptions = row.familiar
+                    ? parseFamiliarOptions(row.familiar.option) : [];
+                const newOptions = row.mode.value === "keep" ? oldOptions
+                    : row.mode.value === "replace"
+                        ? parseFamiliarOptions(candidateFamiliarOptions(row)) : [];
+                familiarFinalBefore += oldOptions.reduce((sum, option) =>
+                    sum + (option.key === "final_damage" ? option.value : 0), 0
+                );
+                familiarFinalAfter += newOptions.reduce((sum, option) =>
+                    sum + (option.key === "final_damage" ? option.value : 0), 0
+                );
+                if (row.mode.value === "keep") continue;
+                for (const [options, sign] of [[oldOptions, -1], [newOptions, 1]]) {
+                    for (const option of options) {
+                        if (["unknown", "passive_skill_level", "final_damage"].includes(option.key)) {
+                            continue;
+                        }
+                        if (option.value < 0 ||
+                            (option.key === "ied" && option.value > 100)) {
+                            throw Error(`萌兽词条数值超出范围：${option.rawName}`);
+                        }
+                        if (option.key === "ied") {
+                            if (sign < 0 && option.value === 100) {
+                                throw Error("无法从100%萌兽无视反推换装结果");
+                            }
+                            remainingDefense *= sign > 0
+                                ? 1 - option.value / 100
+                                : 1 / (1 - option.value / 100);
+                        } else if (Object.hasOwn(delta, option.key)) {
+                            delta[option.key] += sign * option.value;
+                        }
+                    }
+                }
+            }
+            const convertedItems = rows.filter(row => row.mode.value === "replace_pair")
+                .map(row => ({
+                    name: row.extra.name.value.trim(), slot: "褲/裙", part: "褲/裙"
+                }));
             const beforeSets = evaluateSets(row => ({
                 name: row.originalName, slot: row.slot, part: row.part
             }));
             const afterSets = evaluateSets(row => {
                 if (row.mode.value === "remove") return null;
                 return {
-                    name: row.mode.value === "replace" ? row.name.value.trim() : row.originalName,
+                    name: ["replace", "replace_pair", "replace_overall"].includes(row.mode.value)
+                        ? row.name.value.trim() : row.originalName,
                     slot: row.slot,
-                    part: row.part
+                    part: row.mode.value === "replace_pair" ? "上衣" :
+                        row.mode.value === "replace_overall" ? "套服" : row.part
                 };
-            });
+            }, convertedItems);
             beforeSets.forEach((beforeSet, index) => {
                 const afterSet = afterSets[index];
                 const beforeTiers = new Set(beforeSet.tiers.map(([tier]) => tier));
@@ -796,6 +1172,11 @@
                     throw Error(`换装后${label}被算成负数：${Number(next[k].toFixed(4))}%`);
                 }
             }
+            next.final_damage = (
+                (1 + b.final_damage / 100)
+                * (1 + familiarFinalAfter / 100)
+                / (1 + familiarFinalBefore / 100) - 1
+            ) * 100;
             next.ied = (1 - remainingDefense) * 100;
             if (next.ied < -0.000001) throw Error(`换装后无视防御力被算成负数：${Number(next.ied.toFixed(4))}%`);
             if (next.ied > 100) throw Error(`换装后无视防御力超过100%：${Number(next.ied.toFixed(4))}%`);
@@ -804,6 +1185,7 @@
             const score = s => statFactor(s) * s.attack
                 * (1 + (s.damage + s.boss) / 100)
                 * (1.35 + s.crit_damage / 100)
+                * (1 + s.final_damage / 100)
                 * Math.max(0, 1 - s.defense / 100 * (1 - s.ied / 100));
             const before = score(current), ratio = score(next) / before;
             if (!(before > 0) || !(b.measured > 0) || !Number.isFinite(ratio)) throw Error("请检查基准属性、木桩防御率和伤害");
@@ -817,7 +1199,8 @@
                 ),
                 [attackLabel, current.attack, next.attack],
                 ...[["damage", "伤害%"], ["boss", "BOSS伤害%"],
-                    ["crit_damage", "暴击伤害%"], ["ied", "无视防御%"]]
+                    ["crit_damage", "暴击伤害%"], ["final_damage", "最终伤害%"],
+                    ["ied", "无视防御%"]]
                     .map(([key, label]) => [label, current[key], next[key]])
             ];
             const formatPanel = value => value.toLocaleString("zh-CN", {

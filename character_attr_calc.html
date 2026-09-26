@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色属性计算器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 14px;
+            color: #10201e;
+            background: linear-gradient(to bottom, #f0f9ff, #e0f7fa);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+        }
+
+        .page {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 4px 0 6px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        h2 {
+            margin: 0 0 12px;
+            font-size: 17px;
+        }
+
+        .subtitle {
+            margin: 0 0 16px;
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.72;
+        }
+
+        .card {
+            margin-bottom: 12px;
+            padding: 14px;
+            border: 1px solid rgba(0, 121, 107, 0.14);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.86);
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) auto;
+            gap: 10px;
+        }
+
+        input,
+        select,
+        button {
+            font: inherit;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #b2dfdb;
+            border-radius: 7px;
+            color: #10201e;
+            background: #fff;
+        }
+
+        input:focus {
+            border-color: #00796b;
+            outline: 2px solid rgba(0, 121, 107, 0.12);
+        }
+
+        .btn {
+            padding: 9px 14px;
+            border: 1px solid #00796b;
+            border-radius: 8px;
+            color: #fff;
+            background: #00796b;
+            cursor: pointer;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: #005f55;
+        }
+
+        .btn:disabled {
+            cursor: wait;
+            opacity: 0.6;
+        }
+
+        .btn-secondary {
+            color: #00796b;
+            background: transparent;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e0f2f1;
+        }
+
+        .status {
+            min-height: 20px;
+            margin-top: 9px;
+            font-size: 13px;
+            color: #45615e;
+            white-space: pre-wrap;
+        }
+
+        .status.error {
+            color: #b42318;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .character-summary {
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .character-summary img {
+            width: 96px;
+            height: 96px;
+            object-fit: contain;
+        }
+
+        .summary-grid,
+        .metric-grid,
+        .calculator-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .summary-grid {
+            grid-template-columns: repeat(4, minmax(120px, 1fr));
+        }
+
+        .metric-grid {
+            grid-template-columns: repeat(5, minmax(120px, 1fr));
+        }
+
+        .calculator-grid {
+            grid-template-columns: repeat(2, minmax(280px, 1fr));
+        }
+
+        .summary-item,
+        .metric,
+        .calc-group {
+            padding: 10px;
+            border-radius: 9px;
+            background: #f6fbfa;
+        }
+
+        .summary-item .label,
+        .metric .label {
+            display: block;
+            margin-bottom: 4px;
+            color: #52706c;
+            font-size: 12px;
+        }
+
+        .summary-item .value,
+        .metric .value {
+            overflow-wrap: anywhere;
+            font-size: 16px;
+        }
+
+        .metric.estimated {
+            border-left: 3px solid #e09f3e;
+        }
+
+        .metric.official {
+            border-left: 3px solid #00796b;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: minmax(160px, 1fr) 150px;
+            gap: 10px;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .form-row label {
+            font-size: 13px;
+        }
+
+        .field-note {
+            display: block;
+            margin-top: 2px;
+            color: #6a7d7a;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .result-box {
+            min-height: 80px;
+            margin: 0;
+            padding: 12px;
+            overflow-x: auto;
+            border-radius: 9px;
+            background: #f6fbfa;
+            font: 600 13px/1.65 "Segoe UI", Tahoma, sans-serif;
+            white-space: pre-wrap;
+        }
+
+        .warning {
+            margin: 10px 0 0;
+            padding: 9px 10px;
+            border-left: 3px solid #e09f3e;
+            border-radius: 5px;
+            background: #fff8e8;
+            color: #6b4b12;
+            font-size: 12px;
+        }
+
+        .equipment-list {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 8px;
+        }
+
+        .equipment-item {
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 9px;
+            align-items: center;
+            min-height: 64px;
+            padding: 8px;
+            border: 1px solid #dcebe8;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .equipment-item img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+        }
+
+        .equipment-name {
+            font-size: 12px;
+        }
+
+        .equipment-stat {
+            margin-top: 3px;
+            color: #52706c;
+            font-size: 11px;
+        }
+
+        @media (max-width: 850px) {
+            .summary-grid,
+            .metric-grid {
+                grid-template-columns: repeat(2, minmax(120px, 1fr));
+            }
+
+            .calculator-grid,
+            .equipment-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 8px;
+            }
+
+            .search-row,
+            .form-row,
+            .character-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .character-summary img {
+                margin: 0 auto;
+            }
+
+            .summary-grid,
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <h1>角色属性计算器</h1>
+        <p class="subtitle">根据 Nexon Open API 自动估算属性计算器参数</p>
+
+        <section class="card">
+            <form id="characterSearchForm">
+                <div class="search-row">
+                    <input type="text" id="characterName" placeholder="请输入角色昵称" autocomplete="off" required>
+                    <button type="submit" class="btn" id="searchButton">查询并自动填写</button>
+                </div>
+            </form>
+            <div id="status" class="status" aria-live="polite"></div>
+        </section>
+
+        <section class="card hidden" id="characterSection">
+            <h2>角色总览</h2>
+            <div class="character-summary">
+                <img id="characterImage" alt="角色图片">
+                <div class="summary-grid">
+                    <div class="summary-item"><span class="label">角色</span><span class="value" id="summaryName">-</span></div>
+                    <div class="summary-item"><span class="label">职业</span><span class="value" id="summaryClass">-</span></div>
+                    <div class="summary-item"><span class="label">等级</span><span class="value" id="summaryLevel">-</span></div>
+                    <div class="summary-item"><span class="label">服务器</span><span class="value" id="summaryWorld">-</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card hidden" id="calibrationSection">
+            <h2>API 数据与首版估算</h2>
+            <div class="metric-grid">
+                <div class="metric official"><span class="label">官方最终攻魔</span><span class="value" id="officialAttack">-</span></div>
+                <div class="metric estimated"><span class="label">估算基础攻魔</span><span class="value" id="estimatedBaseAttack">-</span></div>
+                <div class="metric estimated"><span class="label">识别攻魔百分比</span><span class="value" id="estimatedAttackPct">-</span></div>
+                <div class="metric estimated"><span class="label">装备平攻魔合计</span><span class="value" id="equipmentAttack">-</span></div>
+                <div class="metric"><span class="label">重建差额</span><span class="value" id="attackDifference">-</span></div>
+            </div>
+            <p class="warning" id="estimateWarning">基础值和百分比只根据当前已解析的数据估算，可在下方手动修正。</p>
+        </section>
+
+        <section class="card">
+            <h2>等效属性计算参数</h2>
+            <div class="calculator-grid">
+                <div class="calc-group">
+                    <h2>攻击力</h2>
+                    <div class="form-row">
+                        <label for="attack">基础攻击力<span class="field-note">API 查询后自动反推</span></label>
+                        <input type="number" id="attack" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="attackPct">攻击力百分比 (%)<span class="field-note">首版解析装备潜能和灵魂</span></label>
+                        <input type="number" id="attackPct" step="0.1" inputmode="decimal">
+                    </div>
+                </div>
+
+                <div class="calc-group">
+                    <h2>伤害加成</h2>
+                    <div class="form-row">
+                        <label for="dmgPct">总伤害 (%)</label>
+                        <input type="number" id="dmgPct" step="0.1" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="bossPct">BOSS 伤害 (%)</label>
+                        <input type="number" id="bossPct" step="0.1" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="criDmg">爆击伤害 (%)</label>
+                        <input type="number" id="criDmg" step="0.1" inputmode="decimal">
+                    </div>
+                </div>
+
+                <div class="calc-group">
+                    <h2 id="mainAttrHeading">主属性</h2>
+                    <div class="form-row">
+                        <label for="mainAttr">基础主属性<span class="field-note" id="mainAttrType">等待角色数据</span></label>
+                        <input type="number" id="mainAttr" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="mainAttrPct">主属性百分比 (%)</label>
+                        <input type="number" id="mainAttrPct" step="0.1" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="extraMainAttr">不套用百分比主属性<span class="field-note">首版统计 Symbol</span></label>
+                        <input type="number" id="extraMainAttr" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                </div>
+
+                <div class="calc-group">
+                    <h2 id="subAttrHeading">副属性</h2>
+                    <div class="form-row">
+                        <label for="subAttr">基础副属性<span class="field-note" id="subAttrType">等待角色数据</span></label>
+                        <input type="number" id="subAttr" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="subAttrPct">副属性百分比 (%)</label>
+                        <input type="number" id="subAttrPct" step="0.1" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="extraSubAttr">不套用百分比副属性<span class="field-note">首版统计 Symbol</span></label>
+                        <input type="number" id="extraSubAttr" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                </div>
+
+                <div class="calc-group hidden" id="secondSubGroup">
+                    <h2>第二副属性</h2>
+                    <div class="form-row">
+                        <label for="subAttr2">基础副属性 2<span class="field-note" id="subAttrType2">特殊职业</span></label>
+                        <input type="number" id="subAttr2" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="subAttrPct2">副属性 2 百分比 (%)</label>
+                        <input type="number" id="subAttrPct2" step="0.1" inputmode="decimal">
+                    </div>
+                    <div class="form-row">
+                        <label for="extraSubAttr2">不套用百分比副属性 2</label>
+                        <input type="number" id="extraSubAttr2" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-row">
+                <button type="button" class="btn" id="calculateButton">计算等效属性</button>
+                <button type="button" class="btn btn-secondary" id="restoreButton" disabled>恢复 API 估算值</button>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>计算结果</h2>
+            <pre id="result" class="result-box">请输入角色昵称查询，或手动填写参数后计算。</pre>
+        </section>
+
+        <section class="card hidden" id="equipmentSection">
+            <h2>当前装备</h2>
+            <div id="equipmentList" class="equipment-list"></div>
+        </section>
+    </main>
+
+    <script>
+        "use strict";
+
+        const NX_API_HOST = "https://open.api.nexon.com";
+        const NX_API_KEY_HEADER = "x-nxopen-api-key";
+        const NX_API_KEY_B64_PARTS = [
+            "dGVzdF9lMjNmMjk3NDg4NzM3MzRkZGJhYjYwNzdlN2VjNzc0NjJjMzFjMWFlOTEyZmZlZjE3ZTRjY2Rj",
+            "Yzk2NGQyYmM5ZWZlOGQwNGU2ZDIzM2JkMzVjZjJmYWJkZWI5M2ZiMGQ=",
+        ];
+
+        const INPUT_IDS = [
+            "attack", "attackPct", "dmgPct", "bossPct", "criDmg",
+            "mainAttr", "mainAttrPct", "extraMainAttr",
+            "subAttr", "subAttrPct", "extraSubAttr",
+            "subAttr2", "subAttrPct2", "extraSubAttr2",
+        ];
+
+        const MAGIC_CLASS_TOKENS = [
+            "法師", "魔法師", "巫師", "主教", "冰雷", "火毒", "龍魔導士", "龙魔导士",
+            "夜光", "幻獸師", "幻兽师", "凱內西斯", "凯内西斯", "伊利恩", "菈菈", "拉拉", "琳恩",
+        ];
+        const DUAL_SUB_CLASS_TOKENS = ["暗影神偷", "暗影俠盜", "暗影侠盗", "影武者", "卡蒂娜"];
+        const UNSUPPORTED_CLASS_TOKENS = ["惡魔復仇者", "恶魔复仇者", "傑諾", "杰诺", "尖兵"];
+
+        let lastApiEstimate = null;
+        let currentOfficialAttack = Number.NaN;
+        let secondSubEnabled = false;
+
+        function getNxApiKey() {
+            return atob(NX_API_KEY_B64_PARTS.join(""));
+        }
+
+        function setStatus(message, isError = false) {
+            const status = document.getElementById("status");
+            status.textContent = message || "";
+            status.classList.toggle("error", isError);
+        }
+
+        function setText(id, value, fallback = "-") {
+            const element = document.getElementById(id);
+            if (!element) return;
+            element.textContent = value === undefined || value === null || value === "" ? fallback : String(value);
+        }
+
+        function parseNumber(value) {
+            if (value === undefined || value === null) return Number.NaN;
+            const match = String(value).replaceAll(",", "").match(/-?\d+(?:\.\d+)?/);
+            return match ? Number(match[0]) : Number.NaN;
+        }
+
+        function finiteOrZero(value) {
+            const number = Number(value);
+            return Number.isFinite(number) ? number : 0;
+        }
+
+        function rounded(value, digits = 2) {
+            if (!Number.isFinite(value)) return 0;
+            const factor = 10 ** digits;
+            return Math.round(value * factor) / factor;
+        }
+
+        function formatNumber(value, digits = 2) {
+            if (!Number.isFinite(value)) return "-";
+            return value.toLocaleString("zh-CN", { maximumFractionDigits: digits });
+        }
+
+        async function nxFetchJson(path, params = {}) {
+            const url = new URL(path, NX_API_HOST);
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined && value !== null && String(value).length > 0) {
+                    url.searchParams.set(key, String(value));
+                }
+            });
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+            try {
+                const response = await fetch(url.toString(), {
+                    headers: { [NX_API_KEY_HEADER]: getNxApiKey() },
+                    signal: controller.signal,
+                });
+                const body = await response.json().catch(() => null);
+                if (!response.ok) {
+                    const apiMessage = body?.error?.message || body?.message || response.statusText;
+                    throw new Error(`Nexon API 请求失败：HTTP ${response.status} ${apiMessage}`);
+                }
+                if (!body) throw new Error("Nexon API 返回了无效数据");
+                return body;
+            } catch (error) {
+                if (error?.name === "AbortError") throw new Error("Nexon API 请求超时");
+                throw error;
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
+        function buildStatIndex(finalStat) {
+            const index = new Map();
+            (Array.isArray(finalStat) ? finalStat : []).forEach(item => {
+                const name = String(item?.stat_name || "").trim();
+                if (name) index.set(name, item?.stat_value);
+            });
+            return index;
+        }
+
+        function findStat(index, candidates, allowIncludes = false) {
+            for (const candidate of candidates) {
+                if (index.has(candidate)) return parseNumber(index.get(candidate));
+            }
+            if (allowIncludes) {
+                for (const [name, value] of index.entries()) {
+                    if (candidates.some(candidate => name.includes(candidate))) return parseNumber(value);
+                }
+            }
+            return Number.NaN;
+        }
+
+        function includesAny(value, tokens) {
+            const text = String(value || "");
+            return tokens.some(token => text.includes(token));
+        }
+
+        function chooseAttackType(className, statIndex) {
+            if (includesAny(className, MAGIC_CLASS_TOKENS)) return "magic";
+            const attack = findStat(statIndex, ["攻擊力", "攻击力"]);
+            const magic = findStat(statIndex, ["魔法攻擊力", "魔法攻击力", "魔力"]);
+            if (Number.isFinite(magic) && (!Number.isFinite(attack) || magic > attack)) return "magic";
+            return "physical";
+        }
+
+        function chooseAttributeTypes(className, statIndex) {
+            if (includesAny(className, ["惡魔復仇者", "恶魔复仇者"])) {
+                return { main: "HP", sub: "STR", secondSub: null, supported: false };
+            }
+            if (includesAny(className, ["傑諾", "杰诺", "尖兵"])) {
+                return { main: "STR", sub: "DEX", secondSub: "LUK", supported: false };
+            }
+
+            const stats = ["STR", "DEX", "INT", "LUK"].map(type => ({
+                type,
+                value: findStat(statIndex, [type]),
+            }));
+            stats.sort((a, b) => finiteOrZero(b.value) - finiteOrZero(a.value));
+            const main = stats[0]?.type || "STR";
+            let sub = { STR: "DEX", DEX: "STR", INT: "LUK", LUK: "DEX" }[main];
+            let secondSub = null;
+            if (includesAny(className, DUAL_SUB_CLASS_TOKENS)) {
+                sub = "DEX";
+                secondSub = "STR";
+            }
+            return { main, sub, secondSub, supported: true };
+        }
+
+        function collectEquipmentEffectTexts(items) {
+            const fields = [
+                "potential_option_1", "potential_option_2", "potential_option_3",
+                "additional_potential_option_1", "additional_potential_option_2", "additional_potential_option_3",
+                "soul_option",
+            ];
+            const texts = [];
+            items.forEach(item => {
+                fields.forEach(field => {
+                    const value = String(item?.[field] || "").trim();
+                    if (value) texts.push(value);
+                });
+            });
+            return texts;
+        }
+
+        function sumPercentFromTexts(texts, patterns) {
+            let total = 0;
+            texts.forEach(text => {
+                patterns.forEach(pattern => {
+                    const regex = new RegExp(`${pattern}\\s*[:：]?\\s*[+＋]?\\s*(\\d+(?:\\.\\d+)?)\\s*%`, "gi");
+                    for (const match of text.matchAll(regex)) total += Number(match[1]);
+                });
+            });
+            return total;
+        }
+
+        function getAttackPercent(texts, attackType) {
+            const patterns = attackType === "magic"
+                ? ["魔法攻擊力", "魔法攻击力", "魔力"]
+                : ["(?<!魔法)攻擊力", "(?<!魔法)攻击力"];
+            return sumPercentFromTexts(texts, patterns);
+        }
+
+        function getAttributePercent(texts, attributeType) {
+            const own = sumPercentFromTexts(texts, [attributeType]);
+            const all = sumPercentFromTexts(texts, ["所有屬性", "所有属性", "全屬性", "全属性"]);
+            return own + all;
+        }
+
+        function getEquipmentFlatAttack(items, attackType) {
+            const key = attackType === "magic" ? "magic_power" : "attack_power";
+            return items.reduce((sum, item) => sum + finiteOrZero(parseNumber(item?.item_total_option?.[key])), 0);
+        }
+
+        function getSymbolAttribute(symbolData, attributeType) {
+            const keyByType = { STR: "symbol_str", DEX: "symbol_dex", INT: "symbol_int", LUK: "symbol_luk", HP: "symbol_hp" };
+            const key = keyByType[attributeType];
+            if (!key) return 0;
+            const symbols = Array.isArray(symbolData?.symbol) ? symbolData.symbol : [];
+            return symbols.reduce((sum, symbol) => sum + finiteOrZero(parseNumber(symbol?.[key])), 0);
+        }
+
+        function getFinalAttribute(statIndex, type) {
+            if (type === "HP") return findStat(statIndex, ["HP", "最大HP", "最大 HP"]);
+            return findStat(statIndex, [type]);
+        }
+
+        function estimateBase(finalValue, percent, nonPercent = 0) {
+            if (!Number.isFinite(finalValue)) return 0;
+            const multiplier = 1 + finiteOrZero(percent) / 100;
+            if (multiplier <= 0) return 0;
+            return Math.max(0, (finalValue - finiteOrZero(nonPercent)) / multiplier);
+        }
+
+        function firstFinite(...values) {
+            return values.find(Number.isFinite) ?? 0;
+        }
+
+        function createEstimate(basic, stat, equipment, symbols) {
+            const statIndex = buildStatIndex(stat?.final_stat);
+            const className = String(basic?.character_class || stat?.character_class || "");
+            const attackType = chooseAttackType(className, statIndex);
+            const attributes = chooseAttributeTypes(className, statIndex);
+            const items = Array.isArray(equipment?.item_equipment) ? equipment.item_equipment : [];
+            const effectTexts = collectEquipmentEffectTexts(items);
+
+            const officialAttack = attackType === "magic"
+                ? findStat(statIndex, ["魔法攻擊力", "魔法攻击力", "魔力"])
+                : findStat(statIndex, ["攻擊力", "攻击力"]);
+            const directAttackPercent = attackType === "magic"
+                ? findStat(statIndex, ["魔法攻擊力百分比", "魔法攻击力百分比", "魔力百分比"])
+                : findStat(statIndex, ["攻擊力百分比", "攻击力百分比"]);
+            const parsedAttackPercent = getAttackPercent(effectTexts, attackType);
+            const attackPercent = Number.isFinite(directAttackPercent) ? directAttackPercent : parsedAttackPercent;
+            const baseAttack = estimateBase(officialAttack, attackPercent);
+
+            const finalMain = getFinalAttribute(statIndex, attributes.main);
+            const mainPercent = getAttributePercent(effectTexts, attributes.main);
+            const extraMain = getSymbolAttribute(symbols, attributes.main);
+            const baseMain = estimateBase(finalMain, mainPercent, extraMain);
+
+            const finalSub = getFinalAttribute(statIndex, attributes.sub);
+            const subPercent = getAttributePercent(effectTexts, attributes.sub);
+            const extraSub = getSymbolAttribute(symbols, attributes.sub);
+            const baseSub = estimateBase(finalSub, subPercent, extraSub);
+
+            const finalSub2 = attributes.secondSub ? getFinalAttribute(statIndex, attributes.secondSub) : 0;
+            const subPercent2 = attributes.secondSub ? getAttributePercent(effectTexts, attributes.secondSub) : 0;
+            const extraSub2 = attributes.secondSub ? getSymbolAttribute(symbols, attributes.secondSub) : 0;
+            const baseSub2 = attributes.secondSub ? estimateBase(finalSub2, subPercent2, extraSub2) : 0;
+
+            return {
+                meta: {
+                    className,
+                    attackType,
+                    attackLabel: attackType === "magic" ? "魔法攻击力" : "攻击力",
+                    attributes,
+                    equipmentAttack: getEquipmentFlatAttack(items, attackType),
+                    officialAttack,
+                    parsedAttackPercent,
+                    directAttackPercent,
+                },
+                inputs: {
+                    attack: rounded(baseAttack),
+                    attackPct: rounded(attackPercent),
+                    dmgPct: rounded(firstFinite(findStat(statIndex, ["傷害", "伤害"]), 0)),
+                    bossPct: rounded(firstFinite(findStat(statIndex, ["BOSS怪物傷害", "BOSS怪物伤害", "BOSS傷害", "BOSS伤害"]), 0)),
+                    criDmg: rounded(firstFinite(findStat(statIndex, ["爆擊傷害", "暴击伤害", "爆击伤害"]), 0)),
+                    mainAttr: rounded(baseMain),
+                    mainAttrPct: rounded(mainPercent),
+                    extraMainAttr: rounded(extraMain),
+                    subAttr: rounded(baseSub),
+                    subAttrPct: rounded(subPercent),
+                    extraSubAttr: rounded(extraSub),
+                    subAttr2: rounded(baseSub2),
+                    subAttrPct2: rounded(subPercent2),
+                    extraSubAttr2: rounded(extraSub2),
+                },
+                official: {
+                    attack: officialAttack,
+                    main: finalMain,
+                    sub: finalSub,
+                    sub2: finalSub2,
+                },
+                items,
+            };
+        }
+
+        function fillInputs(values) {
+            INPUT_IDS.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.value = Number.isFinite(Number(values[id])) ? values[id] : 0;
+            });
+        }
+
+        function renderEstimate(estimate) {
+            lastApiEstimate = structuredClone(estimate.inputs);
+            currentOfficialAttack = estimate.meta.officialAttack;
+            secondSubEnabled = Boolean(estimate.meta.attributes.secondSub);
+            document.getElementById("secondSubGroup").classList.toggle("hidden", !secondSubEnabled);
+
+            fillInputs(estimate.inputs);
+            setText("mainAttrType", estimate.meta.attributes.main);
+            setText("subAttrType", estimate.meta.attributes.sub);
+            setText("subAttrType2", estimate.meta.attributes.secondSub || "-");
+            setText("mainAttrHeading", `主属性（${estimate.meta.attributes.main}）`);
+            setText("subAttrHeading", `副属性（${estimate.meta.attributes.sub}）`);
+
+            setText("officialAttack", `${estimate.meta.attackLabel} ${formatNumber(estimate.meta.officialAttack)}`);
+            setText("estimatedBaseAttack", formatNumber(estimate.inputs.attack));
+            setText("estimatedAttackPct", `${formatNumber(estimate.inputs.attackPct)}%`);
+            setText("equipmentAttack", formatNumber(estimate.meta.equipmentAttack));
+
+            const reconstructed = estimate.inputs.attack * (1 + estimate.inputs.attackPct / 100);
+            const difference = Number.isFinite(estimate.meta.officialAttack) ? reconstructed - estimate.meta.officialAttack : Number.NaN;
+            setText("attackDifference", Number.isFinite(difference) ? formatNumber(difference) : "无法校验");
+
+            const warningParts = ["基础值和百分比只根据当前已解析的数据估算，可在下方手动修正。"];
+            if (!estimate.meta.attributes.supported || includesAny(estimate.meta.className, UNSUPPORTED_CLASS_TOKENS)) {
+                warningParts.push("该职业使用特殊属性公式，第一版结果仅供参考。");
+            }
+            if (!Number.isFinite(estimate.meta.officialAttack)) {
+                warningParts.push("API 响应中未识别到最终攻击力字段。");
+            }
+            setText("estimateWarning", warningParts.join(" "));
+
+            document.getElementById("calibrationSection").classList.remove("hidden");
+            document.getElementById("restoreButton").disabled = false;
+            renderEquipment(estimate.items, estimate.meta.attackType);
+            calculateEquivalence();
+        }
+
+        function renderCharacter(basic) {
+            setText("summaryName", basic?.character_name);
+            setText("summaryClass", basic?.character_class);
+            setText("summaryLevel", basic?.character_level);
+            setText("summaryWorld", basic?.world_name);
+            const image = document.getElementById("characterImage");
+            image.src = basic?.character_image || "";
+            image.classList.toggle("hidden", !basic?.character_image);
+            document.getElementById("characterSection").classList.remove("hidden");
+        }
+
+        function renderEquipment(items, attackType) {
+            const list = document.getElementById("equipmentList");
+            list.replaceChildren();
+            const attackKey = attackType === "magic" ? "magic_power" : "attack_power";
+            const attackLabel = attackType === "magic" ? "魔攻" : "攻击";
+
+            items.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "equipment-item";
+
+                const image = document.createElement("img");
+                image.alt = String(item?.item_name || "装备");
+                if (item?.item_icon) image.src = item.item_icon;
+
+                const body = document.createElement("div");
+                const name = document.createElement("div");
+                name.className = "equipment-name";
+                name.textContent = String(item?.item_name || "未知装备");
+
+                const stat = document.createElement("div");
+                stat.className = "equipment-stat";
+                const attack = finiteOrZero(parseNumber(item?.item_total_option?.[attackKey]));
+                const starforce = finiteOrZero(parseNumber(item?.starforce));
+                stat.textContent = `${attackLabel} ${formatNumber(attack)}${starforce > 0 ? `，${starforce} 星` : ""}`;
+
+                body.append(name, stat);
+                card.append(image, body);
+                list.appendChild(card);
+            });
+
+            document.getElementById("equipmentSection").classList.toggle("hidden", items.length === 0);
+        }
+
+        function getInputNumber(id) {
+            return finiteOrZero(document.getElementById(id)?.value);
+        }
+
+        function calculateEquivalence() {
+            const attack = getInputNumber("attack");
+            const attackPct = getInputNumber("attackPct") / 100;
+            const dmgBonus = getInputNumber("dmgPct") / 100;
+            const bossBonus = getInputNumber("bossPct") / 100;
+            const mainAttr = getInputNumber("mainAttr");
+            const mainAttrPct = getInputNumber("mainAttrPct") / 100;
+            const extraMainAttr = getInputNumber("extraMainAttr");
+            const subAttr = getInputNumber("subAttr");
+            const subAttrPct = getInputNumber("subAttrPct") / 100;
+            const extraSubAttr = getInputNumber("extraSubAttr");
+            const criticalDamage = (getInputNumber("criDmg") + 35) / 100;
+
+            const subAttr2 = secondSubEnabled ? getInputNumber("subAttr2") : 0;
+            const subAttrPct2 = secondSubEnabled ? getInputNumber("subAttrPct2") / 100 : 0;
+            const extraSubAttr2 = secondSubEnabled ? getInputNumber("extraSubAttr2") : 0;
+
+            const effectiveMain = mainAttr * (1 + mainAttrPct) + extraMainAttr;
+            const effectiveSub = subAttr * (1 + subAttrPct) + extraSubAttr
+                + subAttr2 * (1 + subAttrPct2) + extraSubAttr2;
+            const totalAttribute = effectiveMain * 4 + effectiveSub;
+            const effectiveAttack = attack * (1 + attackPct);
+            const effectiveDamage = dmgBonus + bossBonus;
+            const baseOutput = effectiveAttack * totalAttribute * (1 + effectiveDamage) * (1 + criticalDamage);
+
+            const attackGain = (attack + 1) * (1 + attackPct) * totalAttribute * (1 + effectiveDamage) * (1 + criticalDamage) - baseOutput;
+            const attackPercentGain = attack * (1 + attackPct + 0.01) * totalAttribute * (1 + effectiveDamage) * (1 + criticalDamage) - baseOutput;
+            const criticalDamageGain = effectiveAttack * totalAttribute * (1 + effectiveDamage) * (1 + criticalDamage + 0.01) - baseOutput;
+            const damageGain = effectiveAttack * totalAttribute * (1 + effectiveDamage + 0.01) * (1 + criticalDamage) - baseOutput;
+
+            const mainUp = (mainAttr + 1) * (1 + mainAttrPct) + extraMainAttr;
+            const mainGain = effectiveAttack * (mainUp * 4 + effectiveSub) * (1 + effectiveDamage) * (1 + criticalDamage) - baseOutput;
+
+            const mainPercentUp = mainAttr * (1 + mainAttrPct + 0.01) + extraMainAttr;
+            const mainPercentGain = effectiveAttack * (mainPercentUp * 4 + effectiveSub) * (1 + effectiveDamage) * (1 + criticalDamage) - baseOutput;
+
+            const allPercentMain = mainAttr * (1 + mainAttrPct + 0.01) + extraMainAttr;
+            const allPercentSub = subAttr * (1 + subAttrPct + 0.01) + extraSubAttr;
+            const allPercentSub2 = subAttr2 * (1 + subAttrPct2 + 0.01) + extraSubAttr2;
+            const allPercentTotal = allPercentMain * 4 + allPercentSub + allPercentSub2;
+            const allPercentGain = effectiveAttack * allPercentTotal * (1 + effectiveDamage) * (1 + criticalDamage) - baseOutput;
+
+            const reconstructedAttack = effectiveAttack;
+            const difference = Number.isFinite(currentOfficialAttack) ? reconstructedAttack - currentOfficialAttack : Number.NaN;
+            setText("attackDifference", Number.isFinite(difference) ? formatNumber(difference) : "无法校验");
+
+            const ratio = (numerator, denominator, multiplier = 1) => denominator > 0
+                ? formatNumber(numerator / denominator * multiplier)
+                : "N/A";
+
+            document.getElementById("result").textContent =
+                `当前估算输出：${formatNumber(baseOutput)}\n` +
+                `有效攻击力：${formatNumber(effectiveAttack)}\n` +
+                `有效主属性：${formatNumber(effectiveMain)}\n` +
+                `有效副属性：${formatNumber(effectiveSub)}\n\n` +
+                `+1 攻击力：提升 ${formatNumber(attackGain)}\n` +
+                `+1% 攻击力：提升 ${formatNumber(attackPercentGain)}\n` +
+                `+1% BOSS/伤害：提升 ${formatNumber(damageGain)}\n` +
+                `+1% 爆击伤害：提升 ${formatNumber(criticalDamageGain)}\n` +
+                `+1 主属性：提升 ${formatNumber(mainGain)}\n` +
+                `+1% 主属性：提升 ${formatNumber(mainPercentGain)}\n` +
+                `+1% 全属性：提升 ${formatNumber(allPercentGain)}\n\n` +
+                `常见等效换算：\n` +
+                `1 攻击力约等于 ${ratio(attackGain, mainGain)} 主属性\n` +
+                `1% 攻击力约等于 ${ratio(attackPercentGain, attackGain)} 攻击力\n` +
+                `40% BOSS 伤害约等于 ${ratio(damageGain, attackPercentGain, 40)}% 攻击力\n` +
+                `1% 爆击伤害约等于 ${ratio(criticalDamageGain, mainPercentGain)}% 主属性\n` +
+                `1% 主属性约等于 ${ratio(mainPercentGain, mainGain)} 主属性\n` +
+                `1% 全属性约等于 ${ratio(allPercentGain, mainPercentGain)}% 主属性`;
+        }
+
+        async function fetchCharacter(event) {
+            event.preventDefault();
+            const name = document.getElementById("characterName").value.trim();
+            if (!name) {
+                setStatus("请输入角色昵称。", true);
+                return;
+            }
+
+            const button = document.getElementById("searchButton");
+            button.disabled = true;
+            setStatus("正在查询角色数据……");
+
+            try {
+                const idData = await nxFetchJson("/maplestorytw/v1/id", { character_name: name });
+                if (!idData?.ocid) throw new Error("没有找到该角色，或 API 未返回 OCID");
+
+                const ocid = idData.ocid;
+                const [basic, stat, equipment, symbolResult] = await Promise.all([
+                    nxFetchJson("/maplestorytw/v1/character/basic", { ocid }),
+                    nxFetchJson("/maplestorytw/v1/character/stat", { ocid }),
+                    nxFetchJson("/maplestorytw/v1/character/item-equipment", { ocid }),
+                    nxFetchJson("/maplestorytw/v1/character/symbol-equipment", { ocid }).catch(error => ({
+                        symbol: [],
+                        warning: error.message,
+                    })),
+                ]);
+
+                renderCharacter(basic);
+                renderEstimate(createEstimate(basic, stat, equipment, symbolResult));
+                localStorage.setItem("characterName", name);
+                const symbolWarning = symbolResult?.warning ? ` 符文数据未获取：${symbolResult.warning}` : "";
+                setStatus(`查询完成。自动填写值为首版估算，可根据游戏内数据手动调整。${symbolWarning}`);
+            } catch (error) {
+                console.error(error);
+                setStatus(error?.message || "角色查询失败。", true);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        function restoreApiEstimate() {
+            if (!lastApiEstimate) return;
+            fillInputs(lastApiEstimate);
+            calculateEquivalence();
+        }
+
+        document.getElementById("characterSearchForm").addEventListener("submit", fetchCharacter);
+        document.getElementById("calculateButton").addEventListener("click", calculateEquivalence);
+        document.getElementById("restoreButton").addEventListener("click", restoreApiEstimate);
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener("change", calculateEquivalence);
+        });
+
+        const savedCharacterName = localStorage.getItem("characterName");
+        if (savedCharacterName) document.getElementById("characterName").value = savedCharacterName;
+    </script>
+</body>
+
+</html>
