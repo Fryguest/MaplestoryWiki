@@ -184,6 +184,329 @@
     }
   },
   {
+    "set_name": "永恆套裝(弓箭手)",
+    "items": [
+      {"name": "永恆弓箭手手套", "slot": "手套"},
+      {"name": "永恆弓箭手帽", "slot": "帽子"},
+      {"name": "永恆弓箭手連帽衫", "slot": "上衣"},
+      {"name": "永恆弓箭手褲", "slot": "褲/裙"},
+      {"name": "永恆弓箭手肩膀", "slot": "肩膀裝飾"},
+      {"name": "永恆弓箭手鞋", "slot": "鞋子"},
+      {"name": "永恆弓箭手斗篷", "slot": "披風"},
+      {"name": "可選擇創世或命運武器其一", "slot": "武器", "placeholder": true, "contains": ["創世", "命運"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "3": {"raw": ["全屬性 +50", "攻擊力/魔力 +40", "防禦力 +600", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 40, "magic_power": 40, "defense_flat": 600, "boss": 10}},
+      "4": {"raw": ["最大 HP/最大 MP +15%", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp_pct": 15, "mp_pct": 15, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "5": {"raw": ["攻擊力/魔力 +40", "無視怪物防禦率 +20%"], "stats": {"attack_power": 40, "magic_power": 40, "ied": 20}},
+      "6": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}},
+      "7": {"raw": ["全屬性 +50", "最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"all_stat": 50, "hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 15}},
+      "8": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}}
+    }
+  },
+  {
+    "set_name": "永恆套裝(法師)",
+    "items": [
+      {"name": "永恆法師手套", "slot": "手套"},
+      {"name": "永恆法師帽", "slot": "帽子"},
+      {"name": "永恆法師長袍", "slot": "上衣"},
+      {"name": "永恆法師褲", "slot": "褲/裙"},
+      {"name": "永恆法師肩膀", "slot": "肩膀裝飾"},
+      {"name": "永恆法師鞋", "slot": "鞋子"},
+      {"name": "永恆法師斗篷", "slot": "披風"},
+      {"name": "可選擇創世或命運武器其一", "slot": "武器", "placeholder": true, "contains": ["創世", "命運"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "3": {"raw": ["全屬性 +50", "攻擊力/魔力 +40", "防禦力 +600", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 40, "magic_power": 40, "defense_flat": 600, "boss": 10}},
+      "4": {"raw": ["最大 HP/最大 MP +15%", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp_pct": 15, "mp_pct": 15, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "5": {"raw": ["攻擊力/魔力 +40", "無視怪物防禦率 +20%"], "stats": {"attack_power": 40, "magic_power": 40, "ied": 20}},
+      "6": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}},
+      "7": {"raw": ["全屬性 +50", "最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"all_stat": 50, "hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 15}},
+      "8": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}}
+    }
+  },
+  {
+    "set_name": "永恆套裝(海盜)",
+    "items": [
+      {"name": "永恆海盜手套", "slot": "手套"},
+      {"name": "永恆海盜帽", "slot": "帽子"},
+      {"name": "永恆海盜大衣", "slot": "上衣"},
+      {"name": "永恆海盜褲", "slot": "褲/裙"},
+      {"name": "永恆海盜肩膀", "slot": "肩膀裝飾"},
+      {"name": "永恆海盜鞋", "slot": "鞋子"},
+      {"name": "永恆海盜斗篷", "slot": "披風"},
+      {"name": "可選擇創世或命運武器其一", "slot": "武器", "placeholder": true, "contains": ["創世", "命運"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "3": {"raw": ["全屬性 +50", "攻擊力/魔力 +40", "防禦力 +600", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 40, "magic_power": 40, "defense_flat": 600, "boss": 10}},
+      "4": {"raw": ["最大 HP/最大 MP +15%", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp_pct": 15, "mp_pct": 15, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "5": {"raw": ["攻擊力/魔力 +40", "無視怪物防禦率 +20%"], "stats": {"attack_power": 40, "magic_power": 40, "ied": 20}},
+      "6": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}},
+      "7": {"raw": ["全屬性 +50", "最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"all_stat": 50, "hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 15}},
+      "8": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}}
+    }
+  },
+  {
+    "set_name": "永恆套裝(盜賊)",
+    "items": [
+      {"name": "永恆盜賊手套", "slot": "手套"},
+      {"name": "永恆盜賊頭巾", "slot": "帽子"},
+      {"name": "永恆盜賊上衣", "slot": "上衣"},
+      {"name": "永恆盜賊褲", "slot": "褲/裙"},
+      {"name": "永恆盜賊肩膀", "slot": "肩膀裝飾"},
+      {"name": "永恆盜賊鞋", "slot": "鞋子"},
+      {"name": "永恆盜賊斗篷", "slot": "披風"},
+      {"name": "可選擇創世或命運武器其一", "slot": "武器", "placeholder": true, "contains": ["創世", "命運"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "3": {"raw": ["全屬性 +50", "攻擊力/魔力 +40", "防禦力 +600", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 40, "magic_power": 40, "defense_flat": 600, "boss": 10}},
+      "4": {"raw": ["最大 HP/最大 MP +15%", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp_pct": 15, "mp_pct": 15, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "5": {"raw": ["攻擊力/魔力 +40", "無視怪物防禦率 +20%"], "stats": {"attack_power": 40, "magic_power": 40, "ied": 20}},
+      "6": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}},
+      "7": {"raw": ["全屬性 +50", "最大 HP/最大 MP +2500", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"all_stat": 50, "hp": 2500, "mp": 2500, "attack_power": 40, "magic_power": 40, "boss": 15}},
+      "8": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +15%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 15}}
+    }
+  },
+  {
+    "set_name": "神祕冥界套裝(弓手)",
+    "items": [
+      {"name": "神祕冥界幽靈弓手帽", "slot": "帽子"},
+      {"name": "神祕冥界幽靈弓手套裝", "slot": "套服"},
+      {"name": "神祕冥界幽靈弓手鞋子", "slot": "鞋子"},
+      {"name": "神祕冥界幽靈弓手手套", "slot": "手套"},
+      {"name": "神祕冥界幽靈弓手斗篷", "slot": "披風"},
+      {"name": "神祕冥界幽靈弓手護肩", "slot": "肩膀裝飾"},
+      {"name": "神祕冥界武器中選一", "slot": "武器", "placeholder": true, "contains": ["神祕冥界"]}
+    ],
+    "effects": {
+      "2": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "3": {"raw": ["攻擊力/魔力 +30", "防禦力 +400", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "defense_flat": 400, "ied": 10}},
+      "4": {"raw": ["全屬性 +50", "攻擊力/魔力 +35", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 35, "magic_power": 35, "boss": 10}},
+      "5": {"raw": ["最大 HP/最大 MP +2000", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2000, "mp": 2000, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +30%", "攻擊力/魔力 +30"], "stats": {"hp_pct": 30, "mp_pct": 30, "attack_power": 30, "magic_power": 30}},
+      "7": {"raw": ["攻擊力/魔力 +30", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "神祕冥界套裝(法師)",
+    "items": [
+      {"name": "神祕冥界幽靈魔導士帽", "slot": "帽子"},
+      {"name": "神祕冥界幽靈魔導士套裝", "slot": "套服"},
+      {"name": "神祕冥界幽靈魔導士鞋子", "slot": "鞋子"},
+      {"name": "神祕冥界幽靈魔導士手套", "slot": "手套"},
+      {"name": "神祕冥界幽靈法師斗篷", "slot": "披風"},
+      {"name": "神祕冥界幽靈魔法護肩", "slot": "肩膀裝飾"},
+      {"name": "神祕冥界武器中選一", "slot": "武器", "placeholder": true, "contains": ["神祕冥界"]}
+    ],
+    "effects": {
+      "2": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "3": {"raw": ["攻擊力/魔力 +30", "防禦力 +400", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "defense_flat": 400, "ied": 10}},
+      "4": {"raw": ["全屬性 +50", "攻擊力/魔力 +35", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 35, "magic_power": 35, "boss": 10}},
+      "5": {"raw": ["最大 HP/最大 MP +2000", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2000, "mp": 2000, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +30%", "攻擊力/魔力 +30"], "stats": {"hp_pct": 30, "mp_pct": 30, "attack_power": 30, "magic_power": 30}},
+      "7": {"raw": ["攻擊力/魔力 +30", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "神祕冥界套裝(海盜)",
+    "items": [
+      {"name": "神祕冥界幽靈海盜帽", "slot": "帽子"},
+      {"name": "神祕冥界幽靈海盜套裝", "slot": "套服"},
+      {"name": "神祕冥界幽靈海盜鞋子", "slot": "鞋子"},
+      {"name": "神祕冥界幽靈海盜手套", "slot": "手套"},
+      {"name": "神祕冥界幽靈海盜斗篷", "slot": "披風"},
+      {"name": "神祕冥界幽靈海盜護肩", "slot": "肩膀裝飾"},
+      {"name": "神祕冥界武器中選一", "slot": "武器", "placeholder": true, "contains": ["神祕冥界"]}
+    ],
+    "effects": {
+      "2": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "3": {"raw": ["攻擊力/魔力 +30", "防禦力 +400", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "defense_flat": 400, "ied": 10}},
+      "4": {"raw": ["全屬性 +50", "攻擊力/魔力 +35", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 35, "magic_power": 35, "boss": 10}},
+      "5": {"raw": ["最大 HP/最大 MP +2000", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2000, "mp": 2000, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +30%", "攻擊力/魔力 +30"], "stats": {"hp_pct": 30, "mp_pct": 30, "attack_power": 30, "magic_power": 30}},
+      "7": {"raw": ["攻擊力/魔力 +30", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "神祕冥界套裝(盜賊)",
+    "items": [
+      {"name": "神祕冥界幽靈小偷帽", "slot": "帽子"},
+      {"name": "神祕冥界幽靈小偷套裝", "slot": "套服"},
+      {"name": "神祕冥界幽靈小偷鞋子", "slot": "鞋子"},
+      {"name": "神祕冥界幽靈小偷手套", "slot": "手套"},
+      {"name": "神祕冥界幽靈小偷斗篷", "slot": "披風"},
+      {"name": "神祕冥界幽靈小偷護肩", "slot": "肩膀裝飾"},
+      {"name": "神祕冥界武器中選一", "slot": "武器", "placeholder": true, "contains": ["神祕冥界"]}
+    ],
+    "effects": {
+      "2": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "3": {"raw": ["攻擊力/魔力 +30", "防禦力 +400", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "defense_flat": 400, "ied": 10}},
+      "4": {"raw": ["全屬性 +50", "攻擊力/魔力 +35", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 50, "attack_power": 35, "magic_power": 35, "boss": 10}},
+      "5": {"raw": ["最大 HP/最大 MP +2000", "攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 2000, "mp": 2000, "attack_power": 40, "magic_power": 40, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +30%", "攻擊力/魔力 +30"], "stats": {"hp_pct": 30, "mp_pct": 30, "attack_power": 30, "magic_power": 30}},
+      "7": {"raw": ["攻擊力/魔力 +30", "無視怪物防禦率 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "航海師套裝(弓箭手)",
+    "items": [
+      {"name": "航海師弓箭手帽", "slot": "帽子"},
+      {"name": "航海師弓箭手套裝", "slot": "套服"},
+      {"name": "航海師弓箭手鞋", "slot": "鞋子"},
+      {"name": "航海師弓箭手手套", "slot": "手套"},
+      {"name": "航海師弓箭手斗篷", "slot": "披風"},
+      {"name": "航海師弓箭手護肩", "slot": "肩膀裝飾"},
+      {"name": "選擇一件航海師武器", "slot": "武器", "placeholder": true, "contains": ["航海師"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +1500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 1500, "mp": 1500, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "3": {"raw": ["全屬性 +30", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 30, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "4": {"raw": ["攻擊力/魔力 +25", "防禦力 +200", "無視怪物防禦率 +10%"], "stats": {"attack_power": 25, "magic_power": 25, "defense_flat": 200, "ied": 10}},
+      "5": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +20%", "攻擊力/魔力 +20"], "stats": {"hp_pct": 20, "mp_pct": 20, "attack_power": 20, "magic_power": 20}},
+      "7": {"raw": ["攻擊力/魔力 +20", "無視怪物防禦率 +10%"], "stats": {"attack_power": 20, "magic_power": 20, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "航海師套裝(法師)",
+    "items": [
+      {"name": "航海師法師帽", "slot": "帽子"},
+      {"name": "航海師法師套裝", "slot": "套服"},
+      {"name": "航海師法師鞋", "slot": "鞋子"},
+      {"name": "航海師法師手套", "slot": "手套"},
+      {"name": "航海師法師斗篷", "slot": "披風"},
+      {"name": "航海師法師護肩", "slot": "肩膀裝飾"},
+      {"name": "選擇一件航海師武器", "slot": "武器", "placeholder": true, "contains": ["航海師"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +1500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 1500, "mp": 1500, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "3": {"raw": ["全屬性 +30", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 30, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "4": {"raw": ["攻擊力/魔力 +25", "防禦力 +200", "無視怪物防禦率 +10%"], "stats": {"attack_power": 25, "magic_power": 25, "defense_flat": 200, "ied": 10}},
+      "5": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +20%", "攻擊力/魔力 +20"], "stats": {"hp_pct": 20, "mp_pct": 20, "attack_power": 20, "magic_power": 20}},
+      "7": {"raw": ["攻擊力/魔力 +20", "無視怪物防禦率 +10%"], "stats": {"attack_power": 20, "magic_power": 20, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "航海師套裝(海盜)",
+    "items": [
+      {"name": "航海師海盜帽", "slot": "帽子"},
+      {"name": "航海師海盜套裝", "slot": "套服"},
+      {"name": "航海師海盜鞋", "slot": "鞋子"},
+      {"name": "航海師海盜手套", "slot": "手套"},
+      {"name": "航海師海盜斗篷", "slot": "披風"},
+      {"name": "航海師海盜護肩", "slot": "肩膀裝飾"},
+      {"name": "選擇一件航海師武器", "slot": "武器", "placeholder": true, "contains": ["航海師"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +1500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 1500, "mp": 1500, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "3": {"raw": ["全屬性 +30", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 30, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "4": {"raw": ["攻擊力/魔力 +25", "防禦力 +200", "無視怪物防禦率 +10%"], "stats": {"attack_power": 25, "magic_power": 25, "defense_flat": 200, "ied": 10}},
+      "5": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +20%", "攻擊力/魔力 +20"], "stats": {"hp_pct": 20, "mp_pct": 20, "attack_power": 20, "magic_power": 20}},
+      "7": {"raw": ["攻擊力/魔力 +20", "無視怪物防禦率 +10%"], "stats": {"attack_power": 20, "magic_power": 20, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "航海師套裝(盜賊)",
+    "items": [
+      {"name": "航海師盜賊帽", "slot": "帽子"},
+      {"name": "航海師盜賊套裝", "slot": "套服"},
+      {"name": "航海師盜賊鞋", "slot": "鞋子"},
+      {"name": "航海師盜賊手套", "slot": "手套"},
+      {"name": "航海師盜賊斗篷", "slot": "披風"},
+      {"name": "航海師盜賊護肩", "slot": "肩膀裝飾"},
+      {"name": "選擇一件航海師武器", "slot": "武器", "placeholder": true, "contains": ["航海師"]}
+    ],
+    "effects": {
+      "2": {"raw": ["最大 HP/最大 MP +1500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 1500, "mp": 1500, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "3": {"raw": ["全屬性 +30", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 30, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "4": {"raw": ["攻擊力/魔力 +25", "防禦力 +200", "無視怪物防禦率 +10%"], "stats": {"attack_power": 25, "magic_power": 25, "defense_flat": 200, "ied": 10}},
+      "5": {"raw": ["攻擊力/魔力 +30", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 30, "magic_power": 30, "boss": 10}},
+      "6": {"raw": ["最大 HP/最大 MP +20%", "攻擊力/魔力 +20"], "stats": {"hp_pct": 20, "mp_pct": 20, "attack_power": 20, "magic_power": 20}},
+      "7": {"raw": ["攻擊力/魔力 +20", "無視怪物防禦率 +10%"], "stats": {"attack_power": 20, "magic_power": 20, "ied": 10}}
+    }
+  },
+  {
+    "set_name": "露塔必思套裝(弓箭手)",
+    "items": [
+      {"name": "高貴的守護者貝雷帽", "slot": "帽子"},
+      {"name": "鷹眼守護者頭巾", "slot": "上衣"},
+      {"name": "黃蜘蛛守護者褲", "slot": "褲/裙"},
+      {"name": "選擇一件夫尼爾武器", "slot": "武器", "placeholder": true, "contains": ["夫尼爾"]}
+    ],
+    "effects": {
+      "2": {"raw": ["STR +20", "DEX +20", "最大 HP/最大 MP +1000"], "stats": {"str": 20, "dex": 20, "hp": 1000, "mp": 1000}},
+      "3": {"raw": ["最大 HP/最大 MP +10%", "攻擊力 +50"], "stats": {"hp_pct": 10, "mp_pct": 10, "attack_power": 50}},
+      "4": {"raw": ["攻擊Boss怪物時傷害 +30%"], "stats": {"boss": 30}}
+    }
+  },
+  {
+    "set_name": "露塔必思套裝(法師)",
+    "items": [
+      {"name": "高貴的敦威治帽", "slot": "帽子"},
+      {"name": "鷹眼敦威治長袍", "slot": "上衣"},
+      {"name": "黃蜘蛛敦威治褲", "slot": "褲/裙"},
+      {"name": "選擇一件夫尼爾武器", "slot": "武器", "placeholder": true, "contains": ["夫尼爾"]}
+    ],
+    "effects": {
+      "2": {"raw": ["INT +20", "LUK +20", "最大 HP/最大 MP +1000"], "stats": {"int": 20, "luk": 20, "hp": 1000, "mp": 1000}},
+      "3": {"raw": ["最大 HP/最大 MP +10%", "魔法攻擊力 +50"], "stats": {"hp_pct": 10, "mp_pct": 10, "magic_power": 50}},
+      "4": {"raw": ["攻擊Boss怪物時傷害 +30%"], "stats": {"boss": 30}}
+    }
+  },
+  {
+    "set_name": "露塔必思套裝(海盜)",
+    "items": [
+      {"name": "高貴的漫遊者帽", "slot": "帽子"},
+      {"name": "鷹眼漫遊者大衣", "slot": "上衣"},
+      {"name": "黃蜘蛛漫遊者褲", "slot": "褲/裙"},
+      {"name": "選擇一件夫尼爾武器", "slot": "武器", "placeholder": true, "contains": ["夫尼爾"]}
+    ],
+    "effects": {
+      "2": {"raw": ["STR +20", "DEX +20", "最大 HP/最大 MP +1000"], "stats": {"str": 20, "dex": 20, "hp": 1000, "mp": 1000}},
+      "3": {"raw": ["最大 HP/最大 MP +10%", "攻擊力 +50"], "stats": {"hp_pct": 10, "mp_pct": 10, "attack_power": 50}},
+      "4": {"raw": ["攻擊Boss怪物時傷害 +30%"], "stats": {"boss": 30}}
+    }
+  },
+  {
+    "set_name": "露塔必思套裝(盜賊)",
+    "items": [
+      {"name": "高貴的暗殺者頭罩帽", "slot": "帽子"},
+      {"name": "鷹眼暗殺者T恤", "slot": "上衣"},
+      {"name": "黃蜘蛛暗殺者褲", "slot": "褲/裙"},
+      {"name": "選擇一件夫尼爾武器", "slot": "武器", "placeholder": true, "contains": ["夫尼爾"]}
+    ],
+    "effects": {
+      "2": {"raw": ["DEX +20", "LUK +20", "最大 HP/最大 MP +1000"], "stats": {"dex": 20, "luk": 20, "hp": 1000, "mp": 1000}},
+      "3": {"raw": ["最大 HP/最大 MP +10%", "攻擊力 +50"], "stats": {"hp_pct": 10, "mp_pct": 10, "attack_power": 50}},
+      "4": {"raw": ["攻擊Boss怪物時傷害 +30%"], "stats": {"boss": 30}}
+    }
+  },
+  {
+    "set_name": "菇菇支援裝備套組(劍士)",
+    "items": [
+      {"name": "菇菇戰士頭盔", "slot": "帽子"},
+      {"name": "菇菇戰士盔甲", "slot": "上衣"},
+      {"name": "菇菇戰士褲", "slot": "褲/裙"},
+      {"name": "菇菇劍士鞋", "slot": "鞋子"},
+      {"name": "菇菇劍士手套", "slot": "手套"},
+      {"name": "菇菇劍士斗篷", "slot": "披風"},
+      {"name": "菇菇騎士肩膀", "slot": "肩膀裝飾"}
+    ],
+    "effects": {
+      "3": {"raw": ["全屬性 +20", "最大 HP/最大 MP +1000", "攻擊力/魔力 +20"], "stats": {"all_stat": 20, "hp": 1000, "mp": 1000, "attack_power": 20, "magic_power": 20}},
+      "4": {"raw": ["最大 HP/最大 MP +1500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"hp": 1500, "mp": 1500, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "5": {"raw": ["全屬性 +30", "最大 HP/最大 MP +1500", "攻擊力/魔力 +20", "攻擊Boss怪物時傷害 +10%"], "stats": {"all_stat": 30, "hp": 1500, "mp": 1500, "attack_power": 20, "magic_power": 20, "boss": 10}},
+      "6": {"raw": ["攻擊力/魔力 +40", "防禦力 +200", "無視怪物防禦率 +10%"], "stats": {"attack_power": 40, "magic_power": 40, "defense_flat": 200, "ied": 10}},
+      "7": {"raw": ["攻擊力/魔力 +40", "攻擊Boss怪物時傷害 +10%"], "stats": {"attack_power": 40, "magic_power": 40, "boss": 10}}
+    }
+  },
+  {
     "set_name": "漆黑BOSS套裝",
     "items": [
       {"name": "附有魔力的眼罩", "slot": "眼飾"},
@@ -196,7 +519,7 @@
       {"name": "夢幻的腰帶", "slot": "腰帶"},
       {"name": "創世的胸章", "slot": "胸章"},
       {"name": "指揮官力量耳環", "slot": "耳環"},
-      {"name": "被詛咒的魔導書中選1", "slot": "口袋道具", "placeholder": true, "contains": ["被詛咒的魔導書"]}
+      {"name": "被詛咒的魔導書中選1", "slot": "口袋道具", "placeholder": true, "contains": ["魔導書"]}
     ],
     "effects": {
       "2": {
