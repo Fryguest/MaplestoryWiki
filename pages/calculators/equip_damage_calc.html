@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <base href="../../">
+    <link rel="stylesheet" href="static/css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>装备收益计算器</title>
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; padding: 24px; background: #eef8fa; color: #183535; font-family: Arial, sans-serif; }
+        body { margin: 0; padding: 24px 24px 24px 244px; background: #eef8fa; color: #183535; font-family: Arial, sans-serif; }
         main { max-width: 1200px; margin: auto; }
         h1 { font-size: 24px; }
         h2 { font-size: 18px; margin-top: 0; }
@@ -44,11 +46,12 @@
         .panel-results th { text-align: left; }
         .panel-results td { text-align: right; }
         [hidden] { display: none !important; }
-        @media (max-width: 600px) { body { padding: 12px; } .results { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { body { padding: 12px; } .sidebar { position: static; width: auto; height: auto; padding-top: 12px; } .results { grid-template-columns: 1fr; } }
         @media (max-width: 760px) { .equip-compare { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+<div id="sidebar-container"></div>
 <main>
     <h1>装备收益计算器</h1>
     <section>
@@ -1227,6 +1230,23 @@
             $("calculator").requestSubmit();
         }
     });
+    fetch("sidebar.html")
+        .then(response => {
+            if (!response.ok) throw Error(`侧栏加载失败：${response.status}`);
+            return response.text();
+        })
+        .then(html => {
+            $("sidebar-container").innerHTML = html;
+        })
+        .catch(error => {
+            console.error("加载侧栏失败:", error);
+        });
+    function toggleSubMenu(id) {
+        const submenu = $(id);
+        if (submenu) {
+            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+        }
+    }
 </script>
 </body>
 </html>
